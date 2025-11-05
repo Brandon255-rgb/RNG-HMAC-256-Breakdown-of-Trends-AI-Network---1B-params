@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 SUPREME BETTING DASHBOARD - ULTIMATE PROFIT MAXIMIZER 💰</title>
+    
+    <!-- SocketIO -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            animation: pulse 2s infinite;
+        }
+        
+        .profit-glow {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+        }
+        
+        .loss-glow {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .terminal {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .matrix-bg {
+            background: linear-gradient(45deg, #0f0f23, #1a1a3a);
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen grid-pattern">
+    <!-- Header -->
+    <header class="bg-black border-b border-blue-500 p-4 glow">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold neon-text text-blue-400">
+                🚀 SUPREME BETTING DASHBOARD 💰
+            </h1>
+            <div class="flex space-x-4">
+                <button id="startBtn" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-lg font-bold">
+                    <i class="fas fa-play"></i> START SYSTEM
+                </button>
+                <button id="stopBtn" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg font-bold" disabled>
+                    <i class="fas fa-stop"></i> STOP SYSTEM
+                </button>
+                <div id="systemStatus" class="px-4 py-2 rounded-lg bg-red-900 text-red-300">
+                    <i class="fas fa-circle"></i> OFFLINE
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <div class="container mx-auto p-6">
+        <!-- Live Stats Row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+            <!-- Current Bankroll -->
+            <div class="bg-gray-800 p-4 rounded-lg border border-green-500 profit-glow">
+                <div class="text-sm text-green-400 mb-1">💰 BANKROLL</div>
+                <div id="currentBankroll" class="text-2xl font-bold text-green-400">$1,000.00</div>
+            </div>
+            
+            <!-- Total Profit -->
+            <div class="bg-gray-800 p-4 rounded-lg border" id="profitCard">
+                <div class="text-sm text-gray-400 mb-1">📈 PROFIT</div>
+                <div id="totalProfit" class="text-2xl font-bold">$0.00</div>
+            </div>
+            
+            <!-- Win Rate -->
+            <div class="bg-gray-800 p-4 rounded-lg border border-blue-500">
+                <div class="text-sm text-blue-400 mb-1">🎯 WIN RATE</div>
+                <div id="winRate" class="text-2xl font-bold text-blue-400">0%</div>
+            </div>
+            
+            <!-- Total Bets -->
+            <div class="bg-gray-800 p-4 rounded-lg border border-purple-500">
+                <div class="text-sm text-purple-400 mb-1">🔥 TOTAL BETS</div>
+                <div id="totalBets" class="text-2xl font-bold text-purple-400">0</div>
+            </div>
+            
+            <!-- Session Duration -->
+            <div class="bg-gray-800 p-4 rounded-lg border border-yellow-500">
+                <div class="text-sm text-yellow-400 mb-1">⏱️ SESSION</div>
+                <div id="sessionDuration" class="text-2xl font-bold text-yellow-400">0m</div>
+            </div>
+            
+            <!-- AI Confidence -->
+            <div class="bg-gray-800 p-4 rounded-lg border border-orange-500">
+                <div class="text-sm text-orange-400 mb-1">🧠 AI CONFIDENCE</div>
+                <div id="aiConfidence" class="text-2xl font-bold text-orange-400">0%</div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Auto Betting Controls -->
+            <div class="bg-gray-800 p-6 rounded-lg border border-blue-500">
+                <h3 class="text-xl font-bold mb-4 text-blue-400">🤖 AUTO BETTING</h3>
+                <div class="space-y-4">
+                    <button id="toggleAutoBetting" class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-bold">
+                        <i class="fas fa-robot"></i> ENABLE AUTO BETTING
+                    </button>
+                    <div class="flex items-center space-x-2">
+                        <label class="text-sm">Bet Interval (seconds):</label>
+                        <input id="betInterval" type="number" value="30" min="10" max="300" 
+                               class="bg-gray-700 px-3 py-1 rounded w-20 text-center">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Manual Controls -->
+            <div class="bg-gray-800 p-6 rounded-lg border border-green-500">
+                <h3 class="text-xl font-bold mb-4 text-green-400">🎮 MANUAL CONTROL</h3>
+                <div class="space-y-4">
+                    <button id="manualDecision" class="w-full bg-green-600 hover:bg-green-700 py-3 rounded-lg font-bold">
+                        <i class="fas fa-brain"></i> MAKE DECISION
+                    </button>
+                    <button id="refreshData" class="w-full bg-yellow-600 hover:bg-yellow-700 py-2 rounded-lg">
+                        <i class="fas fa-sync"></i> REFRESH DATA
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Risk Management -->
+            <div class="bg-gray-800 p-6 rounded-lg border border-red-500">
+                <h3 class="text-xl font-bold mb-4 text-red-400">⚠️ RISK CONTROL</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between">
+                        <span>Stop Loss:</span>
+                        <span class="text-red-400">-20%</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Stop Win:</span>
+                        <span class="text-green-400">+50%</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Max Bet:</span>
+                        <span class="text-yellow-400">5%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Latest Decision -->
+            <div class="bg-gray-800 p-6 rounded-lg border border-purple-500">
+                <h3 class="text-xl font-bold mb-4 text-purple-400">🧠 LATEST AI DECISION</h3>
+                <div id="latestDecision" class="space-y-3">
+                    <div class="text-gray-400 text-center py-8">
+                        No decisions yet - Start the system to begin!
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Market Conditions -->
+            <div class="bg-gray-800 p-6 rounded-lg border border-orange-500">
+                <h3 class="text-xl font-bold mb-4 text-orange-400">📊 MARKET CONDITIONS</h3>
+                <div id="marketConditions" class="space-y-3">
+                    <div class="flex justify-between">
+                        <span>Volatility:</span>
+                        <span id="volatility" class="text-orange-400">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Trend:</span>
+                        <span id="trend" class="text-orange-400">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Entropy:</span>
+                        <span id="entropy" class="text-orange-400">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Last Roll:</span>
+                        <span id="lastRoll" class="text-orange-400">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Profit Chart -->
+            <div class="bg-gray-800 p-6 rounded-lg border border-green-500">
+                <h3 class="text-xl font-bold mb-4 text-green-400">📈 PROFIT CHART</h3>
+                <canvas id="profitChart" width="400" height="200"></canvas>
+            </div>
+            
+            <!-- Win Rate Chart -->
+            <div class="bg-gray-800 p-6 rounded-lg border border-blue-500">
+                <h3 class="text-xl font-bold mb-4 text-blue-400">🎯 WIN RATE CHART</h3>
+                <canvas id="winRateChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Recent Decisions -->
+            <div class="bg-gray-800 p-6 rounded-lg border border-blue-500">
+                <h3 class="text-xl font-bold mb-4 text-blue-400">📋 RECENT DECISIONS</h3>
+                <div id="recentDecisions" class="space-y-2 max-h-80 overflow-y-auto">
+                    <!-- Recent decisions will be populated here -->
+                </div>
+            </div>
+            
+            <!-- System Logs -->
+            <div class="bg-gray-800 p-6 rounded-lg border border-yellow-500">
+                <h3 class="text-xl font-bold mb-4 text-yellow-400">📝 SYSTEM LOGS</h3>
+                <div id="systemLogs" class="terminal p-4 rounded text-sm max-h-80 overflow-y-auto font-mono">
+                    <div class="text-green-400">[SYSTEM] Dashboard initialized</div>
+                    <div class="text-green-400">[SYSTEM] Waiting for system start...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-blue-500 p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p class="text-blue-400 neon-text">
+                🚀 SUPREME BETTING DASHBOARD - THE ULTIMATE PROFIT MAXIMIZATION SYSTEM 💰
+            </p>
+            <p class="text-sm text-gray-400 mt-2">
+                Powered by AI, Machine Learning, 22 Advanced Strategies, and Pure Mathematical Excellence
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize SocketIO
+        const socket = io();
+        
+        // Chart instances
+        let profitChart, winRateChart;
+        
+        // Dashboard state
+        let dashboardState = {
+            isRunning: false,
+            autoBetting: false,
+            profitHistory: [],
+            winRateHistory: []
+        };
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            setupEventListeners();
+            loadInitialData();
+        });
+
+        // Event Listeners
+        function setupEventListeners() {
+            document.getElementById('startBtn').addEventListener('click', startSystem);
+            document.getElementById('stopBtn').addEventListener('click', stopSystem);
+            document.getElementById('toggleAutoBetting').addEventListener('click', toggleAutoBetting);
+            document.getElementById('manualDecision').addEventListener('click', makeManualDecision);
+            document.getElementById('refreshData').addEventListener('click', refreshData);
+            
+            // Bet interval change
+            document.getElementById('betInterval').addEventListener('change', function() {
+                updateSettings({bet_interval: this.value});
+            });
+        }
+
+        // System Control Functions
+        async function startSystem() {
+            try {
+                addLog('[USER] Starting Supreme Betting System...', 'text-blue-400');
+                
+                const response = await fetch('/api/start', {method: 'POST'});
+                const data = await response.json();
+                
+                if (response.ok) {
+                    dashboardState.isRunning = true;
+                    updateSystemStatus(true);
+                    addLog('[SYSTEM] Supreme Betting System ACTIVATED! 🚀', 'text-green-400');
+                } else {
+                    addLog('[ERROR] Failed to start system: ' + data.error, 'text-red-400');
+                }
+            } catch (error) {
+                addLog('[ERROR] System start failed: ' + error.message, 'text-red-400');
+            }
+        }
+
+        async function stopSystem() {
+            try {
+                addLog('[USER] Stopping Supreme Betting System...', 'text-yellow-400');
+                
+                const response = await fetch('/api/stop', {method: 'POST'});
+                const data = await response.json();
+                
+                if (response.ok) {
+                    dashboardState.isRunning = false;
+                    dashboardState.autoBetting = false;
+                    updateSystemStatus(false);
+                    addLog('[SYSTEM] Supreme Betting System DEACTIVATED', 'text-red-400');
+                } else {
+                    addLog('[ERROR] Failed to stop system: ' + data.error, 'text-red-400');
+                }
+            } catch (error) {
+                addLog('[ERROR] System stop failed: ' + error.message, 'text-red-400');
+            }
+        }
+
+        async function toggleAutoBetting() {
+            try {
+                const response = await fetch('/api/toggle_auto_betting', {method: 'POST'});
+                const data = await response.json();
+                
+                if (response.ok) {
+                    dashboardState.autoBetting = data.auto_betting;
+                    updateAutoBettingStatus(data.auto_betting);
+                    addLog(`[SYSTEM] Auto betting ${data.auto_betting ? 'ENABLED' : 'DISABLED'} 🤖`, 'text-blue-400');
+                } else {
+                    addLog('[ERROR] Failed to toggle auto betting: ' + data.error, 'text-red-400');
+                }
+            } catch (error) {
+                addLog('[ERROR] Auto betting toggle failed: ' + error.message, 'text-red-400');
+            }
+        }
+
+        async function makeManualDecision() {
+            try {
+                addLog('[USER] Requesting manual decision...', 'text-purple-400');
+                
+                const response = await fetch('/api/manual_decision', {method: 'POST'});
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addLog('[SYSTEM] Manual decision initiated 🧠', 'text-purple-400');
+                } else {
+                    addLog('[ERROR] Manual decision failed: ' + data.error, 'text-red-400');
+                }
+            } catch (error) {
+                addLog('[ERROR] Manual decision failed: ' + error.message, 'text-red-400');
+            }
+        }
+
+        async function refreshData() {
+            try {
+                addLog('[USER] Refreshing dashboard data...', 'text-yellow-400');
+                
+                const response = await fetch('/api/dashboard_data');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    updateDashboard(data);
+                    addLog('[SYSTEM] Dashboard data refreshed ✅', 'text-green-400');
+                } else {
+                    addLog('[ERROR] Failed to refresh data: ' + data.error, 'text-red-400');
+                }
+            } catch (error) {
+                addLog('[ERROR] Data refresh failed: ' + error.message, 'text-red-400');
+            }
+        }
+
+        async function updateSettings(settings) {
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(settings)
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    addLog('[SYSTEM] Settings updated', 'text-blue-400');
+                }
+            } catch (error) {
+                addLog('[ERROR] Settings update failed: ' + error.message, 'text-red-400');
+            }
+        }
+
+        async function loadInitialData() {
+            try {
+                const response = await fetch('/api/dashboard_data');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    updateDashboard(data);
+                }
+            } catch (error) {
+                console.error('Failed to load initial data:', error);
+            }
+        }
+
+        // Update Functions
+        function updateSystemStatus(isRunning) {
+            const statusElement = document.getElementById('systemStatus');
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            
+            if (isRunning) {
+                statusElement.className = 'px-4 py-2 rounded-lg bg-green-900 text-green-300';
+                statusElement.innerHTML = '<i class="fas fa-circle"></i> ONLINE';
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+            } else {
+                statusElement.className = 'px-4 py-2 rounded-lg bg-red-900 text-red-300';
+                statusElement.innerHTML = '<i class="fas fa-circle"></i> OFFLINE';
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        }
+
+        function updateAutoBettingStatus(enabled) {
+            const btn = document.getElementById('toggleAutoBetting');
+            
+            if (enabled) {
+                btn.className = 'w-full bg-red-600 hover:bg-red-700 py-3 rounded-lg font-bold';
+                btn.innerHTML = '<i class="fas fa-stop"></i> DISABLE AUTO BETTING';
+            } else {
+                btn.className = 'w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-bold';
+                btn.innerHTML = '<i class="fas fa-robot"></i> ENABLE AUTO BETTING';
+            }
+        }
+
+        function updateDashboard(data) {
+            if (data.live_stats) {
+                document.getElementById('currentBankroll').textContent = '$' + data.live_stats.current_bankroll.toFixed(2);
+                document.getElementById('totalProfit').textContent = '$' + data.live_stats.total_profit.toFixed(2);
+                document.getElementById('winRate').textContent = data.live_stats.win_rate.toFixed(1) + '%';
+                document.getElementById('totalBets').textContent = data.live_stats.total_bets;
+                document.getElementById('sessionDuration').textContent = Math.floor(data.live_stats.session_duration) + 'm';
+                
+                // Update profit card styling
+                const profitCard = document.getElementById('profitCard');
+                if (data.live_stats.total_profit > 0) {
+                    profitCard.className = 'bg-gray-800 p-4 rounded-lg border border-green-500 profit-glow';
+                    document.getElementById('totalProfit').className = 'text-2xl font-bold text-green-400';
+                } else if (data.live_stats.total_profit < 0) {
+                    profitCard.className = 'bg-gray-800 p-4 rounded-lg border border-red-500 loss-glow';
+                    document.getElementById('totalProfit').className = 'text-2xl font-bold text-red-400';
+                } else {
+                    profitCard.className = 'bg-gray-800 p-4 rounded-lg border';
+                    document.getElementById('totalProfit').className = 'text-2xl font-bold';
+                }
+            }
+            
+            if (data.recent_decisions && data.recent_decisions.length > 0) {
+                updateLatestDecision(data.recent_decisions[data.recent_decisions.length - 1]);
+                updateRecentDecisions(data.recent_decisions);
+            }
+            
+            updateCharts(data);
+        }
+
+        function updateLatestDecision(decision) {
+            if (!decision) return;
+            
+            const element = document.getElementById('latestDecision');
+            document.getElementById('aiConfidence').textContent = decision.confidence.toFixed(1) + '%';
+            
+            element.innerHTML = `
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span>Should Bet:</span>
+                        <span class="${decision.should_bet ? 'text-green-400' : 'text-red-400'}">
+                            ${decision.should_bet ? '✅ YES' : '❌ NO'}
+                        </span>
+                    </div>
+                    ${decision.should_bet ? `
+                        <div class="flex justify-between">
+                            <span>Amount:</span>
+                            <span class="text-yellow-400">$${decision.bet_amount.toFixed(2)}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Multiplier:</span>
+                            <span class="text-blue-400">${decision.multiplier.toFixed(2)}x</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Side:</span>
+                            <span class="text-purple-400">${decision.side.toUpperCase()}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Target:</span>
+                            <span class="text-orange-400">${decision.target_roll.toFixed(1)}</span>
+                        </div>
+                    ` : ''}
+                    <div class="flex justify-between">
+                        <span>Strategy:</span>
+                        <span class="text-cyan-400">${decision.strategy_used}</span>
+                    </div>
+                    <div class="text-sm text-gray-400 mt-2">${decision.ai_reasoning}</div>
+                </div>
+            `;
+        }
+
+        function updateRecentDecisions(decisions) {
+            const element = document.getElementById('recentDecisions');
+            
+            element.innerHTML = decisions.slice(-10).reverse().map(decision => `
+                <div class="bg-gray-700 p-3 rounded border-l-4 ${decision.should_bet ? 'border-green-500' : 'border-red-500'}">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">${new Date(decision.timestamp).toLocaleTimeString()}</span>
+                        <span class="${decision.should_bet ? 'text-green-400' : 'text-red-400'}">
+                            ${decision.should_bet ? `$${decision.bet_amount.toFixed(2)} @ ${decision.multiplier.toFixed(1)}x` : 'NO BET'}
+                        </span>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-1">${decision.strategy_used} | ${decision.confidence.toFixed(1)}%</div>
+                </div>
+            `).join('');
+        }
+
+        function addLog(message, className = 'text-green-400') {
+            const logsElement = document.getElementById('systemLogs');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = className;
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            
+            logsElement.appendChild(logEntry);
+            logsElement.scrollTop = logsElement.scrollHeight;
+            
+            // Keep only last 100 logs
+            const logs = logsElement.children;
+            if (logs.length > 100) {
+                logsElement.removeChild(logs[0]);
+            }
+        }
+
+        // Charts
+        function initializeCharts() {
+            // Profit Chart
+            const profitCtx = document.getElementById('profitChart').getContext('2d');
+            profitChart = new Chart(profitCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Profit ($)',
+                        data: [],
+                        borderColor: 'rgb(34, 197, 94)',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        x: { ticks: { color: 'white' } },
+                        y: { ticks: { color: 'white' } }
+                    }
+                }
+            });
+
+            // Win Rate Chart
+            const winRateCtx = document.getElementById('winRateChart').getContext('2d');
+            winRateChart = new Chart(winRateCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Win Rate (%)',
+                        data: [],
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        x: { ticks: { color: 'white' } },
+                        y: { 
+                            ticks: { color: 'white' },
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts(data) {
+            // Update profit chart
+            if (data.live_stats) {
+                const now = new Date().toLocaleTimeString();
+                
+                dashboardState.profitHistory.push({
+                    time: now,
+                    profit: data.live_stats.total_profit
+                });
+                
+                dashboardState.winRateHistory.push({
+                    time: now,
+                    winRate: data.live_stats.win_rate
+                });
+                
+                // Keep only last 20 data points
+                if (dashboardState.profitHistory.length > 20) {
+                    dashboardState.profitHistory.shift();
+                    dashboardState.winRateHistory.shift();
+                }
+                
+                // Update profit chart
+                profitChart.data.labels = dashboardState.profitHistory.map(d => d.time);
+                profitChart.data.datasets[0].data = dashboardState.profitHistory.map(d => d.profit);
+                profitChart.update();
+                
+                // Update win rate chart
+                winRateChart.data.labels = dashboardState.winRateHistory.map(d => d.time);
+                winRateChart.data.datasets[0].data = dashboardState.winRateHistory.map(d => d.winRate);
+                winRateChart.update();
+            }
+        }
+
+        // SocketIO Event Handlers
+        socket.on('connect', function() {
+            addLog('[SOCKET] Connected to Supreme Dashboard', 'text-blue-400');
+        });
+
+        socket.on('disconnect', function() {
+            addLog('[SOCKET] Disconnected from dashboard', 'text-red-400');
+        });
+
+        socket.on('system_status', function(data) {
+            addLog(`[SYSTEM] Status changed: ${data.status}`, 'text-blue-400');
+            updateSystemStatus(data.status === 'started');
+        });
+
+        socket.on('new_decision', function(data) {
+            addLog('[AI] New decision made 🧠', 'text-purple-400');
+            updateLatestDecision(data.decision);
+        });
+
+        socket.on('bet_executed', function(data) {
+            const result = data.result.bet_result;
+            const won = result?.won || false;
+            const profit = result?.profit || 0;
+            
+            addLog(`[BET] ${won ? 'WON' : 'LOST'} - ${profit > 0 ? '+' : ''}$${profit.toFixed(2)} 💰`, 
+                   won ? 'text-green-400' : 'text-red-400');
+        });
+
+        socket.on('market_update', function(data) {
+            // Update market conditions display
+            if (data.volatility_metrics && !data.volatility_metrics.insufficient_data) {
+                document.getElementById('volatility').textContent = data.volatility_metrics.session_volatility.toFixed(3);
+            }
+            if (data.trend_indicators && !data.trend_indicators.insufficient_data) {
+                document.getElementById('trend').textContent = data.trend_indicators.trend_slope.toFixed(3);
+            }
+            if (data.entropy_analysis && !data.entropy_analysis.insufficient_data) {
+                document.getElementById('entropy').textContent = data.entropy_analysis.shannon_entropy.toFixed(3);
+            }
+            if (data.game_state) {
+                document.getElementById('lastRoll').textContent = data.game_state.last_roll.toFixed(1);
+            }
+        });
+
+        socket.on('performance_update', function(data) {
+            updateDashboard(data);
+        });
+
+        socket.on('error', function(data) {
+            addLog('[ERROR] ' + data.message, 'text-red-400');
+        });
+
+        // Auto refresh every 30 seconds
+        setInterval(() => {
+            if (dashboardState.isRunning) {
+                socket.emit('request_live_update');
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

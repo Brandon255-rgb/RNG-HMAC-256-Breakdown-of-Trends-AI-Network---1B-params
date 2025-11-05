@@ -497,6 +497,148 @@ class AdvancedStrategyEngine:
             "session_change": session_change
         }
     
+    def promo_boost_opportunism(self, context: BettingContext) -> Dict:
+        """Strategy 6: Exploit promotions and bonuses"""
+        # Check if there are active promotions (placeholder logic)
+        has_promo = True  # This would check actual promo status
+        
+        if has_promo:
+            # Increase stake during promotions
+            promo_multiplier = 1.5
+            base_stake = context.bankroll * 0.025
+            stake = base_stake * promo_multiplier
+        else:
+            # Standard betting
+            stake = context.bankroll * 0.015
+        
+        return {
+            "strategy": "promo_opportunism",
+            "stake": min(stake, context.bankroll * 0.05),
+            "multiplier": 2.5,
+            "promo_active": has_promo
+        }
+    
+    def adaptive_streak_trigger(self, context: BettingContext) -> Dict:
+        """Strategy 7: Trigger after streak patterns"""
+        recent_outcomes = context.recent_outcomes[-10:]
+        if len(recent_outcomes) < 5:
+            return {"strategy": "streak_trigger", "stake": 0, "skip": True}
+        
+        # Look for streak patterns
+        current_streak = 0
+        for outcome in reversed(recent_outcomes):
+            if outcome == recent_outcomes[-1]:
+                current_streak += 1
+            else:
+                break
+        
+        if current_streak >= 4:  # Long streak detected
+            # Bet against streak continuation
+            stake = context.bankroll * 0.03
+            multiplier = 3.0
+        else:
+            stake = context.bankroll * 0.01
+            multiplier = 2.0
+        
+        return {
+            "strategy": "streak_trigger",
+            "stake": stake,
+            "multiplier": multiplier,
+            "streak_length": current_streak
+        }
+    
+    def dynamic_grid_betting(self, context: BettingContext) -> Dict:
+        """Strategy 9: Dynamic grid with multiple levels"""
+        # Simplified grid implementation
+        grid_levels = [1.5, 2.0, 3.0, 5.0, 10.0]
+        base_stake = context.bankroll * 0.01
+        
+        # Select level based on recent performance
+        recent_wins = sum(context.recent_outcomes[-10:])
+        if recent_wins < 3:
+            level = min(4, len(grid_levels) - 1)  # Higher multiplier
+        else:
+            level = 0  # Lower multiplier
+        
+        return {
+            "strategy": "dynamic_grid",
+            "stake": base_stake,
+            "multiplier": grid_levels[level],
+            "grid_level": level
+        }
+    
+    def volatility_weighted_martingale(self, context: BettingContext) -> Dict:
+        """Strategy 10: Martingale adjusted by volatility"""
+        volatility = context.volatility_metrics.get('session_volatility', 0.05)
+        
+        # Recent loss count
+        recent_losses = 0
+        for outcome in reversed(context.recent_outcomes[-5:]):
+            if not outcome:
+                recent_losses += 1
+            else:
+                break
+        
+        if recent_losses > 0:
+            # Martingale progression adjusted by volatility
+            base_stake = context.bankroll * 0.01
+            volatility_adjustment = 1 + volatility
+            stake = base_stake * (2 ** recent_losses) * volatility_adjustment
+        else:
+            stake = context.bankroll * 0.01
+        
+        return {
+            "strategy": "volatility_martingale",
+            "stake": min(stake, context.bankroll * 0.1),
+            "multiplier": 2.0,
+            "loss_count": recent_losses
+        }
+
+    # Add placeholders for remaining strategies (11-22)
+    def adaptive_win_lock_ladder(self, context: BettingContext) -> Dict:
+        """Strategy 11: Lock wins and ladder stakes"""
+        return {"strategy": "win_lock_ladder", "stake": context.bankroll * 0.02, "multiplier": 2.5}
+    
+    def drawdown_ceiling_governor(self, context: BettingContext) -> Dict:
+        """Strategy 12: Limit drawdown exposure"""
+        return {"strategy": "drawdown_governor", "stake": context.bankroll * 0.015, "multiplier": 3.0}
+    
+    def monte_carlo_momentum_detector(self, context: BettingContext) -> Dict:
+        """Strategy 13: Monte Carlo simulation based"""
+        return {"strategy": "monte_carlo", "stake": context.bankroll * 0.025, "multiplier": 2.0}
+    
+    def profit_skim_reinvest_cycle(self, context: BettingContext) -> Dict:
+        """Strategy 15: Skim profits and reinvest"""
+        return {"strategy": "profit_skim", "stake": context.bankroll * 0.02, "multiplier": 2.2}
+    
+    def autocorrelation_sentinel(self, context: BettingContext) -> Dict:
+        """Strategy 16: Detect autocorrelation patterns"""
+        return {"strategy": "autocorr_sentinel", "stake": context.bankroll * 0.018, "multiplier": 4.0}
+    
+    def multi_multiplier_portfolio_rotation(self, context: BettingContext) -> Dict:
+        """Strategy 17: Rotate between multiplier portfolios"""
+        return {"strategy": "multiplier_rotation", "stake": context.bankroll * 0.022, "multiplier": 3.5}
+    
+    def mean_reversion_ladder(self, context: BettingContext) -> Dict:
+        """Strategy 18: Mean reversion betting ladder"""
+        return {"strategy": "mean_reversion", "stake": context.bankroll * 0.03, "multiplier": 2.8}
+    
+    def entropy_weighted_rotation(self, context: BettingContext) -> Dict:
+        """Strategy 19: Entropy-weighted strategy rotation"""
+        return {"strategy": "entropy_rotation", "stake": context.bankroll * 0.025, "multiplier": 3.2}
+    
+    def quantile_adaptive_scaling(self, context: BettingContext) -> Dict:
+        """Strategy 20: Quantile-based adaptive scaling"""
+        return {"strategy": "quantile_scaling", "stake": context.bankroll * 0.02, "multiplier": 4.5}
+    
+    def bayesian_profit_target_rebalancer(self, context: BettingContext) -> Dict:
+        """Strategy 21: Bayesian profit target rebalancing"""
+        return {"strategy": "bayesian_rebalancer", "stake": context.bankroll * 0.035, "multiplier": 2.5}
+    
+    def drawdown_resilient_hybrid_grid(self, context: BettingContext) -> Dict:
+        """Strategy 22: Drawdown resilient hybrid grid"""
+        return {"strategy": "hybrid_grid", "stake": context.bankroll * 0.028, "multiplier": 3.8}
+
     # [Continue with remaining 17 strategies...]
     def fractional_kelly_overlay(self, context: BettingContext) -> Dict:
         """Strategy 8: Kelly criterion with edge estimation"""

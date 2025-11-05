@@ -18,16 +18,19 @@ from dataclasses import asdict
 import traceback
 
 # Import our supreme systems
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from unified_ai_decision_engine import UnifiedAIDecisionEngine, initialize_supreme_engine, get_supreme_engine
 from continuous_learning_system import ContinuousLearningSystem, initialize_learning_system, get_learning_system, TrainingExample
-from cloudscraper_test import StakeAPIAccess
-from camoufox_seleniumbase_bypass import UltimateStakeBot
+from real_stake_api import StakeAPIAccess
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # Initialize Flask app with SocketIO
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['SECRET_KEY'] = 'supreme_betting_engine_2024'
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 

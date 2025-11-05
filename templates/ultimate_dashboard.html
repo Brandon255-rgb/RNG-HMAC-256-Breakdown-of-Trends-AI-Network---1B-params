@@ -3,253 +3,570 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 SUPREME BETTING DASHBOARD - ULTIMATE PROFIT MAXIMIZER 💰</title>
+    <title>🚀 SUPREME AI BETTING COMMAND CENTER - PROFIT MAXIMIZER 💰</title>
     
-    <!-- SocketIO -->
+    <!-- External Libraries -->
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        .glow {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-            animation: pulse 2s infinite;
+        :root {
+            --neon-blue: #00d4ff;
+            --neon-green: #39ff14;
+            --neon-purple: #bf00ff;
+            --neon-orange: #ff6600;
+            --dark-bg: #0a0a0f;
+            --card-bg: #1a1a2e;
+            --accent-bg: #16213e;
         }
-        
-        .profit-glow {
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+
+        * {
+            box-sizing: border-box;
         }
-        
-        .loss-glow {
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: var(--dark-bg);
+            color: #ffffff;
+            margin: 0;
+            overflow-x: hidden;
         }
-        
-        @keyframes pulse {
+
+        /* Animated background */
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, var(--neon-blue)15, transparent 50%),
+                radial-gradient(circle at 80% 20%, var(--neon-purple)15, transparent 50%),
+                radial-gradient(circle at 40% 80%, var(--neon-green)15, transparent 50%),
+                linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f23 100%);
+            z-index: -2;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Neon glow effects */
+        .neon-glow {
+            text-shadow: 
+                0 0 5px currentColor,
+                0 0 10px currentColor,
+                0 0 20px currentColor,
+                0 0 40px currentColor;
+        }
+
+        .card-glow {
+            box-shadow: 
+                0 0 20px rgba(0, 212, 255, 0.3),
+                inset 0 0 20px rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .profit-card {
+            box-shadow: 
+                0 0 30px rgba(57, 255, 20, 0.5),
+                inset 0 0 20px rgba(57, 255, 20, 0.1);
+            border: 1px solid rgba(57, 255, 20, 0.5);
+            animation: profitPulse 2s infinite;
+        }
+
+        .loss-card {
+            box-shadow: 
+                0 0 30px rgba(255, 0, 100, 0.5),
+                inset 0 0 20px rgba(255, 0, 100, 0.1);
+            border: 1px solid rgba(255, 0, 100, 0.5);
+            animation: lossPulse 2s infinite;
+        }
+
+        @keyframes profitPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(57, 255, 20, 0.5); }
+            50% { box-shadow: 0 0 50px rgba(57, 255, 20, 0.8); }
+        }
+
+        @keyframes lossPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 100, 0.5); }
+            50% { box-shadow: 0 0 50px rgba(255, 0, 100, 0.8); }
+        }
+
+        /* Button styles */
+        .cyber-btn {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.4);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cyber-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Status indicators */
+        .status-online {
+            background: linear-gradient(45deg, var(--neon-green), #00ff88);
+            color: #000;
+            animation: statusPulse 1.5s infinite;
+        }
+
+        .status-offline {
+            background: linear-gradient(45deg, #ff0040, #ff6600);
+            color: #fff;
+        }
+
+        @keyframes statusPulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            50% { opacity: 0.7; }
         }
-        
-        .terminal {
-            background: #000;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
+
+        /* Terminal styling */
+        .cyber-terminal {
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            font-family: 'JetBrains Mono', monospace;
+            text-shadow: 0 0 10px var(--neon-green);
         }
-        
-        .matrix-bg {
-            background: linear-gradient(45deg, #0f0f23, #1a1a3a);
+
+        /* Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        
-        .neon-text {
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 4px;
+        }
+
+        /* Stat number animation */
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
             text-shadow: 0 0 10px currentColor;
         }
-        
-        .grid-pattern {
-            background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
+
+        /* Loading animation */
+        .loading-spinner {
+            border: 3px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid var(--neon-blue);
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Card hover effects */
+        .stat-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        /* Decision card styling */
+        .decision-card {
+            background: linear-gradient(135deg, rgba(191, 0, 255, 0.1), rgba(0, 212, 255, 0.1));
+            border-left: 4px solid var(--neon-purple);
+        }
+
+        /* Progress bars */
+        .progress-bar {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            height: 6px;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .grid-cols-6 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            
+            .text-3xl {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Chart container styling */
+        .chart-container {
+            position: relative;
+            background: rgba(26, 26, 46, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        /* Notification styling */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 15px;
+            color: white;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen grid-pattern">
+<body>
+    <!-- Animated Background -->
+    <div class="cyber-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <!-- Notification Container -->
+    <div id="notification" class="notification">
+        <div class="flex items-center space-x-3">
+            <i class="fas fa-bell text-yellow-400"></i>
+            <span id="notificationText">System Ready</span>
+        </div>
+    </div>
+
     <!-- Header -->
-    <header class="bg-black border-b border-blue-500 p-4 glow">
+    <header class="relative z-10 bg-black bg-opacity-50 backdrop-blur-md border-b border-cyan-500 p-6">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-3xl font-bold neon-text text-blue-400">
-                🚀 SUPREME BETTING DASHBOARD 💰
-            </h1>
-            <div class="flex space-x-4">
-                <button id="startBtn" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-lg font-bold">
-                    <i class="fas fa-play"></i> START SYSTEM
+            <div class="flex items-center space-x-4">
+                <h1 class="text-4xl font-black neon-glow text-cyan-400">
+                    🚀 SUPREME AI COMMAND CENTER
+                </h1>
+                <div class="hidden md:block text-sm text-cyan-300">
+                    <div>Neural Network • Machine Learning • 22 Strategies</div>
+                    <div class="text-xs text-gray-400">Real-time Profit Maximization System</div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="startBtn" class="cyber-btn px-8 py-3 rounded-lg font-bold text-lg">
+                    <i class="fas fa-rocket mr-2"></i> ACTIVATE
                 </button>
-                <button id="stopBtn" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg font-bold" disabled>
-                    <i class="fas fa-stop"></i> STOP SYSTEM
+                <button id="stopBtn" class="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 px-8 py-3 rounded-lg font-bold text-lg transition-all duration-300" disabled>
+                    <i class="fas fa-stop mr-2"></i> SHUTDOWN
                 </button>
-                <div id="systemStatus" class="px-4 py-2 rounded-lg bg-red-900 text-red-300">
-                    <i class="fas fa-circle"></i> OFFLINE
+                <div id="systemStatus" class="status-offline px-6 py-3 rounded-lg font-bold text-lg">
+                    <i class="fas fa-circle mr-2"></i> OFFLINE
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Main Dashboard -->
-    <div class="container mx-auto p-6">
-        <!-- Live Stats Row -->
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+    <div class="container mx-auto p-8 relative z-10">
+        
+        <!-- Live Stats Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
             <!-- Current Bankroll -->
-            <div class="bg-gray-800 p-4 rounded-lg border border-green-500 profit-glow">
-                <div class="text-sm text-green-400 mb-1">💰 BANKROLL</div>
-                <div id="currentBankroll" class="text-2xl font-bold text-green-400">$1,000.00</div>
+            <div class="stat-card card-glow p-6 rounded-xl text-center">
+                <div class="text-sm text-cyan-400 mb-2 font-semibold uppercase tracking-wide">💰 Bankroll</div>
+                <div id="currentBankroll" class="stat-number text-3xl font-black text-green-400">$1,000.00</div>
+                <div class="progress-bar mt-3" style="width: 100%"></div>
             </div>
             
             <!-- Total Profit -->
-            <div class="bg-gray-800 p-4 rounded-lg border" id="profitCard">
-                <div class="text-sm text-gray-400 mb-1">📈 PROFIT</div>
-                <div id="totalProfit" class="text-2xl font-bold">$0.00</div>
+            <div class="stat-card card-glow p-6 rounded-xl text-center" id="profitCard">
+                <div class="text-sm text-gray-400 mb-2 font-semibold uppercase tracking-wide">📈 Profit</div>
+                <div id="totalProfit" class="stat-number text-3xl font-black">$0.00</div>
+                <div id="profitProgress" class="progress-bar mt-3" style="width: 0%"></div>
             </div>
             
             <!-- Win Rate -->
-            <div class="bg-gray-800 p-4 rounded-lg border border-blue-500">
-                <div class="text-sm text-blue-400 mb-1">🎯 WIN RATE</div>
-                <div id="winRate" class="text-2xl font-bold text-blue-400">0%</div>
+            <div class="stat-card card-glow p-6 rounded-xl text-center">
+                <div class="text-sm text-blue-400 mb-2 font-semibold uppercase tracking-wide">🎯 Win Rate</div>
+                <div id="winRate" class="stat-number text-3xl font-black text-blue-400">0%</div>
+                <div id="winRateProgress" class="progress-bar mt-3" style="width: 0%"></div>
             </div>
             
             <!-- Total Bets -->
-            <div class="bg-gray-800 p-4 rounded-lg border border-purple-500">
-                <div class="text-sm text-purple-400 mb-1">🔥 TOTAL BETS</div>
-                <div id="totalBets" class="text-2xl font-bold text-purple-400">0</div>
+            <div class="stat-card card-glow p-6 rounded-xl text-center">
+                <div class="text-sm text-purple-400 mb-2 font-semibold uppercase tracking-wide">🔥 Bets</div>
+                <div id="totalBets" class="stat-number text-3xl font-black text-purple-400">0</div>
+                <div class="progress-bar mt-3" style="width: 0%"></div>
             </div>
             
             <!-- Session Duration -->
-            <div class="bg-gray-800 p-4 rounded-lg border border-yellow-500">
-                <div class="text-sm text-yellow-400 mb-1">⏱️ SESSION</div>
-                <div id="sessionDuration" class="text-2xl font-bold text-yellow-400">0m</div>
+            <div class="stat-card card-glow p-6 rounded-xl text-center">
+                <div class="text-sm text-yellow-400 mb-2 font-semibold uppercase tracking-wide">⏱️ Session</div>
+                <div id="sessionDuration" class="stat-number text-3xl font-black text-yellow-400">0m</div>
+                <div id="sessionProgress" class="progress-bar mt-3" style="width: 0%"></div>
             </div>
             
             <!-- AI Confidence -->
-            <div class="bg-gray-800 p-4 rounded-lg border border-orange-500">
-                <div class="text-sm text-orange-400 mb-1">🧠 AI CONFIDENCE</div>
-                <div id="aiConfidence" class="text-2xl font-bold text-orange-400">0%</div>
+            <div class="stat-card card-glow p-6 rounded-xl text-center">
+                <div class="text-sm text-orange-400 mb-2 font-semibold uppercase tracking-wide">🧠 AI Power</div>
+                <div id="aiConfidence" class="stat-number text-3xl font-black text-orange-400">0%</div>
+                <div id="confidenceProgress" class="progress-bar mt-3" style="width: 0%"></div>
             </div>
         </div>
 
         <!-- Control Panel -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
             <!-- Auto Betting Controls -->
-            <div class="bg-gray-800 p-6 rounded-lg border border-blue-500">
-                <h3 class="text-xl font-bold mb-4 text-blue-400">🤖 AUTO BETTING</h3>
-                <div class="space-y-4">
-                    <button id="toggleAutoBetting" class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-bold">
-                        <i class="fas fa-robot"></i> ENABLE AUTO BETTING
+            <div class="card-glow p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6 text-cyan-400 neon-glow flex items-center">
+                    <i class="fas fa-robot mr-3"></i> AI AUTOPILOT
+                </h3>
+                <div class="space-y-6">
+                    <button id="toggleAutoBetting" class="cyber-btn w-full py-4 rounded-lg font-bold text-lg">
+                        <i class="fas fa-brain mr-2"></i> ENABLE AUTOPILOT
                     </button>
-                    <div class="flex items-center space-x-2">
-                        <label class="text-sm">Bet Interval (seconds):</label>
-                        <input id="betInterval" type="number" value="30" min="10" max="300" 
-                               class="bg-gray-700 px-3 py-1 rounded w-20 text-center">
+                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Bet Interval (seconds):</label>
+                        <input id="betInterval" type="range" min="10" max="300" value="30" 
+                               class="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-gray-400 mt-2">
+                            <span>10s</span>
+                            <span id="intervalValue">30s</span>
+                            <span>300s</span>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <!-- Manual Controls -->
-            <div class="bg-gray-800 p-6 rounded-lg border border-green-500">
-                <h3 class="text-xl font-bold mb-4 text-green-400">🎮 MANUAL CONTROL</h3>
+            <div class="card-glow p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6 text-green-400 neon-glow flex items-center">
+                    <i class="fas fa-gamepad mr-3"></i> MANUAL CONTROL
+                </h3>
                 <div class="space-y-4">
-                    <button id="manualDecision" class="w-full bg-green-600 hover:bg-green-700 py-3 rounded-lg font-bold">
-                        <i class="fas fa-brain"></i> MAKE DECISION
+                    <button id="manualDecision" class="w-full bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 py-4 rounded-lg font-bold text-lg transition-all duration-300">
+                        <i class="fas fa-lightning-bolt mr-2"></i> FIRE DECISION
                     </button>
-                    <button id="refreshData" class="w-full bg-yellow-600 hover:bg-yellow-700 py-2 rounded-lg">
-                        <i class="fas fa-sync"></i> REFRESH DATA
+                    <button id="refreshData" class="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 py-3 rounded-lg font-semibold transition-all duration-300">
+                        <i class="fas fa-sync-alt mr-2"></i> REFRESH DATA
+                    </button>
+                    <button id="emergencyStop" class="w-full bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 py-3 rounded-lg font-semibold transition-all duration-300">
+                        <i class="fas fa-exclamation-triangle mr-2"></i> EMERGENCY STOP
                     </button>
                 </div>
             </div>
             
             <!-- Risk Management -->
-            <div class="bg-gray-800 p-6 rounded-lg border border-red-500">
-                <h3 class="text-xl font-bold mb-4 text-red-400">⚠️ RISK CONTROL</h3>
-                <div class="space-y-3 text-sm">
-                    <div class="flex justify-between">
-                        <span>Stop Loss:</span>
-                        <span class="text-red-400">-20%</span>
+            <div class="card-glow p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6 text-red-400 neon-glow flex items-center">
+                    <i class="fas fa-shield-alt mr-3"></i> RISK SHIELD
+                </h3>
+                <div class="space-y-4">
+                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold">Stop Loss:</span>
+                            <span class="text-red-400 font-bold">-20%</span>
+                        </div>
+                        <div class="progress-bar bg-red-600" style="width: 20%"></div>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Stop Win:</span>
-                        <span class="text-green-400">+50%</span>
+                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold">Stop Win:</span>
+                            <span class="text-green-400 font-bold">+50%</span>
+                        </div>
+                        <div class="progress-bar bg-green-600" style="width: 50%"></div>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Max Bet:</span>
-                        <span class="text-yellow-400">5%</span>
+                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold">Max Bet:</span>
+                            <span class="text-yellow-400 font-bold">5%</span>
+                        </div>
+                        <div class="progress-bar bg-yellow-600" style="width: 5%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Metrics -->
+            <div class="card-glow p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6 text-purple-400 neon-glow flex items-center">
+                    <i class="fas fa-chart-line mr-3"></i> PERFORMANCE
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Best Streak:</span>
+                        <span id="bestStreak" class="text-green-400 font-bold">0</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Worst Streak:</span>
+                        <span id="worstStreak" class="text-red-400 font-bold">0</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Avg Profit/Bet:</span>
+                        <span id="avgProfit" class="text-blue-400 font-bold">$0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Strategy Score:</span>
+                        <span id="strategyScore" class="text-yellow-400 font-bold">100%</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <!-- Latest Decision -->
-            <div class="bg-gray-800 p-6 rounded-lg border border-purple-500">
-                <h3 class="text-xl font-bold mb-4 text-purple-400">🧠 LATEST AI DECISION</h3>
-                <div id="latestDecision" class="space-y-3">
-                    <div class="text-gray-400 text-center py-8">
-                        No decisions yet - Start the system to begin!
+        <!-- AI Decision Display -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <!-- Latest AI Decision -->
+            <div class="card-glow p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6 text-purple-400 neon-glow flex items-center">
+                    <i class="fas fa-brain mr-3"></i> AI NEURAL DECISION
+                    <div class="loading-spinner ml-auto hidden" id="decisionSpinner"></div>
+                </h3>
+                <div id="latestDecision" class="decision-card p-6 rounded-lg">
+                    <div class="text-center py-8 text-gray-400">
+                        <i class="fas fa-robot text-6xl mb-4 opacity-50"></i>
+                        <div class="text-lg">AI Brain Sleeping...</div>
+                        <div class="text-sm">Start the system to awaken the neural network!</div>
                     </div>
                 </div>
             </div>
             
             <!-- Market Conditions -->
-            <div class="bg-gray-800 p-6 rounded-lg border border-orange-500">
-                <h3 class="text-xl font-bold mb-4 text-orange-400">📊 MARKET CONDITIONS</h3>
-                <div id="marketConditions" class="space-y-3">
-                    <div class="flex justify-between">
-                        <span>Volatility:</span>
-                        <span id="volatility" class="text-orange-400">-</span>
+            <div class="card-glow p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6 text-orange-400 neon-glow flex items-center">
+                    <i class="fas fa-chart-area mr-3"></i> MARKET NEURAL SCAN
+                </h3>
+                <div id="marketConditions" class="space-y-4">
+                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg flex justify-between items-center">
+                        <span class="font-semibold">Volatility:</span>
+                        <span id="volatility" class="text-orange-400 font-bold">-</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Trend:</span>
-                        <span id="trend" class="text-orange-400">-</span>
+                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg flex justify-between items-center">
+                        <span class="font-semibold">Trend Force:</span>
+                        <span id="trend" class="text-orange-400 font-bold">-</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Entropy:</span>
-                        <span id="entropy" class="text-orange-400">-</span>
+                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg flex justify-between items-center">
+                        <span class="font-semibold">Entropy Chaos:</span>
+                        <span id="entropy" class="text-orange-400 font-bold">-</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Last Roll:</span>
-                        <span id="lastRoll" class="text-orange-400">-</span>
+                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg flex justify-between items-center">
+                        <span class="font-semibold">Last Roll:</span>
+                        <span id="lastRoll" class="text-orange-400 font-bold text-2xl">-</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
             <!-- Profit Chart -->
-            <div class="bg-gray-800 p-6 rounded-lg border border-green-500">
-                <h3 class="text-xl font-bold mb-4 text-green-400">📈 PROFIT CHART</h3>
-                <canvas id="profitChart" width="400" height="200"></canvas>
+            <div class="card-glow p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6 text-green-400 neon-glow flex items-center">
+                    <i class="fas fa-chart-line mr-3"></i> PROFIT TRAJECTORY
+                </h3>
+                <div class="chart-container">
+                    <canvas id="profitChart" width="400" height="250"></canvas>
+                </div>
             </div>
             
             <!-- Win Rate Chart -->
-            <div class="bg-gray-800 p-6 rounded-lg border border-blue-500">
-                <h3 class="text-xl font-bold mb-4 text-blue-400">🎯 WIN RATE CHART</h3>
-                <canvas id="winRateChart" width="400" height="200"></canvas>
+            <div class="card-glow p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6 text-blue-400 neon-glow flex items-center">
+                    <i class="fas fa-bullseye mr-3"></i> ACCURACY MATRIX
+                </h3>
+                <div class="chart-container">
+                    <canvas id="winRateChart" width="400" height="250"></canvas>
+                </div>
             </div>
         </div>
 
-        <!-- Recent Activity -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Activity Streams -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Recent Decisions -->
-            <div class="bg-gray-800 p-6 rounded-lg border border-blue-500">
-                <h3 class="text-xl font-bold mb-4 text-blue-400">📋 RECENT DECISIONS</h3>
-                <div id="recentDecisions" class="space-y-2 max-h-80 overflow-y-auto">
+            <div class="card-glow p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6 text-blue-400 neon-glow flex items-center">
+                    <i class="fas fa-history mr-3"></i> DECISION STREAM
+                </h3>
+                <div id="recentDecisions" class="space-y-3 max-h-96 overflow-y-auto">
                     <!-- Recent decisions will be populated here -->
                 </div>
             </div>
             
-            <!-- System Logs -->
-            <div class="bg-gray-800 p-6 rounded-lg border border-yellow-500">
-                <h3 class="text-xl font-bold mb-4 text-yellow-400">📝 SYSTEM LOGS</h3>
-                <div id="systemLogs" class="terminal p-4 rounded text-sm max-h-80 overflow-y-auto font-mono">
-                    <div class="text-green-400">[SYSTEM] Dashboard initialized</div>
-                    <div class="text-green-400">[SYSTEM] Waiting for system start...</div>
+            <!-- System Neural Logs -->
+            <div class="card-glow p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6 text-green-400 neon-glow flex items-center">
+                    <i class="fas fa-terminal mr-3"></i> NEURAL SYSTEM LOGS
+                </h3>
+                <div id="systemLogs" class="cyber-terminal p-6 rounded-lg text-sm max-h-96 overflow-y-auto font-mono">
+                    <div class="text-green-400">[NEURAL] Dashboard consciousness initialized</div>
+                    <div class="text-cyan-400">[SYSTEM] Quantum processors standing by...</div>
+                    <div class="text-yellow-400">[WAIT] Awaiting neural activation command...</div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-black border-t border-blue-500 p-4 mt-8">
+    <footer class="relative z-10 bg-black bg-opacity-50 backdrop-blur-md border-t border-cyan-500 p-6 mt-12">
         <div class="container mx-auto text-center">
-            <p class="text-blue-400 neon-text">
-                🚀 SUPREME BETTING DASHBOARD - THE ULTIMATE PROFIT MAXIMIZATION SYSTEM 💰
+            <p class="text-2xl font-bold text-cyan-400 neon-glow mb-2">
+                🚀 SUPREME AI BETTING COMMAND CENTER 💰
             </p>
-            <p class="text-sm text-gray-400 mt-2">
-                Powered by AI, Machine Learning, 22 Advanced Strategies, and Pure Mathematical Excellence
+            <p class="text-lg text-purple-400 mb-2">
+                Powered by Amazon Bedrock AI • Machine Learning • 22 Neural Strategies
+            </p>
+            <p class="text-sm text-gray-400">
+                Next-Generation Quantum Profit Maximization System • Built for Maximum Domination
             </p>
         </div>
     </footer>
@@ -266,7 +583,8 @@
             isRunning: false,
             autoBetting: false,
             profitHistory: [],
-            winRateHistory: []
+            winRateHistory: [],
+            notifications: []
         };
 
         // Initialize dashboard
@@ -274,6 +592,7 @@
             initializeCharts();
             setupEventListeners();
             loadInitialData();
+            startAnimations();
         });
 
         // Event Listeners
@@ -283,17 +602,36 @@
             document.getElementById('toggleAutoBetting').addEventListener('click', toggleAutoBetting);
             document.getElementById('manualDecision').addEventListener('click', makeManualDecision);
             document.getElementById('refreshData').addEventListener('click', refreshData);
+            document.getElementById('emergencyStop').addEventListener('click', emergencyStop);
             
-            // Bet interval change
-            document.getElementById('betInterval').addEventListener('change', function() {
+            // Bet interval slider
+            const betIntervalSlider = document.getElementById('betInterval');
+            const intervalValue = document.getElementById('intervalValue');
+            
+            betIntervalSlider.addEventListener('input', function() {
+                intervalValue.textContent = this.value + 's';
                 updateSettings({bet_interval: this.value});
+            });
+            
+            // Stat card click animations
+            document.querySelectorAll('.stat-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
             });
         }
 
         // System Control Functions
         async function startSystem() {
             try {
-                addLog('[USER] Starting Supreme Betting System...', 'text-blue-400');
+                showNotification('🚀 Initiating Supreme AI System...', 'info');
+                addLog('[USER] Activating Supreme Betting Neural Network...', 'text-cyan-400');
+                
+                document.getElementById('startBtn').innerHTML = '<div class="loading-spinner inline-block mr-2"></div> ACTIVATING...';
+                document.getElementById('startBtn').disabled = true;
                 
                 const response = await fetch('/api/start', {method: 'POST'});
                 const data = await response.json();
@@ -301,18 +639,25 @@
                 if (response.ok) {
                     dashboardState.isRunning = true;
                     updateSystemStatus(true);
-                    addLog('[SYSTEM] Supreme Betting System ACTIVATED! 🚀', 'text-green-400');
+                    addLog('[NEURAL] Supreme AI System FULLY ACTIVATED! 🚀', 'text-green-400');
+                    showNotification('🎯 AI System Online - Ready for Profit!', 'success');
                 } else {
-                    addLog('[ERROR] Failed to start system: ' + data.error, 'text-red-400');
+                    addLog('[ERROR] Neural activation failed: ' + data.error, 'text-red-400');
+                    showNotification('⚠️ System activation failed', 'error');
                 }
             } catch (error) {
-                addLog('[ERROR] System start failed: ' + error.message, 'text-red-400');
+                addLog('[CRITICAL] System activation failed: ' + error.message, 'text-red-400');
+                showNotification('💥 Critical system error', 'error');
+            } finally {
+                document.getElementById('startBtn').innerHTML = '<i class="fas fa-rocket mr-2"></i> ACTIVATE';
+                document.getElementById('startBtn').disabled = false;
             }
         }
 
         async function stopSystem() {
             try {
-                addLog('[USER] Stopping Supreme Betting System...', 'text-yellow-400');
+                showNotification('🛑 Shutting down AI system...', 'warning');
+                addLog('[USER] Initiating system shutdown...', 'text-yellow-400');
                 
                 const response = await fetch('/api/stop', {method: 'POST'});
                 const data = await response.json();
@@ -321,12 +666,23 @@
                     dashboardState.isRunning = false;
                     dashboardState.autoBetting = false;
                     updateSystemStatus(false);
-                    addLog('[SYSTEM] Supreme Betting System DEACTIVATED', 'text-red-400');
+                    addLog('[SYSTEM] Supreme AI System DEACTIVATED', 'text-red-400');
+                    showNotification('💤 AI System Offline', 'info');
                 } else {
-                    addLog('[ERROR] Failed to stop system: ' + data.error, 'text-red-400');
+                    addLog('[ERROR] Shutdown failed: ' + data.error, 'text-red-400');
+                    showNotification('⚠️ Shutdown error', 'error');
                 }
             } catch (error) {
-                addLog('[ERROR] System stop failed: ' + error.message, 'text-red-400');
+                addLog('[ERROR] System shutdown failed: ' + error.message, 'text-red-400');
+                showNotification('💥 Shutdown error', 'error');
+            }
+        }
+
+        async function emergencyStop() {
+            if (confirm('⚠️ EMERGENCY STOP will immediately halt all operations. Continue?')) {
+                await stopSystem();
+                addLog('[EMERGENCY] EMERGENCY STOP ACTIVATED', 'text-red-400');
+                showNotification('🚨 EMERGENCY STOP ACTIVATED', 'error');
             }
         }
 
@@ -338,47 +694,66 @@
                 if (response.ok) {
                     dashboardState.autoBetting = data.auto_betting;
                     updateAutoBettingStatus(data.auto_betting);
-                    addLog(`[SYSTEM] Auto betting ${data.auto_betting ? 'ENABLED' : 'DISABLED'} 🤖`, 'text-blue-400');
+                    addLog(`[AI] Autopilot ${data.auto_betting ? 'ENGAGED' : 'DISENGAGED'} 🤖`, 'text-cyan-400');
+                    showNotification(`🤖 Autopilot ${data.auto_betting ? 'Engaged' : 'Disengaged'}`, 'info');
                 } else {
-                    addLog('[ERROR] Failed to toggle auto betting: ' + data.error, 'text-red-400');
+                    addLog('[ERROR] Autopilot toggle failed: ' + data.error, 'text-red-400');
+                    showNotification('⚠️ Autopilot error', 'error');
                 }
             } catch (error) {
-                addLog('[ERROR] Auto betting toggle failed: ' + error.message, 'text-red-400');
+                addLog('[ERROR] Autopilot toggle failed: ' + error.message, 'text-red-400');
+                showNotification('💥 Autopilot error', 'error');
             }
         }
 
         async function makeManualDecision() {
             try {
-                addLog('[USER] Requesting manual decision...', 'text-purple-400');
+                addLog('[USER] Requesting manual neural decision...', 'text-purple-400');
+                showNotification('🧠 AI Brain processing...', 'info');
+                
+                document.getElementById('decisionSpinner').classList.remove('hidden');
+                document.getElementById('manualDecision').innerHTML = '<div class="loading-spinner inline-block mr-2"></div> THINKING...';
+                document.getElementById('manualDecision').disabled = true;
                 
                 const response = await fetch('/api/manual_decision', {method: 'POST'});
                 const data = await response.json();
                 
                 if (response.ok) {
-                    addLog('[SYSTEM] Manual decision initiated 🧠', 'text-purple-400');
+                    addLog('[NEURAL] Manual decision neural processing initiated 🧠', 'text-purple-400');
+                    showNotification('⚡ Decision fired!', 'success');
                 } else {
-                    addLog('[ERROR] Manual decision failed: ' + data.error, 'text-red-400');
+                    addLog('[ERROR] Neural decision failed: ' + data.error, 'text-red-400');
+                    showNotification('⚠️ Decision failed', 'error');
                 }
             } catch (error) {
                 addLog('[ERROR] Manual decision failed: ' + error.message, 'text-red-400');
+                showNotification('💥 Decision error', 'error');
+            } finally {
+                document.getElementById('decisionSpinner').classList.add('hidden');
+                document.getElementById('manualDecision').innerHTML = '<i class="fas fa-lightning-bolt mr-2"></i> FIRE DECISION';
+                document.getElementById('manualDecision').disabled = false;
             }
         }
 
         async function refreshData() {
             try {
-                addLog('[USER] Refreshing dashboard data...', 'text-yellow-400');
+                addLog('[USER] Refreshing neural data streams...', 'text-yellow-400');
+                showNotification('🔄 Refreshing data...', 'info');
                 
                 const response = await fetch('/api/dashboard_data');
                 const data = await response.json();
                 
                 if (response.ok) {
                     updateDashboard(data);
-                    addLog('[SYSTEM] Dashboard data refreshed ✅', 'text-green-400');
+                    addLog('[SYSTEM] Neural data streams refreshed ✅', 'text-green-400');
+                    showNotification('✅ Data refreshed', 'success');
                 } else {
-                    addLog('[ERROR] Failed to refresh data: ' + data.error, 'text-red-400');
+                    addLog('[ERROR] Data refresh failed: ' + data.error, 'text-red-400');
+                    showNotification('⚠️ Refresh failed', 'error');
                 }
             } catch (error) {
                 addLog('[ERROR] Data refresh failed: ' + error.message, 'text-red-400');
+                showNotification('💥 Refresh error', 'error');
             }
         }
 
@@ -392,7 +767,7 @@
                 
                 const data = await response.json();
                 if (response.ok) {
-                    addLog('[SYSTEM] Settings updated', 'text-blue-400');
+                    addLog('[SYSTEM] Neural settings updated', 'text-blue-400');
                 }
             } catch (error) {
                 addLog('[ERROR] Settings update failed: ' + error.message, 'text-red-400');
@@ -412,6 +787,44 @@
             }
         }
 
+        // Animation Functions
+        function startAnimations() {
+            // Animate stat numbers
+            setInterval(() => {
+                if (dashboardState.isRunning) {
+                    document.querySelectorAll('.stat-number').forEach(el => {
+                        el.style.textShadow = `0 0 ${Math.random() * 20 + 10}px currentColor`;
+                    });
+                }
+            }, 1000);
+            
+            // Update progress bars
+            setInterval(updateProgressBars, 2000);
+        }
+
+        function updateProgressBars() {
+            if (!dashboardState.isRunning) return;
+            
+            // Update win rate progress
+            const winRate = parseFloat(document.getElementById('winRate').textContent) || 0;
+            document.getElementById('winRateProgress').style.width = `${winRate}%`;
+            
+            // Update confidence progress
+            const confidence = parseFloat(document.getElementById('aiConfidence').textContent) || 0;
+            document.getElementById('confidenceProgress').style.width = `${confidence}%`;
+            
+            // Update session progress (example: 0-240 minutes = 0-100%)
+            const sessionMinutes = parseFloat(document.getElementById('sessionDuration').textContent) || 0;
+            const sessionProgress = Math.min((sessionMinutes / 240) * 100, 100);
+            document.getElementById('sessionProgress').style.width = `${sessionProgress}%`;
+            
+            // Update profit progress (relative to bankroll)
+            const profit = parseFloat(document.getElementById('totalProfit').textContent.replace('$', '')) || 0;
+            const bankroll = parseFloat(document.getElementById('currentBankroll').textContent.replace('$', '')) || 1000;
+            const profitProgress = Math.abs(profit / bankroll) * 100;
+            document.getElementById('profitProgress').style.width = `${Math.min(profitProgress, 100)}%`;
+        }
+
         // Update Functions
         function updateSystemStatus(isRunning) {
             const statusElement = document.getElementById('systemStatus');
@@ -419,13 +832,13 @@
             const stopBtn = document.getElementById('stopBtn');
             
             if (isRunning) {
-                statusElement.className = 'px-4 py-2 rounded-lg bg-green-900 text-green-300';
-                statusElement.innerHTML = '<i class="fas fa-circle"></i> ONLINE';
+                statusElement.className = 'status-online px-6 py-3 rounded-lg font-bold text-lg';
+                statusElement.innerHTML = '<i class="fas fa-circle mr-2"></i> ONLINE';
                 startBtn.disabled = true;
                 stopBtn.disabled = false;
             } else {
-                statusElement.className = 'px-4 py-2 rounded-lg bg-red-900 text-red-300';
-                statusElement.innerHTML = '<i class="fas fa-circle"></i> OFFLINE';
+                statusElement.className = 'status-offline px-6 py-3 rounded-lg font-bold text-lg';
+                statusElement.innerHTML = '<i class="fas fa-circle mr-2"></i> OFFLINE';
                 startBtn.disabled = false;
                 stopBtn.disabled = true;
             }
@@ -435,33 +848,34 @@
             const btn = document.getElementById('toggleAutoBetting');
             
             if (enabled) {
-                btn.className = 'w-full bg-red-600 hover:bg-red-700 py-3 rounded-lg font-bold';
-                btn.innerHTML = '<i class="fas fa-stop"></i> DISABLE AUTO BETTING';
+                btn.className = 'w-full bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 py-4 rounded-lg font-bold text-lg transition-all duration-300';
+                btn.innerHTML = '<i class="fas fa-pause mr-2"></i> DISABLE AUTOPILOT';
             } else {
-                btn.className = 'w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-bold';
-                btn.innerHTML = '<i class="fas fa-robot"></i> ENABLE AUTO BETTING';
+                btn.className = 'cyber-btn w-full py-4 rounded-lg font-bold text-lg';
+                btn.innerHTML = '<i class="fas fa-brain mr-2"></i> ENABLE AUTOPILOT';
             }
         }
 
         function updateDashboard(data) {
             if (data.live_stats) {
-                document.getElementById('currentBankroll').textContent = '$' + data.live_stats.current_bankroll.toFixed(2);
-                document.getElementById('totalProfit').textContent = '$' + data.live_stats.total_profit.toFixed(2);
-                document.getElementById('winRate').textContent = data.live_stats.win_rate.toFixed(1) + '%';
-                document.getElementById('totalBets').textContent = data.live_stats.total_bets;
-                document.getElementById('sessionDuration').textContent = Math.floor(data.live_stats.session_duration) + 'm';
+                // Animate number changes
+                animateValue('currentBankroll', data.live_stats.current_bankroll, '$');
+                animateValue('totalProfit', data.live_stats.total_profit, '$');
+                animateValue('winRate', data.live_stats.win_rate, '%', 1);
+                animateValue('totalBets', data.live_stats.total_bets, '');
+                animateValue('sessionDuration', Math.floor(data.live_stats.session_duration), 'm');
                 
                 // Update profit card styling
                 const profitCard = document.getElementById('profitCard');
                 if (data.live_stats.total_profit > 0) {
-                    profitCard.className = 'bg-gray-800 p-4 rounded-lg border border-green-500 profit-glow';
-                    document.getElementById('totalProfit').className = 'text-2xl font-bold text-green-400';
+                    profitCard.className = 'stat-card profit-card p-6 rounded-xl text-center';
+                    document.getElementById('totalProfit').className = 'stat-number text-3xl font-black text-green-400';
                 } else if (data.live_stats.total_profit < 0) {
-                    profitCard.className = 'bg-gray-800 p-4 rounded-lg border border-red-500 loss-glow';
-                    document.getElementById('totalProfit').className = 'text-2xl font-bold text-red-400';
+                    profitCard.className = 'stat-card loss-card p-6 rounded-xl text-center';
+                    document.getElementById('totalProfit').className = 'stat-number text-3xl font-black text-red-400';
                 } else {
-                    profitCard.className = 'bg-gray-800 p-4 rounded-lg border';
-                    document.getElementById('totalProfit').className = 'text-2xl font-bold';
+                    profitCard.className = 'stat-card card-glow p-6 rounded-xl text-center';
+                    document.getElementById('totalProfit').className = 'stat-number text-3xl font-black';
                 }
             }
             
@@ -473,43 +887,64 @@
             updateCharts(data);
         }
 
+        function animateValue(elementId, targetValue, suffix = '', decimals = 2) {
+            const element = document.getElementById(elementId);
+            const currentValue = parseFloat(element.textContent.replace(/[$%m]/g, '')) || 0;
+            const increment = (targetValue - currentValue) / 20;
+            
+            let currentStep = 0;
+            const timer = setInterval(() => {
+                currentStep++;
+                const newValue = currentValue + (increment * currentStep);
+                
+                if (currentStep >= 20) {
+                    element.textContent = suffix + targetValue.toFixed(decimals) + (suffix === '$' || suffix === '%' || suffix === 'm' ? '' : suffix);
+                    clearInterval(timer);
+                } else {
+                    element.textContent = suffix + newValue.toFixed(decimals) + (suffix === '$' || suffix === '%' || suffix === 'm' ? '' : suffix);
+                }
+            }, 50);
+        }
+
         function updateLatestDecision(decision) {
             if (!decision) return;
             
             const element = document.getElementById('latestDecision');
-            document.getElementById('aiConfidence').textContent = decision.confidence.toFixed(1) + '%';
+            animateValue('aiConfidence', decision.confidence, '%', 1);
             
             element.innerHTML = `
-                <div class="space-y-2">
-                    <div class="flex justify-between">
-                        <span>Should Bet:</span>
-                        <span class="${decision.should_bet ? 'text-green-400' : 'text-red-400'}">
-                            ${decision.should_bet ? '✅ YES' : '❌ NO'}
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                        <span class="font-semibold">Neural Decision:</span>
+                        <span class="text-2xl font-bold ${decision.should_bet ? 'text-green-400' : 'text-red-400'}">
+                            ${decision.should_bet ? '✅ ENGAGE' : '❌ HOLD'}
                         </span>
                     </div>
                     ${decision.should_bet ? `
-                        <div class="flex justify-between">
-                            <span>Amount:</span>
-                            <span class="text-yellow-400">$${decision.bet_amount.toFixed(2)}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Multiplier:</span>
-                            <span class="text-blue-400">${decision.multiplier.toFixed(2)}x</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Side:</span>
-                            <span class="text-purple-400">${decision.side.toUpperCase()}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Target:</span>
-                            <span class="text-orange-400">${decision.target_roll.toFixed(1)}</span>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg text-center">
+                                <div class="text-xs text-gray-400 mb-1">Amount</div>
+                                <div class="text-yellow-400 font-bold text-lg">$${decision.bet_amount.toFixed(2)}</div>
+                            </div>
+                            <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg text-center">
+                                <div class="text-xs text-gray-400 mb-1">Multiplier</div>
+                                <div class="text-blue-400 font-bold text-lg">${decision.multiplier.toFixed(2)}x</div>
+                            </div>
+                            <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg text-center">
+                                <div class="text-xs text-gray-400 mb-1">Side</div>
+                                <div class="text-purple-400 font-bold">${decision.side.toUpperCase()}</div>
+                            </div>
+                            <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg text-center">
+                                <div class="text-xs text-gray-400 mb-1">Target</div>
+                                <div class="text-orange-400 font-bold">${decision.target_roll.toFixed(1)}</div>
+                            </div>
                         </div>
                     ` : ''}
-                    <div class="flex justify-between">
-                        <span>Strategy:</span>
-                        <span class="text-cyan-400">${decision.strategy_used}</span>
+                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                        <div class="text-xs text-gray-400 mb-2">Strategy & Reasoning:</div>
+                        <div class="text-cyan-400 font-semibold mb-2">${decision.strategy_used}</div>
+                        <div class="text-sm text-gray-300">${decision.ai_reasoning || 'Neural network processing...'}</div>
                     </div>
-                    <div class="text-sm text-gray-400 mt-2">${decision.ai_reasoning}</div>
                 </div>
             `;
         }
@@ -517,17 +952,41 @@
         function updateRecentDecisions(decisions) {
             const element = document.getElementById('recentDecisions');
             
-            element.innerHTML = decisions.slice(-10).reverse().map(decision => `
-                <div class="bg-gray-700 p-3 rounded border-l-4 ${decision.should_bet ? 'border-green-500' : 'border-red-500'}">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm">${new Date(decision.timestamp).toLocaleTimeString()}</span>
-                        <span class="${decision.should_bet ? 'text-green-400' : 'text-red-400'}">
+            element.innerHTML = decisions.slice(-10).reverse().map((decision, index) => `
+                <div class="decision-card p-4 rounded-lg border-l-4 ${decision.should_bet ? 'border-green-500' : 'border-red-500'} transform transition-all duration-300 hover:scale-105">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-mono">${new Date(decision.timestamp).toLocaleTimeString()}</span>
+                        <span class="text-lg font-bold ${decision.should_bet ? 'text-green-400' : 'text-red-400'}">
                             ${decision.should_bet ? `$${decision.bet_amount.toFixed(2)} @ ${decision.multiplier.toFixed(1)}x` : 'NO BET'}
                         </span>
                     </div>
-                    <div class="text-xs text-gray-400 mt-1">${decision.strategy_used} | ${decision.confidence.toFixed(1)}%</div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-gray-400">${decision.strategy_used}</span>
+                        <span class="text-xs text-cyan-400">${decision.confidence.toFixed(1)}% confidence</span>
+                    </div>
                 </div>
             `).join('');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            // Set color based on type
+            const colors = {
+                'info': 'border-cyan-500 text-cyan-400',
+                'success': 'border-green-500 text-green-400',
+                'warning': 'border-yellow-500 text-yellow-400',
+                'error': 'border-red-500 text-red-400'
+            };
+            
+            notification.className = `notification ${colors[type] || colors.info}`;
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
 
         function addLog(message, className = 'text-green-400') {
@@ -550,6 +1009,51 @@
 
         // Charts
         function initializeCharts() {
+            // Advanced chart configuration
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#00d4ff',
+                            font: {
+                                family: 'Orbitron',
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#00d4ff',
+                            font: {
+                                family: 'JetBrains Mono'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 212, 255, 0.2)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#00d4ff',
+                            font: {
+                                family: 'JetBrains Mono'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 212, 255, 0.2)'
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                }
+            };
+
             // Profit Chart
             const profitCtx = document.getElementById('profitChart').getContext('2d');
             profitChart = new Chart(profitCtx, {
@@ -559,19 +1063,31 @@
                     datasets: [{
                         label: 'Profit ($)',
                         data: [],
-                        borderColor: 'rgb(34, 197, 94)',
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        tension: 0.4
+                        borderColor: '#39ff14',
+                        backgroundColor: 'rgba(57, 255, 20, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        pointBackgroundColor: '#39ff14',
+                        pointBorderColor: '#ffffff',
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        shadow: true
                     }]
                 },
                 options: {
-                    responsive: true,
+                    ...chartOptions,
                     plugins: {
-                        legend: { labels: { color: 'white' } }
-                    },
-                    scales: {
-                        x: { ticks: { color: 'white' } },
-                        y: { ticks: { color: 'white' } }
+                        ...chartOptions.plugins,
+                        title: {
+                            display: true,
+                            text: 'NEURAL PROFIT TRAJECTORY',
+                            color: '#39ff14',
+                            font: {
+                                family: 'Orbitron',
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
                     }
                 }
             });
@@ -585,22 +1101,37 @@
                     datasets: [{
                         label: 'Win Rate (%)',
                         data: [],
-                        borderColor: 'rgb(59, 130, 246)',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        tension: 0.4
+                        borderColor: '#00d4ff',
+                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        pointBackgroundColor: '#00d4ff',
+                        pointBorderColor: '#ffffff',
+                        pointRadius: 5,
+                        pointHoverRadius: 8
                     }]
                 },
                 options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { labels: { color: 'white' } }
-                    },
+                    ...chartOptions,
                     scales: {
-                        x: { ticks: { color: 'white' } },
-                        y: { 
-                            ticks: { color: 'white' },
+                        ...chartOptions.scales,
+                        y: {
+                            ...chartOptions.scales.y,
                             min: 0,
                             max: 100
+                        }
+                    },
+                    plugins: {
+                        ...chartOptions.plugins,
+                        title: {
+                            display: true,
+                            text: 'AI ACCURACY MATRIX',
+                            color: '#00d4ff',
+                            font: {
+                                family: 'Orbitron',
+                                size: 16,
+                                weight: 'bold'
+                            }
                         }
                     }
                 }
@@ -608,7 +1139,6 @@
         }
 
         function updateCharts(data) {
-            // Update profit chart
             if (data.live_stats) {
                 const now = new Date().toLocaleTimeString();
                 
@@ -622,41 +1152,50 @@
                     winRate: data.live_stats.win_rate
                 });
                 
-                // Keep only last 20 data points
-                if (dashboardState.profitHistory.length > 20) {
+                // Keep only last 30 data points for smooth animation
+                if (dashboardState.profitHistory.length > 30) {
                     dashboardState.profitHistory.shift();
                     dashboardState.winRateHistory.shift();
                 }
                 
-                // Update profit chart
+                // Update profit chart with animation
                 profitChart.data.labels = dashboardState.profitHistory.map(d => d.time);
                 profitChart.data.datasets[0].data = dashboardState.profitHistory.map(d => d.profit);
-                profitChart.update();
+                profitChart.update('smooth');
                 
-                // Update win rate chart
+                // Update win rate chart with animation
                 winRateChart.data.labels = dashboardState.winRateHistory.map(d => d.time);
                 winRateChart.data.datasets[0].data = dashboardState.winRateHistory.map(d => d.winRate);
-                winRateChart.update();
+                winRateChart.update('smooth');
             }
         }
 
         // SocketIO Event Handlers
         socket.on('connect', function() {
-            addLog('[SOCKET] Connected to Supreme Dashboard', 'text-blue-400');
+            addLog('[SOCKET] Connected to Supreme Neural Dashboard', 'text-cyan-400');
+            showNotification('🔗 Neural link established', 'success');
         });
 
         socket.on('disconnect', function() {
-            addLog('[SOCKET] Disconnected from dashboard', 'text-red-400');
+            addLog('[SOCKET] Neural link disconnected', 'text-red-400');
+            showNotification('⚠️ Neural link lost', 'warning');
         });
 
         socket.on('system_status', function(data) {
-            addLog(`[SYSTEM] Status changed: ${data.status}`, 'text-blue-400');
+            addLog(`[NEURAL] System status: ${data.status}`, 'text-blue-400');
             updateSystemStatus(data.status === 'started');
+            
+            if (data.status === 'started') {
+                showNotification('🚀 Neural network online!', 'success');
+            } else {
+                showNotification('💤 Neural network sleeping', 'info');
+            }
         });
 
         socket.on('new_decision', function(data) {
-            addLog('[AI] New decision made 🧠', 'text-purple-400');
+            addLog('[AI] Neural decision computed 🧠', 'text-purple-400');
             updateLatestDecision(data.decision);
+            showNotification('⚡ New neural decision!', 'info');
         });
 
         socket.on('bet_executed', function(data) {
@@ -664,23 +1203,37 @@
             const won = result?.won || false;
             const profit = result?.profit || 0;
             
-            addLog(`[BET] ${won ? 'WON' : 'LOST'} - ${profit > 0 ? '+' : ''}$${profit.toFixed(2)} 💰`, 
+            addLog(`[BET] ${won ? 'NEURAL WIN' : 'NEURAL LOSS'} - ${profit > 0 ? '+' : ''}$${profit.toFixed(2)} 💰`, 
                    won ? 'text-green-400' : 'text-red-400');
+                   
+            showNotification(`${won ? '🎯 Neural Victory!' : '💥 Neural Miss'} ${profit > 0 ? '+' : ''}$${profit.toFixed(2)}`, 
+                           won ? 'success' : 'error');
         });
 
         socket.on('market_update', function(data) {
-            // Update market conditions display
+            // Update market conditions display with enhanced formatting
             if (data.volatility_metrics && !data.volatility_metrics.insufficient_data) {
-                document.getElementById('volatility').textContent = data.volatility_metrics.session_volatility.toFixed(3);
+                document.getElementById('volatility').textContent = (data.volatility_metrics.session_volatility * 100).toFixed(1) + '%';
             }
             if (data.trend_indicators && !data.trend_indicators.insufficient_data) {
-                document.getElementById('trend').textContent = data.trend_indicators.trend_slope.toFixed(3);
+                const trendValue = data.trend_indicators.trend_slope;
+                document.getElementById('trend').innerHTML = `
+                    <span class="${trendValue > 0 ? 'text-green-400' : trendValue < 0 ? 'text-red-400' : 'text-yellow-400'}">
+                        ${trendValue > 0 ? '📈' : trendValue < 0 ? '📉' : '➡️'} ${trendValue.toFixed(3)}
+                    </span>
+                `;
             }
             if (data.entropy_analysis && !data.entropy_analysis.insufficient_data) {
-                document.getElementById('entropy').textContent = data.entropy_analysis.shannon_entropy.toFixed(3);
+                const entropyValue = data.entropy_analysis.shannon_entropy;
+                document.getElementById('entropy').innerHTML = `
+                    <span class="text-orange-400 font-bold">${entropyValue.toFixed(3)} ⚡</span>
+                `;
             }
             if (data.game_state) {
-                document.getElementById('lastRoll').textContent = data.game_state.last_roll.toFixed(1);
+                const rollValue = data.game_state.last_roll;
+                document.getElementById('lastRoll').innerHTML = `
+                    <span class="neon-glow ${rollValue > 50 ? 'text-green-400' : 'text-red-400'}">${rollValue.toFixed(1)}</span>
+                `;
             }
         });
 
@@ -689,15 +1242,50 @@
         });
 
         socket.on('error', function(data) {
-            addLog('[ERROR] ' + data.message, 'text-red-400');
+            addLog('[NEURAL ERROR] ' + data.message, 'text-red-400');
+            showNotification('💥 Neural error: ' + data.message, 'error');
         });
 
-        // Auto refresh every 30 seconds
+        socket.on('ai_insights_updated', function(data) {
+            addLog('[AI] Neural insights updated 🧠', 'text-purple-400');
+            showNotification('🧠 AI insights updated', 'info');
+        });
+
+        socket.on('auto_betting_toggled', function(data) {
+            updateAutoBettingStatus(data.auto_betting);
+            addLog(`[AUTO] Autopilot ${data.auto_betting ? 'ENGAGED' : 'DISENGAGED'}`, 'text-cyan-400');
+        });
+
+        // Auto refresh every 15 seconds with enhanced feedback
         setInterval(() => {
             if (dashboardState.isRunning) {
                 socket.emit('request_live_update');
+                
+                // Visual feedback for live updates
+                document.querySelectorAll('.stat-number').forEach(el => {
+                    el.style.animation = 'none';
+                    setTimeout(() => {
+                        el.style.animation = 'pulse 0.5s ease-in-out';
+                    }, 10);
+                });
             }
-        }, 30000);
+        }, 15000);
+
+        // Heartbeat indicator
+        setInterval(() => {
+            if (dashboardState.isRunning) {
+                const heartbeat = document.createElement('div');
+                heartbeat.className = 'fixed top-4 left-4 w-3 h-3 bg-green-400 rounded-full z-50';
+                heartbeat.style.animation = 'pulse 0.5s ease-in-out';
+                document.body.appendChild(heartbeat);
+                
+                setTimeout(() => {
+                    if (heartbeat.parentNode) {
+                        heartbeat.parentNode.removeChild(heartbeat);
+                    }
+                }, 500);
+            }
+        }, 2000);
     </script>
 </body>
 </html>

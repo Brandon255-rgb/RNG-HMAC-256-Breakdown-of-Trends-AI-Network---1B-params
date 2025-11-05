@@ -1,0 +1,643 @@
+"""
+ULTIMATE UNIFIED DASHBOARD - The Supreme Command Center
+Single endpoint that combines all models, strategies, AI decisions, and real-time betting
+GOAL: COMPLETE CONTROL AND MAXIMUM PROFIT VISUALIZATION
+"""
+
+from flask import Flask, render_template, jsonify, request, send_from_directory
+from flask_socketio import SocketIO, emit
+import asyncio
+import threading
+import time
+import json
+import logging
+from datetime import datetime, timedelta
+from typing import Dict, List, Any
+import os
+from dataclasses import asdict
+import traceback
+
+# Import our supreme systems
+from unified_ai_decision_engine import UnifiedAIDecisionEngine, initialize_supreme_engine, get_supreme_engine
+from continuous_learning_system import ContinuousLearningSystem, initialize_learning_system, get_learning_system, TrainingExample
+from cloudscraper_test import StakeAPIAccess
+from camoufox_seleniumbase_bypass import UltimateStakeBot
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Initialize Flask app with SocketIO
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'supreme_betting_engine_2024'
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+
+# Global state
+dashboard_state = {
+    'is_running': False,
+    'current_session': None,
+    'live_stats': {
+        'total_bets': 0,
+        'successful_bets': 0,
+        'total_profit': 0.0,
+        'win_rate': 0.0,
+        'current_bankroll': 1000.0,
+        'session_duration': 0,
+        'last_decision': None,
+        'last_bet': None
+    },
+    'recent_decisions': [],
+    'recent_outcomes': [],
+    'model_performance': {},
+    'ai_insights': {},
+    'learning_insights': {},
+    'market_conditions': {},
+    'strategy_performance': {},
+    'auto_betting': False,
+    'bet_interval': 30  # seconds between bets
+}
+
+# Background task management
+background_tasks = {
+    'main_loop': None,
+    'data_collector': None,
+    'performance_tracker': None
+}
+
+@app.route('/')
+def dashboard():
+    """Main dashboard page"""
+    return render_template('ultimate_dashboard.html')
+
+@app.route('/api/status')
+def get_status():
+    """Get current system status"""
+    return jsonify({
+        'status': 'operational' if dashboard_state['is_running'] else 'stopped',
+        'engines_loaded': {
+            'supreme_engine': get_supreme_engine() is not None,
+            'learning_system': get_learning_system() is not None
+        },
+        'dashboard_state': dashboard_state['live_stats'],
+        'auto_betting': dashboard_state['auto_betting']
+    })
+
+@app.route('/api/start', methods=['POST'])
+def start_system():
+    """Start the supreme betting system"""
+    try:
+        global dashboard_state
+        
+        # Initialize systems if not already done
+        api_key = os.getenv('STAKE_API_KEY')
+        if not api_key:
+            return jsonify({'error': 'STAKE_API_KEY not found in environment'}), 400
+        
+        # Initialize supreme engine
+        if get_supreme_engine() is None:
+            aws_credentials = {
+                'aws_access_key_id': os.getenv('AWS_ACCESS_KEY_ID'),
+                'aws_secret_access_key': os.getenv('AWS_SECRET_ACCESS_KEY'),
+                'region': os.getenv('AWS_REGION', 'us-east-1')
+            }
+            initialize_supreme_engine(api_key, aws_credentials)
+        
+        # Initialize learning system
+        if get_learning_system() is None:
+            initialize_learning_system("./models")
+        
+        dashboard_state['is_running'] = True
+        dashboard_state['current_session'] = datetime.now()
+        
+        # Start background tasks
+        start_background_tasks()
+        
+        socketio.emit('system_status', {'status': 'started', 'timestamp': datetime.now().isoformat()})
+        
+        return jsonify({'status': 'started', 'message': 'Supreme betting system activated!'})
+        
+    except Exception as e:
+        logging.error(f"Failed to start system: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/stop', methods=['POST'])
+def stop_system():
+    """Stop the supreme betting system"""
+    try:
+        global dashboard_state
+        
+        dashboard_state['is_running'] = False
+        dashboard_state['auto_betting'] = False
+        
+        # Stop background tasks
+        stop_background_tasks()
+        
+        socketio.emit('system_status', {'status': 'stopped', 'timestamp': datetime.now().isoformat()})
+        
+        return jsonify({'status': 'stopped', 'message': 'Supreme betting system deactivated'})
+        
+    except Exception as e:
+        logging.error(f"Failed to stop system: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/toggle_auto_betting', methods=['POST'])
+def toggle_auto_betting():
+    """Toggle automatic betting on/off"""
+    try:
+        dashboard_state['auto_betting'] = not dashboard_state['auto_betting']
+        
+        socketio.emit('auto_betting_toggled', {
+            'auto_betting': dashboard_state['auto_betting'],
+            'timestamp': datetime.now().isoformat()
+        })
+        
+        return jsonify({
+            'auto_betting': dashboard_state['auto_betting'],
+            'message': f"Auto betting {'enabled' if dashboard_state['auto_betting'] else 'disabled'}"
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/manual_decision', methods=['POST'])
+def make_manual_decision():
+    """Make a manual betting decision"""
+    try:
+        supreme_engine = get_supreme_engine()
+        if not supreme_engine:
+            return jsonify({'error': 'Supreme engine not initialized'}), 400
+        
+        # Run decision making in background thread
+        def make_decision():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                decision = loop.run_until_complete(supreme_engine.make_supreme_decision())
+                
+                # Emit decision to dashboard
+                socketio.emit('new_decision', {
+                    'decision': format_decision_for_frontend(decision),
+                    'timestamp': datetime.now().isoformat()
+                })
+                
+                # Execute if decision is to bet
+                if decision and decision.should_bet:
+                    result = loop.run_until_complete(supreme_engine.execute_decision(decision))
+                    
+                    # Emit bet result
+                    socketio.emit('bet_executed', {
+                        'result': result,
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    
+                    # Update dashboard state
+                    update_dashboard_after_bet(decision, result)
+                
+            except Exception as e:
+                logging.error(f"Manual decision failed: {e}")
+                socketio.emit('error', {'message': f"Decision failed: {e}"})
+            finally:
+                loop.close()
+        
+        thread = threading.Thread(target=make_decision)
+        thread.daemon = True
+        thread.start()
+        
+        return jsonify({'status': 'decision_started', 'message': 'Manual decision initiated'})
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dashboard_data')
+def get_dashboard_data():
+    """Get comprehensive dashboard data"""
+    try:
+        supreme_engine = get_supreme_engine()
+        learning_system = get_learning_system()
+        
+        data = {
+            'live_stats': dashboard_state['live_stats'],
+            'recent_decisions': dashboard_state['recent_decisions'][-20:],  # Last 20 decisions
+            'recent_outcomes': dashboard_state['recent_outcomes'][-50:],   # Last 50 outcomes
+            'system_status': {
+                'is_running': dashboard_state['is_running'],
+                'auto_betting': dashboard_state['auto_betting'],
+                'session_start': dashboard_state['current_session'].isoformat() if dashboard_state['current_session'] else None
+            }
+        }
+        
+        # Add engine status if available
+        if supreme_engine:
+            engine_status = supreme_engine.get_comprehensive_status()
+            data['engine_status'] = engine_status
+        
+        # Add learning insights if available
+        if learning_system:
+            learning_insights = learning_system.get_learning_insights()
+            data['learning_insights'] = learning_insights
+        
+        return jsonify(data)
+        
+    except Exception as e:
+        logging.error(f"Failed to get dashboard data: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/learning_insights')
+def get_learning_insights():
+    """Get detailed learning system insights"""
+    try:
+        learning_system = get_learning_system()
+        if not learning_system:
+            return jsonify({'error': 'Learning system not initialized'}), 400
+        
+        insights = learning_system.get_learning_insights()
+        return jsonify(insights)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/model_performance')
+def get_model_performance():
+    """Get detailed model performance metrics"""
+    try:
+        learning_system = get_learning_system()
+        if not learning_system:
+            return jsonify({'error': 'Learning system not initialized'}), 400
+        
+        performance = {
+            'model_performance': learning_system.model_performance,
+            'feature_importance': learning_system.feature_importance,
+            'training_examples_count': len(learning_system.training_examples),
+            'recent_outcomes_count': len(learning_system.recent_outcomes)
+        }
+        
+        return jsonify(performance)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/strategy_analysis')
+def get_strategy_analysis():
+    """Get strategy performance analysis"""
+    try:
+        supreme_engine = get_supreme_engine()
+        if not supreme_engine:
+            return jsonify({'error': 'Supreme engine not initialized'}), 400
+        
+        # Get strategy framework performance
+        strategy_performance = supreme_engine.strategy_framework.get_strategy_performance_report()
+        
+        return jsonify(strategy_performance)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/ai_insights')
+def get_ai_insights():
+    """Get AI brain insights and learning"""
+    try:
+        supreme_engine = get_supreme_engine()
+        if not supreme_engine:
+            return jsonify({'error': 'Supreme engine not initialized'}), 400
+        
+        # Run in background thread to handle async
+        def get_insights():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                insights = loop.run_until_complete(supreme_engine.ai_brain.get_learning_insights())
+                
+                # Emit insights to dashboard
+                socketio.emit('ai_insights_updated', {
+                    'insights': insights,
+                    'timestamp': datetime.now().isoformat()
+                })
+                
+            except Exception as e:
+                logging.error(f"AI insights failed: {e}")
+            finally:
+                loop.close()
+        
+        thread = threading.Thread(target=get_insights)
+        thread.daemon = True
+        thread.start()
+        
+        return jsonify({'status': 'insights_requested'})
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/settings', methods=['GET', 'POST'])
+def manage_settings():
+    """Manage system settings"""
+    if request.method == 'GET':
+        return jsonify({
+            'bet_interval': dashboard_state['bet_interval'],
+            'auto_betting': dashboard_state['auto_betting'],
+            'risk_settings': {
+                'max_bet_percentage': 5.0,
+                'stop_loss_threshold': 20.0,
+                'stop_win_threshold': 50.0
+            }
+        })
+    
+    elif request.method == 'POST':
+        try:
+            settings = request.json
+            
+            # Update settings
+            if 'bet_interval' in settings:
+                dashboard_state['bet_interval'] = max(10, int(settings['bet_interval']))
+            
+            # Emit settings update
+            socketio.emit('settings_updated', {
+                'settings': settings,
+                'timestamp': datetime.now().isoformat()
+            })
+            
+            return jsonify({'status': 'settings_updated', 'settings': settings})
+            
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+# Socket.IO Events
+@socketio.on('connect')
+def handle_connect():
+    """Handle client connection"""
+    emit('connected', {'message': 'Connected to Supreme Betting Dashboard'})
+    
+    # Send initial data
+    emit('dashboard_update', {
+        'live_stats': dashboard_state['live_stats'],
+        'system_status': {
+            'is_running': dashboard_state['is_running'],
+            'auto_betting': dashboard_state['auto_betting']
+        }
+    })
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    """Handle client disconnection"""
+    print('Client disconnected')
+
+@socketio.on('request_live_update')
+def handle_live_update_request():
+    """Handle request for live data update"""
+    try:
+        # Send comprehensive update
+        update_data = {
+            'live_stats': dashboard_state['live_stats'],
+            'recent_decisions': dashboard_state['recent_decisions'][-5:],
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        emit('live_update', update_data)
+        
+    except Exception as e:
+        emit('error', {'message': f"Live update failed: {e}"})
+
+# Background Task Functions
+def start_background_tasks():
+    """Start all background tasks"""
+    global background_tasks
+    
+    # Main decision loop
+    if background_tasks['main_loop'] is None or not background_tasks['main_loop'].is_alive():
+        background_tasks['main_loop'] = threading.Thread(target=main_decision_loop, daemon=True)
+        background_tasks['main_loop'].start()
+    
+    # Data collector
+    if background_tasks['data_collector'] is None or not background_tasks['data_collector'].is_alive():
+        background_tasks['data_collector'] = threading.Thread(target=data_collection_loop, daemon=True)
+        background_tasks['data_collector'].start()
+    
+    # Performance tracker
+    if background_tasks['performance_tracker'] is None or not background_tasks['performance_tracker'].is_alive():
+        background_tasks['performance_tracker'] = threading.Thread(target=performance_tracking_loop, daemon=True)
+        background_tasks['performance_tracker'].start()
+
+def stop_background_tasks():
+    """Stop all background tasks"""
+    global background_tasks
+    dashboard_state['is_running'] = False
+    
+    # Tasks will stop when they check dashboard_state['is_running']
+
+def main_decision_loop():
+    """Main loop for automatic betting decisions"""
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+    try:
+        while dashboard_state['is_running']:
+            if dashboard_state['auto_betting']:
+                try:
+                    supreme_engine = get_supreme_engine()
+                    if supreme_engine:
+                        # Make decision
+                        decision = loop.run_until_complete(supreme_engine.make_supreme_decision())
+                        
+                        if decision:
+                            # Store decision
+                            dashboard_state['recent_decisions'].append(format_decision_for_frontend(decision))
+                            dashboard_state['live_stats']['last_decision'] = datetime.now().isoformat()
+                            
+                            # Emit decision to dashboard
+                            socketio.emit('new_decision', {
+                                'decision': format_decision_for_frontend(decision),
+                                'timestamp': datetime.now().isoformat()
+                            })
+                            
+                            # Execute if decision is to bet
+                            if decision.should_bet:
+                                result = loop.run_until_complete(supreme_engine.execute_decision(decision))
+                                
+                                # Store bet result
+                                dashboard_state['live_stats']['last_bet'] = datetime.now().isoformat()
+                                
+                                # Emit bet result
+                                socketio.emit('bet_executed', {
+                                    'result': result,
+                                    'decision': format_decision_for_frontend(decision),
+                                    'timestamp': datetime.now().isoformat()
+                                })
+                                
+                                # Update dashboard state
+                                update_dashboard_after_bet(decision, result)
+                                
+                                # Add to learning system
+                                add_to_learning_system(decision, result)
+                
+                except Exception as e:
+                    logging.error(f"Decision loop error: {e}")
+                    socketio.emit('error', {'message': f"Decision error: {e}"})
+            
+            # Wait before next decision
+            time.sleep(dashboard_state['bet_interval'])
+            
+    except Exception as e:
+        logging.error(f"Main decision loop failed: {e}")
+    finally:
+        loop.close()
+
+def data_collection_loop():
+    """Background loop for collecting market data"""
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+    try:
+        while dashboard_state['is_running']:
+            try:
+                supreme_engine = get_supreme_engine()
+                if supreme_engine:
+                    # Collect current market conditions
+                    game_state = loop.run_until_complete(supreme_engine.data_processor.get_current_game_state())
+                    trend_indicators = supreme_engine.data_processor.get_trend_indicators()
+                    volatility_metrics = supreme_engine.data_processor.get_volatility_metrics()
+                    entropy_analysis = supreme_engine.data_processor.get_entropy_analysis()
+                    
+                    # Update dashboard state
+                    dashboard_state['market_conditions'] = {
+                        'game_state': game_state,
+                        'trend_indicators': trend_indicators,
+                        'volatility_metrics': volatility_metrics,
+                        'entropy_analysis': entropy_analysis,
+                        'last_updated': datetime.now().isoformat()
+                    }
+                    
+                    # Emit market update
+                    socketio.emit('market_update', dashboard_state['market_conditions'])
+                    
+            except Exception as e:
+                logging.error(f"Data collection error: {e}")
+            
+            time.sleep(10)  # Collect data every 10 seconds
+            
+    except Exception as e:
+        logging.error(f"Data collection loop failed: {e}")
+    finally:
+        loop.close()
+
+def performance_tracking_loop():
+    """Background loop for tracking performance"""
+    try:
+        while dashboard_state['is_running']:
+            try:
+                # Update session duration
+                if dashboard_state['current_session']:
+                    duration = datetime.now() - dashboard_state['current_session']
+                    dashboard_state['live_stats']['session_duration'] = duration.total_seconds() / 60  # minutes
+                
+                # Calculate win rate
+                if dashboard_state['live_stats']['total_bets'] > 0:
+                    dashboard_state['live_stats']['win_rate'] = (
+                        dashboard_state['live_stats']['successful_bets'] / 
+                        dashboard_state['live_stats']['total_bets'] * 100
+                    )
+                
+                # Emit performance update
+                socketio.emit('performance_update', {
+                    'live_stats': dashboard_state['live_stats'],
+                    'timestamp': datetime.now().isoformat()
+                })
+                
+            except Exception as e:
+                logging.error(f"Performance tracking error: {e}")
+            
+            time.sleep(5)  # Update every 5 seconds
+            
+    except Exception as e:
+        logging.error(f"Performance tracking loop failed: {e}")
+
+# Utility Functions
+def format_decision_for_frontend(decision) -> Dict:
+    """Format decision object for frontend display"""
+    if not decision:
+        return None
+    
+    return {
+        'decision_id': decision.decision_id,
+        'should_bet': decision.should_bet,
+        'bet_amount': decision.bet_amount,
+        'multiplier': decision.multiplier,
+        'side': decision.side,
+        'target_roll': decision.target_roll,
+        'confidence': decision.confidence,
+        'strategy_used': decision.strategy_recommendation.get('strategy', 'unknown'),
+        'ai_reasoning': decision.ai_decision.reasoning if decision.ai_decision else '',
+        'risk_assessment': decision.risk_assessment,
+        'timestamp': decision.timestamp.isoformat()
+    }
+
+def update_dashboard_after_bet(decision, result):
+    """Update dashboard state after bet execution"""
+    
+    dashboard_state['live_stats']['total_bets'] += 1
+    
+    if result.get('action') == 'bet_placed' and result.get('bet_result', {}).get('won', False):
+        dashboard_state['live_stats']['successful_bets'] += 1
+        profit = decision.bet_amount * (decision.multiplier - 1)
+    else:
+        profit = -decision.bet_amount
+    
+    dashboard_state['live_stats']['total_profit'] += profit
+    dashboard_state['live_stats']['current_bankroll'] += profit
+    
+    # Add to recent outcomes
+    dashboard_state['recent_outcomes'].append({
+        'decision_id': decision.decision_id,
+        'won': result.get('bet_result', {}).get('won', False),
+        'profit': profit,
+        'timestamp': datetime.now().isoformat()
+    })
+    
+    # Keep only recent outcomes
+    if len(dashboard_state['recent_outcomes']) > 1000:
+        dashboard_state['recent_outcomes'] = dashboard_state['recent_outcomes'][-1000:]
+
+def add_to_learning_system(decision, result):
+    """Add bet outcome to learning system"""
+    try:
+        learning_system = get_learning_system()
+        if learning_system and decision:
+            
+            # Create training example
+            example = TrainingExample(
+                game_state=decision.ai_decision.context.current_game_state if decision.ai_decision else {},
+                predictions=[],  # Would need to extract from decision
+                strategy_used=decision.strategy_recommendation.get('strategy', 'unknown'),
+                decision_confidence=decision.confidence,
+                bet_amount=decision.bet_amount,
+                multiplier=decision.multiplier,
+                side=decision.side,
+                target_roll=decision.target_roll,
+                trend_indicators=decision.ai_decision.context.trend_indicators if decision.ai_decision else {},
+                volatility_metrics=decision.ai_decision.context.volatility_metrics if decision.ai_decision else {},
+                entropy_analysis=decision.ai_decision.context.entropy_analysis if decision.ai_decision else {},
+                actual_roll=result.get('bet_result', {}).get('roll', 50.0),
+                bet_won=result.get('bet_result', {}).get('won', False),
+                profit_loss=result.get('bet_result', {}).get('profit', 0.0),
+                timestamp=datetime.now(),
+                decision_id=decision.decision_id,
+                session_id=decision.session_id
+            )
+            
+            learning_system.add_training_example(example)
+            
+    except Exception as e:
+        logging.error(f"Failed to add to learning system: {e}")
+
+if __name__ == '__main__':
+    # Set up logging
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    
+    # Create templates directory if it doesn't exist
+    os.makedirs('templates', exist_ok=True)
+    os.makedirs('static', exist_ok=True)
+    
+    print("🚀 SUPREME BETTING DASHBOARD STARTING...")
+    print("🔥 THE ULTIMATE PROFIT MAXIMIZATION SYSTEM")
+    print("💰 READY TO MAKE SERIOUS MONEY!")
+    print("📊 Dashboard will be available at: http://localhost:5000")
+    
+    # Run the dashboard
+    socketio.run(app, host='0.0.0.0', port=5000, debug=False)

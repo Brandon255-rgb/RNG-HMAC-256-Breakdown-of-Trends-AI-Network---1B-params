@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 REAL STAKE PREDICTOR DASHBOARD</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .api-status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+
+        .api-connected {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .api-disconnected {
+            background: #f44336;
+            color: white;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: #4FC3F7;
+            border-bottom: 2px solid #4FC3F7;
+            padding-bottom: 10px;
+        }
+
+        .control-panel {
+            grid-column: span 3;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .btn-start {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-start:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .btn-start:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.5;
+        }
+
+        .btn-stop {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-stop:hover {
+            background: #da190b;
+            transform: translateY(-2px);
+        }
+
+        .btn-stop:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.5;
+        }
+
+        .btn-test {
+            background: #FF9800;
+            color: white;
+        }
+
+        .btn-test:hover {
+            background: #e68900;
+        }
+
+        .btn-refresh {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-refresh:hover {
+            background: #1976D2;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-right: 15px;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group select,
+        .form-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .positive {
+            color: #4CAF50;
+        }
+
+        .negative {
+            color: #f44336;
+        }
+
+        .neutral {
+            color: #FFC107;
+        }
+
+        .live-feed {
+            height: 400px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .bet-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid;
+            animation: slideIn 0.5s ease;
+        }
+
+        .bet-win {
+            background: rgba(76, 175, 80, 0.2);
+            border-left-color: #4CAF50;
+        }
+
+        .bet-loss {
+            background: rgba(244, 67, 54, 0.2);
+            border-left-color: #f44336;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .seeds-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            margin-top: 15px;
+        }
+
+        .seeds-info div {
+            margin-bottom: 8px;
+        }
+
+        .manual-bet {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .manual-bet-controls {
+            display: flex;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .mode-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 5px;
+            margin: 10px 0;
+        }
+
+        .mode-option {
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mode-option.active {
+            background: #4FC3F7;
+            color: white;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .alert-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+        }
+
+        .alert-error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            color: #f44336;
+        }
+
+        .prediction-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .prediction-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4FC3F7;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 REAL STAKE PREDICTOR DASHBOARD</h1>
+            <div id="apiStatus" class="api-status api-disconnected">
+                🔴 API DISCONNECTED
+            </div>
+            <div id="modeStatus" class="api-status neutral">
+                🎮 DEMO MODE
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid">
+            <!-- Control Panel -->
+            <div class="card control-panel">
+                <h3>🎮 Bot Controls</h3>
+                
+                <!-- Mode Toggle -->
+                <div class="mode-toggle">
+                    <div class="mode-option active" onclick="setMode('demo')">
+                        🎮 Demo Mode
+                    </div>
+                    <div class="mode-option" onclick="setMode('real')">
+                        💰 Real Money
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button id="startBtn" class="btn btn-start" onclick="startBot()">
+                        🚀 START BOT
+                    </button>
+                    <button id="stopBtn" class="btn btn-stop" onclick="stopBot()" disabled>
+                        🛑 STOP BOT
+                    </button>
+                    <button class="btn btn-test" onclick="testAPI()">
+                        🔍 TEST API
+                    </button>
+                    <button class="btn btn-refresh" onclick="refreshSeeds()">
+                        🌱 REFRESH SEEDS
+                    </button>
+                    
+                    <div class="form-group">
+                        <label>Strategy:</label>
+                        <select id="strategy">
+                            <option value="ultra_safe">Ultra Safe (4.0x margin)</option>
+                            <option value="conservative" selected>Conservative (2.5x margin)</option>
+                            <option value="moderate">Moderate (1.5x margin)</option>
+                            <option value="aggressive">Aggressive (0.8x margin)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Bet Amount ($):</label>
+                        <input type="number" id="betAmount" min="0.01" step="0.01" value="1.00">
+                    </div>
+                </div>
+                
+                <!-- Real-time Prediction Display -->
+                <div id="predictionDisplay" class="prediction-display" style="display: none;">
+                    <div>Next Prediction:</div>
+                    <div id="predictionValue" class="prediction-value">--</div>
+                    <div>Confidence: <span id="predictionConfidence">--</span>%</div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="card">
+                <h3>📊 Live Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div id="balance" class="stat-value">$1,000</div>
+                        <div class="stat-label">Balance</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="totalProfit" class="stat-value positive">$0</div>
+                        <div class="stat-label">Total Profit</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="winRate" class="stat-value neutral">0%</div>
+                        <div class="stat-label">Win Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="totalBets" class="stat-value">0</div>
+                        <div class="stat-label">Total Bets</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="winStreak" class="stat-value positive">0</div>
+                        <div class="stat-label">Win Streak</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="lossStreak" class="stat-value negative">0</div>
+                        <div class="stat-label">Loss Streak</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Seeds Info -->
+            <div class="card">
+                <h3>🌱 Live Stake Seeds</h3>
+                <div id="seedsInfo" class="seeds-info">
+                    <div>Client Seed: <span id="clientSeed">Loading...</span></div>
+                    <div>Server Hash: <span id="serverHash">Loading...</span></div>
+                    <div>Current Nonce: <span id="currentNonce">Loading...</span></div>
+                    <div>Last Updated: <span id="lastUpdated">Never</span></div>
+                </div>
+                
+                <!-- Manual Bet Section -->
+                <div class="manual-bet">
+                    <h4>Manual Bet</h4>
+                    <div class="manual-bet-controls">
+                        <div class="form-group">
+                            <label>Amount:</label>
+                            <input type="number" id="manualAmount" min="0.01" step="0.01" value="1.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Target:</label>
+                            <input type="number" id="manualTarget" min="0.01" max="99.99" step="0.01" value="50.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Condition:</label>
+                            <select id="manualCondition">
+                                <option value="under">Under</option>
+                                <option value="over">Over</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-start" onclick="placeManualBet()">
+                            🎯 PLACE BET
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Betting Feed -->
+            <div class="card">
+                <h3>📈 Live Betting Feed</h3>
+                <div id="liveFeed" class="live-feed">
+                    <div style="text-align: center; opacity: 0.6; margin-top: 50px;">
+                        🎰 No bets placed yet...<br>
+                        Start the bot to see live betting activity!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profit Chart -->
+            <div class="card">
+                <h3>💰 Profit Chart</h3>
+                <div class="chart-container">
+                    <canvas id="profitChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Win Rate Chart -->
+            <div class="card">
+                <h3>🎯 Win Rate Chart</h3>
+                <div class="chart-container">
+                    <canvas id="winRateChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts -->
+        <div id="alerts"></div>
+    </div>
+
+    <script>
+        // Global variables
+        let socket = io();
+        let isRunning = false;
+        let demoMode = true;
+        let profitChart, winRateChart;
+        let profitData = [];
+        let winRateData = [];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            connectSocket();
+        });
+
+        function initializeCharts() {
+            // Profit Chart
+            const profitCtx = document.getElementById('profitChart').getContext('2d');
+            profitChart = new Chart(profitCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Profit ($)',
+                        data: [],
+                        borderColor: '#4FC3F7',
+                        backgroundColor: 'rgba(79, 195, 247, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Win Rate Chart
+            const winRateCtx = document.getElementById('winRateChart').getContext('2d');
+            winRateChart = new Chart(winRateCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Wins', 'Losses'],
+                    datasets: [{
+                        data: [0, 0],
+                        backgroundColor: ['#4CAF50', '#f44336'],
+                        borderColor: ['#4CAF50', '#f44336'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function connectSocket() {
+            socket.on('connect', function() {
+                console.log('Connected to server');
+                showAlert('Connected to dashboard server', 'success');
+            });
+
+            socket.on('stats_update', function(data) {
+                updateStats(data);
+            });
+
+            socket.on('bet_placed', function(data) {
+                addBetToFeed(data);
+                updateCharts(data);
+            });
+
+            socket.on('bot_started', function(data) {
+                isRunning = true;
+                updateButtonStates();
+                showAlert('Bot started successfully!', 'success');
+            });
+
+            socket.on('bot_stopped', function(data) {
+                isRunning = false;
+                updateButtonStates();
+                showAlert('Bot stopped', 'success');
+            });
+
+            socket.on('api_test_result', function(data) {
+                if (data.success) {
+                    showAlert('API connection successful!', 'success');
+                    updateAPIStatus(true);
+                    updateSeedsInfo(data.seeds);
+                } else {
+                    showAlert('API connection failed!', 'error');
+                    updateAPIStatus(false);
+                }
+            });
+
+            socket.on('error', function(data) {
+                showAlert(data.message, 'error');
+            });
+        }
+
+        function updateStats(data) {
+            document.getElementById('balance').textContent = `$${data.balance.toFixed(2)}`;
+            document.getElementById('totalProfit').textContent = `$${data.total_profit.toFixed(2)}`;
+            document.getElementById('totalProfit').className = `stat-value ${data.total_profit >= 0 ? 'positive' : 'negative'}`;
+            document.getElementById('winRate').textContent = `${data.win_rate.toFixed(1)}%`;
+            document.getElementById('totalBets').textContent = data.total_bets;
+            document.getElementById('winStreak').textContent = data.win_streak;
+            document.getElementById('lossStreak').textContent = data.loss_streak;
+
+            // Update API status
+            updateAPIStatus(data.api_connected);
+            
+            // Update seeds info
+            if (data.current_seeds) {
+                updateSeedsInfo(data.current_seeds);
+            }
+
+            // Update charts
+            if (data.total_bets > 0) {
+                const wins = Math.round(data.win_rate * data.total_bets / 100);
+                const losses = data.total_bets - wins;
+                winRateChart.data.datasets[0].data = [wins, losses];
+                winRateChart.update();
+            }
+        }
+
+        function updateAPIStatus(connected) {
+            const statusEl = document.getElementById('apiStatus');
+            if (connected) {
+                statusEl.textContent = '🟢 API CONNECTED';
+                statusEl.className = 'api-status api-connected';
+            } else {
+                statusEl.textContent = '🔴 API DISCONNECTED';
+                statusEl.className = 'api-status api-disconnected';
+            }
+        }
+
+        function updateSeedsInfo(seeds) {
+            if (!seeds) return;
+            
+            document.getElementById('clientSeed').textContent = seeds.client_seed || 'N/A';
+            document.getElementById('serverHash').textContent = seeds.server_seed_hash ? 
+                seeds.server_seed_hash.substring(0, 20) + '...' : 'N/A';
+            document.getElementById('currentNonce').textContent = seeds.nonce || 'N/A';
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+        }
+
+        function addBetToFeed(bet) {
+            const feed = document.getElementById('liveFeed');
+            
+            // Remove placeholder if exists
+            if (feed.children.length === 1 && feed.children[0].style.textAlign === 'center') {
+                feed.innerHTML = '';
+            }
+
+            const betEl = document.createElement('div');
+            betEl.className = `bet-item ${bet.won ? 'bet-win' : 'bet-loss'}`;
+            betEl.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${bet.won ? '✅ WIN' : '❌ LOSS'}</strong> - $${bet.amount} ${bet.condition.toUpperCase()} ${bet.target}
+                        <br>
+                        <small>Predicted: ${bet.predicted.toFixed(2)} | Result: ${bet.result.toFixed(2)} | Nonce: ${bet.nonce}</small>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="${bet.profit >= 0 ? 'positive' : 'negative'}" style="font-weight: bold;">
+                            ${bet.profit >= 0 ? '+' : ''}$${bet.profit.toFixed(2)}
+                        </div>
+                        <small>${bet.multiplier.toFixed(2)}x | ${bet.demo ? 'DEMO' : 'REAL'}</small>
+                    </div>
+                </div>
+            `;
+
+            feed.insertBefore(betEl, feed.firstChild);
+
+            // Keep only last 20 bets
+            while (feed.children.length > 20) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+
+        function updateCharts(bet) {
+            profitData.push(bet.profit);
+            
+            // Update profit chart
+            profitChart.data.labels.push(new Date().toLocaleTimeString());
+            profitChart.data.datasets[0].data.push(bet.balance);
+            
+            // Keep only last 50 points
+            if (profitChart.data.labels.length > 50) {
+                profitChart.data.labels.shift();
+                profitChart.data.datasets[0].data.shift();
+            }
+            
+            profitChart.update();
+        }
+
+        function updateButtonStates() {
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            
+            if (isRunning) {
+                startBtn.disabled = true;
+                startBtn.style.opacity = '0.5';
+                stopBtn.disabled = false;
+                stopBtn.style.opacity = '1';
+            } else {
+                startBtn.disabled = false;
+                startBtn.style.opacity = '1';
+                stopBtn.disabled = true;
+                stopBtn.style.opacity = '0.5';
+            }
+        }
+
+        function setMode(mode) {
+            demoMode = (mode === 'demo');
+            
+            // Update mode display
+            const modeStatus = document.getElementById('modeStatus');
+            if (demoMode) {
+                modeStatus.textContent = '🎮 DEMO MODE';
+                modeStatus.className = 'api-status neutral';
+            } else {
+                modeStatus.textContent = '💰 REAL MONEY';
+                modeStatus.className = 'api-status negative';
+            }
+            
+            // Update toggle buttons
+            document.querySelectorAll('.mode-option').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function startBot() {
+            if (isRunning) return;
+            
+            const strategy = document.getElementById('strategy').value;
+            const betAmount = parseFloat(document.getElementById('betAmount').value);
+            
+            socket.emit('start_bot', {
+                strategy: strategy,
+                bet_amount: betAmount,
+                demo_mode: demoMode
+            });
+        }
+
+        function stopBot() {
+            if (!isRunning) return;
+            
+            socket.emit('stop_bot');
+        }
+
+        function testAPI() {
+            socket.emit('test_api');
+            showAlert('Testing API connection...', 'success');
+        }
+
+        function refreshSeeds() {
+            socket.emit('refresh_seeds');
+            showAlert('Refreshing seeds...', 'success');
+        }
+
+        function placeManualBet() {
+            const amount = parseFloat(document.getElementById('manualAmount').value);
+            const target = parseFloat(document.getElementById('manualTarget').value);
+            const condition = document.getElementById('manualCondition').value;
+            
+            socket.emit('place_manual_bet', {
+                amount: amount,
+                target: target,
+                condition: condition
+            });
+        }
+
+        function showAlert(message, type) {
+            const alertsContainer = document.getElementById('alerts');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            alertsContainer.appendChild(alert);
+            
+            // Remove alert after 5 seconds
+            setTimeout(() => {
+                alertsContainer.removeChild(alert);
+            }, 5000);
+        }
+
+        // Initialize button states
+        updateButtonStates();
+    </script>
+</body>
+</html>

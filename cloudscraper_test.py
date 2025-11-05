@@ -44,8 +44,8 @@ class StakeAPIAccess:
             'Sec-Fetch-Site': 'same-origin',
             'Origin': 'https://stake.com',
             'Referer': 'https://stake.com/',
-            'Authorization': f'Bearer {self.api_key}',
             'X-API-Key': self.api_key,
+            'X-Access-Token': self.api_key,
             'Content-Type': 'application/json'
         })
         

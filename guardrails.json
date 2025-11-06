@@ -1,0 +1,303 @@
+{
+  "system_info": {
+    "name": "Supreme Oracle System",
+    "version": "2.0.0", 
+    "description": "Consolidated 5-file architecture with Bedrock AI + Pattern Oracle",
+    "architecture": [
+      "main.py - System orchestrator",
+      "supreme_bedrock_bot.py - Bedrock AI with betting strategies",
+      "oracle_train.py - Consolidated pattern recognition model", 
+      "mega_dashboard.html - Enhanced user interface",
+      "guardrails.json - Configuration and safety rules"
+    ]
+  },
+
+  "weights": [0.20, 0.15, 0.15, 0.10, 0.10, 0.10, 0.10, 0.05, 0.03, 0.02],
+  "method_names": [
+    "nist_stats",
+    "markov_chains", 
+    "gap_analysis",
+    "entropy_measures",
+    "correlation_matrix",
+    "bayesian_inference",
+    "time_series",
+    "neural_patterns",
+    "random_forest",
+    "genetic_algo"
+  ],
+
+  "betting_guardrails": {
+    "max_bet_percentage": 0.01,
+    "min_confidence": 0.55,
+    "stop_loss_threshold": 0.10,
+    "stop_win_threshold": 0.50,
+    "max_consecutive_losses": 5,
+    "daily_loss_limit": 0.20,
+    "volatility_multiplier": 0.5,
+    "min_bankroll_amount": 100.0,
+    "emergency_stop_loss": 0.25,
+    "bankroll_protection": 0.90
+  },
+
+  "risk_management": {
+    "kelly_multiplier": 0.25,
+    "max_exposure": 0.05,
+    "cool_down_minutes": 10,
+    "position_sizing": {
+      "conservative": 0.005,
+      "moderate": 0.01,
+      "aggressive": 0.02
+    },
+    "volatility_adjustment": {
+      "low": 1.0,
+      "medium": 0.75,
+      "high": 0.5,
+      "extreme": 0.25
+    }
+  },
+
+  "pattern_detection": {
+    "entropy_threshold": 1.5,
+    "anomaly_sensitivity": 0.95,
+    "3xor_echo_detection": true,
+    "bias_injection_detection": true,
+    "correlation_threshold": 0.3,
+    "min_pattern_strength": 0.6,
+    "anomaly_threshold": 2.0,
+    "confidence_decay": 0.95
+  },
+
+  "model_configuration": {
+    "ensemble_mode": "weighted_average",
+    "confidence_calculation": "model_agreement", 
+    "prediction_range": [0, 99.99],
+    "feature_normalization": true,
+    "outlier_handling": "clip"
+  },
+
+  "api_integration": {
+    "bedrock_enabled": true,
+    "bedrock_model": "anthropic.claude-3-sonnet-20240229-v1:0",
+    "stake_api_enabled": true,
+    "stake_simulation_mode": false,
+    "xai_api_enabled": false,
+    "real_time_stake_connector": true,
+    "live_prediction_streaming": true,
+    "unified_decision_engine": true,
+    "production_mode": true,
+    "no_fallback_data": true,
+    "real_stake_only": true,
+    "rate_limiting": {
+      "predictions_per_minute": 10,
+      "api_calls_per_hour": 100,
+      "bedrock_requests_per_minute": 60,
+      "stake_requests_per_minute": 120,
+      "prediction_cooldown_seconds": 5,
+      "real_time_updates_per_second": 2,
+      "simulation_requests_per_minute": 30
+    },
+    "authentication": {
+      "aws_access_key": "YOUR_AWS_ACCESS_KEY",
+      "aws_secret_key": "YOUR_AWS_SECRET_KEY",
+      "stake_api_key": "YOUR_STAKE_API_KEY",
+      "xai_api_key": "YOUR_XAI_API_KEY"
+    },
+    "connection_settings": {
+      "timeout_seconds": 30,
+      "retry_attempts": 3,
+      "backoff_multiplier": 2,
+      "keep_alive": true,
+      "ssl_verification": true,
+      "compression": true
+    }
+  },
+
+  "safety_settings": {
+    "simulation_only": false,
+    "educational_purpose": false,
+    "no_real_gambling": false,
+    "warning_message": "PRODUCTION MODE: Real money trading active. Use proper risk management.",
+    "responsible_gaming": true,
+    "production_mode": true,
+    "real_money_trading": true,
+    "risk_management_required": true,
+    "stop_loss_enforcement": true,
+    "position_size_limits": true
+  },
+
+  "performance_targets": {
+    "minimum_accuracy": 55.0,
+    "target_accuracy": 65.0,
+    "maximum_drawdown": 15.0,
+    "minimum_profit_factor": 1.2,
+    "target_sharpe_ratio": 1.5,
+    "accuracy_goal": 0.55,
+    "confidence_threshold": 0.55,
+    "mse_target": 800,
+    "r2_minimum": 0.01,
+    "prediction_speed_ms": 100,
+    "session_goals": {
+      "daily_profit_target": 10.0,
+      "weekly_profit_target": 50.0,
+      "monthly_profit_target": 200.0
+    },
+    "hmac_analysis_targets": {
+      "pattern_detection_accuracy": 0.65,
+      "bias_detection_sensitivity": 0.9,
+      "correlation_threshold": 0.3,
+      "entropy_validation_threshold": 1.5
+    },
+    "multiplier_optimization_targets": {
+      "profit_improvement_percentage": 0.2,
+      "risk_reduction_percentage": 0.15,
+      "optimal_target_accuracy": 0.8,
+      "volatility_adjustment_effectiveness": 0.7
+    },
+    "betting_performance_targets": {
+      "kelly_criterion_effectiveness": 0.75,
+      "profit_taking_efficiency": 0.8,
+      "drawdown_control": 0.85,
+      "bankroll_growth_rate": 0.1
+    },
+    "simulation_benchmarks": {
+      "monte_carlo_convergence": 0.95,
+      "statistical_significance": 0.99,
+      "performance_consistency": 0.8,
+      "stress_test_survival": 0.9
+    }
+  },
+
+  "advanced_features": {
+    "3xor_mining_enabled": true,
+    "bias_injection_simulation": true,
+    "hmac_calculation": true,
+    "pattern_visualization": true,
+    "real_time_learning": false,
+    "model_retraining": false,
+    "preimage_prefix_patterns": ["FOO-", "BAR-", "FOOBAR-"],
+    "zero_bit_target": 32,
+    "mining_difficulty_adjustment": true,
+    "bias_injection_strength": 0.1,
+    "massive_dataset_analysis": true,
+    "ensemble_prediction_methods": true,
+    "fourier_transform_analysis": true,
+    "wavelet_decomposition": true,
+    "trend_analysis": true,
+    "neural_pattern_detection": true,
+    "volatility_detection": true,
+    "multiplier_optimization": true,
+    "kelly_criterion_sizing": true,
+    "real_time_stake_connection": true,
+    "unified_decision_engine": true,
+    "advanced_strategy_engine": true,
+    "massive_betting_simulator": true
+  },
+
+  "hmac_analysis": {
+    "enabled": true,
+    "exact_stake_calculations": true,
+    "client_seed_processing": true,
+    "server_seed_hashing": true,
+    "nonce_incrementation": true,
+    "sharp_pattern_detection": true,
+    "bias_detection_threshold": 0.1,
+    "pattern_strength_minimum": 0.6,
+    "correlation_analysis": true,
+    "entropy_validation": true
+  },
+
+  "multiplier_optimization": {
+    "enabled": true,
+    "base_multiplier": 2.0,
+    "risk_adjustment_factor": 0.8,
+    "profit_margin_target": 0.15,
+    "volatility_scaling": true,
+    "confidence_scaling": true,
+    "min_multiplier": 1.1,
+    "max_multiplier": 100.0,
+    "optimal_target_calculation": true,
+    "dynamic_adjustment": true
+  },
+
+  "betting_strategies": {
+    "kelly_criterion": {
+      "enabled": true,
+      "fractional_kelly": 0.25,
+      "win_probability_threshold": 0.55,
+      "edge_calculation": true,
+      "variance_adjustment": true,
+      "bankroll_scaling": true
+    },
+    "martingale_protection": {
+      "enabled": true,
+      "max_doubles": 3,
+      "reset_threshold": 0.1,
+      "progressive_scaling": false
+    },
+    "profit_taking": {
+      "enabled": true,
+      "target_profit_percentage": 0.2,
+      "trailing_stop": true,
+      "partial_profit_taking": 0.5,
+      "reinvestment_percentage": 0.8
+    }
+  },
+
+  "simulation_engine": {
+    "enabled": true,
+    "massive_simulation_support": true,
+    "bankroll_scenarios": [100, 500, 1000, 5000, 10000],
+    "multiplier_testing": [1.5, 2.0, 3.0, 5.0, 10.0],
+    "confidence_testing": [0.55, 0.60, 0.65, 0.70, 0.75],
+    "session_lengths": [100, 500, 1000, 5000],
+    "parallel_simulations": true,
+    "monte_carlo_runs": 10000,
+    "statistical_analysis": true,
+    "performance_metrics": ["total_profit", "win_rate", "avg_profit", "max_drawdown", "profit_factor"]
+  },
+
+  "real_time_integration": {
+    "stake_api_connection": true,
+    "live_prediction_updates": true,
+    "game_state_monitoring": true,
+    "automatic_betting": true,
+    "manual_confirmation_required": false,
+    "connection_retry_attempts": 3,
+    "connection_timeout_seconds": 30,
+    "heartbeat_interval_seconds": 60,
+    "data_validation": true,
+    "error_handling": "strict_validation",
+    "production_mode": true,
+    "real_data_only": true,
+    "no_simulation_fallback": true
+  },
+
+  "data_sources": {
+    "billion_roll_dataset": "rolls_1e9.u16",
+    "session_seeds": {
+      "client_seeds": ["rpssWuZThW", "A1EnyBArgu"],
+      "server_seed_hashes": [
+        "b10c1d121c5373702d9b6c166c6f7749905f80f1c6f096d2177ba39ec16a8e3a",
+        "1c3b4889e9411f47beb7d1149031d72a61e704911415922999e3579df87e3c8b"
+      ]
+    },
+    "model_files": {
+      "oracle_model": "supreme_oracle.pth",
+      "feature_scaler": "scaler.pkl",
+      "pattern_data": "patterns.json"
+    }
+  },
+
+  "logging": {
+    "log_level": "INFO",
+    "save_predictions": true,
+    "save_patterns": true,
+    "performance_tracking": true,
+    "anomaly_logging": true,
+    "log_file": "supreme_system.log",
+    "performance_log": "performance.log",
+    "trading_log": "trading.log",
+    "max_log_size_mb": 100,
+    "log_retention_days": 30
+  }
+}

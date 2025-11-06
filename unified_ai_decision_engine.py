@@ -491,6 +491,97 @@ class RealTimeDataProcessor:
         randomness_score = (run_score + freq_score) / 2
         
         return randomness_score
+    
+    def update_session_seeds(self, seeds: Dict) -> None:
+        """Update session seeds for enhanced prediction accuracy"""
+        try:
+            self.session_seeds = {
+                'client_seed': seeds.get('client_seed', ''),
+                'server_seed_hash': seeds.get('server_seed_hash', ''),
+                'nonce': seeds.get('nonce', 0),
+                'total_bets': seeds.get('total_bets', 0),
+                'revealed_server_seed': seeds.get('revealed_server_seed', '')
+            }
+            
+            # Enhance predictions with seed-based calculations
+            self.seeds_enabled = True
+            logging.info(f"Session seeds updated for enhanced predictions: {self.session_seeds['client_seed'][:8]}...")
+            
+        except Exception as e:
+            logging.error(f"Failed to update session seeds: {e}")
+            self.seeds_enabled = False
+    
+    def clear_session_seeds(self) -> None:
+        """Clear session seeds"""
+        try:
+            self.session_seeds = {}
+            self.seeds_enabled = False
+            logging.info("Session seeds cleared")
+        except Exception as e:
+            logging.error(f"Failed to clear session seeds: {e}")
+    
+    def get_seed_based_prediction(self, nonce: int = None) -> Dict:
+        """Get prediction based on session seeds if available"""
+        try:
+            if not hasattr(self, 'seeds_enabled') or not self.seeds_enabled:
+                return {'prediction': None, 'confidence': 0, 'method': 'no_seeds'}
+            
+            if not hasattr(self, 'session_seeds') or not self.session_seeds.get('client_seed'):
+                return {'prediction': None, 'confidence': 0, 'method': 'no_seeds'}
+            
+            # Use provided nonce or current session nonce
+            current_nonce = nonce if nonce is not None else self.session_seeds.get('nonce', 0)
+            
+            if self.session_seeds.get('revealed_server_seed'):
+                # High accuracy prediction with revealed server seed
+                import hashlib
+                import hmac
+                
+                client_seed = self.session_seeds['client_seed']
+                server_seed = self.session_seeds['revealed_server_seed']
+                message = f"{client_seed}:{current_nonce}"
+                
+                hmac_result = hmac.new(
+                    server_seed.encode('utf-8'),
+                    message.encode('utf-8'),
+                    hashlib.sha256
+                ).hexdigest()
+                
+                # Convert to dice roll
+                hex_chunk = hmac_result[:8]
+                decimal_value = int(hex_chunk, 16)
+                predicted_roll = round((decimal_value % 10000) / 100, 2)
+                
+                return {
+                    'prediction': predicted_roll,
+                    'confidence': 95,
+                    'method': 'hmac_calculation',
+                    'hmac_output': hmac_result,
+                    'message': message
+                }
+            else:
+                # Limited prediction with hash only - use pattern analysis
+                seed_hash = self.session_seeds['server_seed_hash']
+                client_seed = self.session_seeds['client_seed']
+                
+                # Create a deterministic prediction based on available data
+                combined_input = f"{client_seed}_{seed_hash}_{current_nonce}"
+                hash_result = hashlib.md5(combined_input.encode()).hexdigest()
+                
+                # Convert to prediction
+                hex_value = int(hash_result[:4], 16)
+                predicted_roll = round((hex_value % 10000) / 100, 2)
+                
+                return {
+                    'prediction': predicted_roll,
+                    'confidence': 25,  # Low confidence without actual server seed
+                    'method': 'hash_approximation',
+                    'note': 'Limited accuracy without revealed server seed'
+                }
+                
+        except Exception as e:
+            logging.error(f"Seed-based prediction failed: {e}")
+            return {'prediction': None, 'confidence': 0, 'method': 'error'}
 
 class UnifiedAIDecisionEngine:
     """The supreme decision engine that combines everything"""
@@ -882,7 +973,7 @@ class UnifiedAIDecisionEngine:
         # Risk assessment
         risk_assessment = {
             'bankroll_risk': bet_amount / self.current_bankroll,
-            'volatility_adjusted': volatility_metrics.get('session_volatility', 0.5),
+            'volatility_adjusted': betting_context.volatility_metrics.get('session_volatility', 0.5),
             'confidence_level': confidence,
             'max_loss': bet_amount,
             'potential_gain': bet_amount * multiplier,

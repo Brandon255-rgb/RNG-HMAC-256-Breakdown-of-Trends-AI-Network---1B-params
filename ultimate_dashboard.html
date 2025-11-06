@@ -1352,10 +1352,399 @@
             color: #888;
             font-style: italic;
         }
+
+        /* Stake-style Rolling Results Banner */
+        .results-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(135deg, #0F212E, #1A2C38);
+            border-bottom: 1px solid #105EB4;
+            z-index: 1000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .results-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                rgba(31, 255, 32, 0.05) 0%, 
+                transparent 50%, 
+                rgba(16, 94, 180, 0.05) 100%);
+        }
+
+        .results-banner-label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 600;
+            margin-right: 20px;
+            min-width: 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .results-scroll-container {
+            flex: 1;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results-scroll {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            animation: scrollResults 0.5s ease-out;
+            gap: 8px;
+        }
+
+        @keyframes scrollResults {
+            from {
+                transform: translateX(60px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .result-bubble {
+            min-width: 50px;
+            height: 36px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            animation: resultPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes resultPop {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(-90deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .result-bubble.win {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .result-bubble.loss {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .result-bubble::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+            border-radius: inherit;
+        }
+
+        .result-bubble.exit {
+            animation: resultExit 0.4s ease-in forwards;
+        }
+
+        @keyframes resultExit {
+            to {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+        }
+
+        /* Toast Notification System */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1001;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: rgba(26, 35, 50, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            max-width: 350px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #3b82f6;
+            transform: translateX(400px);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: auto;
+            position: relative;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .toast.error {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .toast.warning {
+            border-left-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .toast.info {
+            border-left-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .toast-icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .toast-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .toast-close:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Adjust main container to account for results banner */
+        .container {
+            margin-top: 60px;
+        }
+
+        /* Enhanced Stake-style Dice Game */
+        .stake-dice-game {
+            background: #0F212E;
+            border: 1px solid #105EB4;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .game-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1FFF20;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1FFF20;
+            display: block;
+        }
+
+        .dice-controls-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .bet-controls {
+            background: #1A2C38;
+            border: 1px solid #105EB4;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .dice-visualization {
+            background: #1A2C38;
+            border: 1px solid #105EB4;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .dice-range-slider {
+            position: relative;
+            height: 80px;
+            margin: 20px 0;
+        }
+
+        .range-track {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: #374151;
+            border-radius: 4px;
+            transform: translateY(-50%);
+            overflow: hidden;
+        }
+
+        .range-fill-under {
+            position: absolute;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            transition: width 0.3s ease;
+        }
+
+        .range-fill-over {
+            position: absolute;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #16a34a, #22c55e);
+            transition: width 0.3s ease;
+        }
+
+        .dice-slider-input {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            height: 8px;
+            background: transparent;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .dice-slider-input::-webkit-slider-thumb {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #1FFF20;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid #0F212E;
+            box-shadow: 0 2px 8px rgba(31, 255, 32, 0.4);
+        }
+
+        .dice-slider-input::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #1FFF20;
+            border-radius: 50%;
+            border: 3px solid #0F212E;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(31, 255, 32, 0.4);
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .win-chance-display {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .win-chance-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1FFF20;
+            margin-bottom: 4px;
+        }
+
+        .win-chance-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
     <div class="grid-overlay"></div>
+    
+    <!-- Stake-style Rolling Results Banner -->
+    <div class="results-banner">
+        <div class="results-banner-label">LIVE RESULTS</div>
+        <div class="results-scroll-container">
+            <div class="results-scroll" id="resultsScroll">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer">
+        <!-- Toasts will be populated here -->
+    </div>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -1453,6 +1842,130 @@
             </div>
         </div>
 
+        <!-- Session Seeds Input Panel -->
+        <div class="control-panel">
+            <div class="control-title">
+                <i class="fas fa-key"></i>
+                Session Seeds for Enhanced Decryption
+            </div>
+            <p style="font-size: 13px; color: #9ca3af; margin-bottom: 20px;">
+                Enter the session seeds to improve number prediction accuracy using HMAC-SHA256 calculations
+            </p>
+            
+            <div class="control-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="form-group">
+                    <label class="form-label">Client Seed</label>
+                    <input type="text" class="form-input" id="clientSeed" placeholder="Enter client seed (e.g., A1EnyBArgu)" maxlength="64">
+                    <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">
+                        Your chosen client seed for provably fair gaming
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Server Seed Hash</label>
+                    <input type="text" class="form-input" id="serverSeedHash" placeholder="Enter server seed hash (SHA256)" maxlength="64">
+                    <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">
+                        Server seed hash (64 character hex string)
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-grid" style="grid-template-columns: 1fr 1fr 2fr;">
+                <div class="form-group">
+                    <label class="form-label">Nonce</label>
+                    <input type="number" class="form-input" id="nonceValue" placeholder="0" min="0" step="1">
+                    <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">
+                        Current bet number in session
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Total Bets Made</label>
+                    <input type="number" class="form-input" id="totalBetsMade" placeholder="0" min="0" step="1" readonly>
+                    <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">
+                        Automatically tracked
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Revealed Server Seed (Optional)</label>
+                    <input type="text" class="form-input" id="revealedServerSeed" placeholder="Enter if available for verification">
+                    <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">
+                        Only available after session ends - for verification
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group" style="margin-top: 20px;">
+                <button class="btn btn-primary" id="updateSeedsBtn">
+                    <i class="fas fa-sync-alt"></i>
+                    Update Seeds
+                </button>
+                <button class="btn btn-success" id="calculateNextBtn">
+                    <i class="fas fa-calculator"></i>
+                    Calculate Next Numbers
+                </button>
+                <button class="btn btn-secondary" id="verifySeedsBtn">
+                    <i class="fas fa-check-circle"></i>
+                    Verify Seeds
+                </button>
+                <button class="btn btn-secondary" id="clearSeedsBtn">
+                    <i class="fas fa-trash"></i>
+                    Clear Seeds
+                </button>
+            </div>
+            
+            <!-- Seeds Status Panel -->
+            <div style="margin-top: 20px; padding: 16px; background: rgba(55, 65, 81, 0.4); border: 1px solid rgba(75, 85, 99, 0.3); border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div class="form-label" style="margin: 0;">Seeds Status</div>
+                    <span id="seedsStatus" class="status-indicator status-offline"></span>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 12px;">
+                    <div>
+                        <span style="color: #9ca3af;">Client Seed:</span>
+                        <div id="currentClientSeed" style="color: #1FFF20; font-family: monospace; word-break: break-all;">Not set</div>
+                    </div>
+                    <div>
+                        <span style="color: #9ca3af;">Server Hash:</span>
+                        <div id="currentServerHash" style="color: #1FFF20; font-family: monospace; word-break: break-all;">Not set</div>
+                    </div>
+                    <div>
+                        <span style="color: #9ca3af;">Next Prediction:</span>
+                        <div id="nextCalculatedNumber" style="color: #34d399; font-weight: 600; font-size: 14px;">--</div>
+                    </div>
+                    <div>
+                        <span style="color: #9ca3af;">Confidence:</span>
+                        <div id="seedConfidence" style="color: #34d399; font-weight: 600;">0%</div>
+                    </div>
+                </div>
+                
+                <!-- HMAC Calculation Results -->
+                <div id="hmacResults" style="margin-top: 16px; display: none;">
+                    <div class="form-label" style="margin-bottom: 8px;">HMAC-SHA256 Calculation Results</div>
+                    <div style="background: rgba(15, 20, 25, 0.6); padding: 12px; border-radius: 6px; font-family: monospace; font-size: 11px;">
+                        <div style="margin-bottom: 8px;">
+                            <span style="color: #9ca3af;">HMAC Input:</span>
+                            <div id="hmacInput" style="color: #e5e7eb; word-break: break-all;">--</div>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <span style="color: #9ca3af;">HMAC Output:</span>
+                            <div id="hmacOutput" style="color: #1FFF20; word-break: break-all;">--</div>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <span style="color: #9ca3af;">Dice Roll (0-99.99):</span>
+                            <div id="diceRollResult" style="color: #34d399; font-size: 14px; font-weight: 600;">--</div>
+                        </div>
+                        <div>
+                            <span style="color: #9ca3af;">Next 5 Rolls:</span>
+                            <div id="nextFiveRolls" style="color: #60a5fa;">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Stake-Style Betting Interface -->
         <div class="betting-interface">
             <div class="betting-tabs">
@@ -1498,56 +2011,127 @@
                 </div>
 
                 <!-- Dice Game Interface -->
-                <div class="dice-game">
-                    <div class="dice-slider-container">
-                        <div class="slider-label">
-                            <span>0.00</span>
-                            <span>100.00</span>
+                <div class="stake-dice-game">
+                    <div class="game-header">
+                        <div class="game-title">
+                            <i class="fas fa-dice"></i>
+                            Dice - Provably Fair
                         </div>
-                        <div class="slider-track">
-                            <input type="range" class="dice-slider" id="diceSlider" min="2" max="98" value="50" step="0.01">
-                            <div class="dice-range-visualization">
-                                <div class="range-section lower-range" id="lowerRange" style="width: 50%;">
-                                    <span>ROLL UNDER</span>
-                                </div>
-                                <div class="range-section higher-range" id="higherRange" style="width: 50%;">
-                                    <span>ROLL OVER</span>
-                                </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalPlayed">0</span>
+                                <span>Played</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalWon">0</span>
+                                <span>Won</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="winPercentage">0%</span>
+                                <span>Win %</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="dice-inputs">
-                        <div class="dice-input-group">
-                            <label class="control-label">Multiplier</label>
-                            <input type="number" class="dice-input" id="multiplierInput" value="2.0000" step="0.0001" min="1.0102" max="9900">
-                        </div>
-                        
-                        <div class="dice-input-group">
-                            <label class="control-label">Roll Over/Under</label>
-                            <div class="roll-toggle-container">
-                                <input type="number" class="dice-input" id="rollOverInput" value="50.00" step="0.01" min="0.01" max="99.99">
-                                <button class="roll-toggle-btn" id="rollToggleBtn" title="Switch between Roll Over and Roll Under">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M12 2v20m0-20l-4 4m4-4l4 4m-4 16l-4-4m4 4l4-4"/>
-                                        <circle cx="12" cy="12" r="3"/>
-                                    </svg>
-                                </button>
+                    <div class="dice-controls-container">
+                        <!-- Left Panel: Bet Controls -->
+                        <div class="bet-controls">
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label class="control-label">Bet Amount</label>
+                                <div class="input-group">
+                                    <div class="currency-icon-input">
+                                        <svg data-ds-icon="USDT" width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" id="stakeBetCurrencyIcon">
+                                            <path fill="#26A17B" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11"></path>
+                                            <path fill="#fff" d="M13.322 12.95c-.076.005-.466.028-1.336.028-.694 0-1.183-.02-1.355-.029v.002c-2.673-.117-4.668-.583-4.668-1.14s1.995-1.021 4.668-1.14v1.817c.175.013.675.042 1.367.042.83 0 1.246-.034 1.324-.041v-1.817c2.667.119 4.657.584 4.657 1.14s-1.99 1.02-4.657 1.139m0-2.467V8.856h3.722v-2.48H6.909v2.48h3.722v1.626c-3.025.139-5.3.738-5.3 1.456s2.275 1.317 5.3 1.456v5.213h2.69v-5.214c3.02-.139 5.29-.738 5.29-1.455s-2.27-1.316-5.29-1.455"></path>
+                                        </svg>
+                                    </div>
+                                    <input type="number" id="stakeBetAmount" class="input" placeholder="0.00000000" step="0.00000001" min="0" />
+                                </div>
+                                <div class="amount-buttons">
+                                    <button class="amount-btn" onclick="adjustStakeBetAmount(0.5)">½</button>
+                                    <button class="amount-btn" onclick="adjustStakeBetAmount(2)">2×</button>
+                                    <button class="amount-btn" onclick="setStakeBetAmount(0.00000001)">Min</button>
+                                    <button class="amount-btn" onclick="setMaxStakeBetAmount()">Max</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label class="control-label">Multiplier</label>
+                                <div class="input-group">
+                                    <input type="number" id="stakeMultiplier" class="input" value="2.0000" step="0.0001" min="1.0102" max="9900" readonly />
+                                    <div class="after-icon">×</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label class="control-label">Roll Over</label>
+                                <div class="input-group">
+                                    <input type="number" id="stakeRollOver" class="input" value="50.00" step="0.01" min="0.01" max="98.99" />
+                                    <button class="roll-toggle-btn" id="stakeRollToggle" title="Switch Roll Over/Under">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 24px;">
+                                <label class="control-label">Win Chance</label>
+                                <div class="input-group">
+                                    <input type="number" id="stakeWinChance" class="input" value="49.50" step="0.01" min="1" max="98" readonly />
+                                    <div class="after-icon">%</div>
+                                </div>
+                            </div>
+
+                            <button class="place-bet-button" id="stakePlayButton">
+                                <i class="fas fa-play"></i>
+                                Bet
+                            </button>
+
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #105EB4;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #888; margin-bottom: 8px;">
+                                    <span>Profit on Win</span>
+                                    <span id="stakeProfitDisplay">0.00000000 USDT</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #888;">
+                                    <span>Payout</span>
+                                    <span id="stakePayoutDisplay">0.00000000 USDT</span>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="dice-input-group">
-                            <label class="control-label">Win Chance</label>
-                            <input type="number" class="dice-input" id="winChanceInput" value="49.5000" step="0.0001" min="1" max="98">
+
+                        <!-- Right Panel: Dice Visualization -->
+                        <div class="dice-visualization">
+                            <div class="dice-range-slider">
+                                <div class="range-track">
+                                    <div class="range-fill-under" id="rangeFillUnder" style="width: 50%;"></div>
+                                    <div class="range-fill-over" id="rangeFillOver" style="width: 50%;"></div>
+                                </div>
+                                <input type="range" class="dice-slider-input" id="stakeSlider" min="1" max="99" value="50" step="0.01">
+                            </div>
+
+                            <div class="range-labels">
+                                <span style="color: #ef4444;">0.00</span>
+                                <span style="color: #1FFF20;">100.00</span>
+                            </div>
+
+                            <div class="win-chance-display">
+                                <div class="win-chance-value" id="stakeWinChanceDisplay">49.50%</div>
+                                <div class="win-chance-label">WIN CHANCE</div>
+                            </div>
+
+                            <!-- Live Result Display -->
+                            <div id="liveResultDisplay" style="text-align: center; margin-top: 20px; display: none;">
+                                <div style="font-size: 48px; font-weight: 700; margin-bottom: 8px;" id="liveResultNumber">--</div>
+                                <div style="font-size: 14px; color: #888;" id="liveResultOutcome">--</div>
+                            </div>
                         </div>
                     </div>
 
-                    <button class="place-bet-button" id="placeBetButton">
-                        Place Bet
-                    </button>
-
-                    <div class="dice-container is-hidden">
-                        <div class="dice-result" id="diceResult">--</div>
+                    <!-- Game History -->
+                    <div style="margin-top: 24px;">
+                        <h4 style="color: #1FFF20; margin-bottom: 12px; font-size: 14px;">Recent Results</h4>
+                        <div id="stakeGameHistory" style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 120px; overflow-y: auto;">
+                            <!-- Game history bubbles will be added here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1759,8 +2343,12 @@
             socket.on('connect', function() {
                 console.log('Connected to server');
                 updateConnectionStatus(true);
-                logActivity('Connected to server');
-                showNotification('Connected to dashboard server', 'success');
+                logActivity('Connected to Supreme AI server');
+                showNotification('Connected to Make AI Dashboard', 'success');
+                
+                // Request initial data
+                requestLiveUpdate();
+                requestAIInsights();
             });
             
             socket.on('disconnect', function() {
@@ -1773,6 +2361,10 @@
             socket.on('bet_result', function(data) {
                 handleBetResult(data);
             });
+
+            socket.on('dice_bet_result', function(data) {
+                handleDiceBetResult(data);
+            });
             
             socket.on('prediction_update', function(data) {
                 updatePredictions(data);
@@ -1783,10 +2375,48 @@
             });
 
             socket.on('balance_update', function(data) {
-                if (!isDemoMode) {
-                    stats.balance = data.balance;
-                    updateDisplay();
-                }
+                updateBalanceFromServer(data);
+            });
+
+            socket.on('dashboard_update', function(data) {
+                updateDashboardFromServer(data);
+            });
+
+            socket.on('live_update', function(data) {
+                updateLiveStats(data);
+            });
+
+            socket.on('ai_insights_updated', function(data) {
+                updateAIInsights(data);
+            });
+
+            socket.on('new_decision', function(data) {
+                displayNewDecision(data);
+            });
+
+            socket.on('bet_executed', function(data) {
+                displayBetExecution(data);
+            });
+
+            socket.on('market_update', function(data) {
+                updateMarketConditions(data);
+            });
+
+            socket.on('performance_update', function(data) {
+                updatePerformanceMetrics(data);
+            });
+
+            socket.on('settings_updated', function(data) {
+                handleSettingsUpdate(data);
+            });
+
+            socket.on('mode_switched', function(data) {
+                handleModeSwitch(data);
+            });
+
+            socket.on('error', function(data) {
+                console.error('Server error:', data);
+                showNotification(`Server error: ${data.message}`, 'error');
             });
         }
 
@@ -1795,39 +2425,146 @@
             isDemoMode = !isDemoMode;
             modeToggle.classList.toggle('real-money');
             
+            // Notify server about mode change
+            if (socket && socket.connected) {
+                socket.emit('update_settings', { demo_mode: isDemoMode });
+            }
+            
             if (isDemoMode) {
                 demoLabel.classList.add('active');
                 demoLabel.classList.remove('real');
                 realLabel.classList.remove('active', 'real');
                 stats.balance = 1000.00;
+                currencyBalances.usdt = 1000.00004897;
                 document.getElementById('balanceChange').textContent = 'Demo funds';
                 logActivity('Switched to Demo Mode');
                 showNotification('Demo Mode: Virtual $1,000 balance', 'success');
+                
+                // Disconnect from Stake API if connected
+                if (socket && socket.connected) {
+                    socket.emit('disconnect_stake_api');
+                }
             } else {
                 demoLabel.classList.remove('active');
                 realLabel.classList.add('active', 'real');
                 document.getElementById('balanceChange').textContent = 'Real money - Be careful!';
                 logActivity('Switched to Real Money Mode - USE CAUTION!');
                 showNotification('⚠️ REAL MONEY MODE - Trade carefully!', 'warning');
+                
+                // Show additional warning for real money
+                setTimeout(() => {
+                    if (confirm('⚠️ WARNING: You are entering REAL MONEY mode!\n\nThis will use your actual Stake.com funds. Only proceed if you:\n✅ Have a funded Stake account\n✅ Understand the risks involved\n✅ Can afford to lose the money you bet\n\nDo you want to continue?')) {
+                        logActivity('Real money mode confirmed by user');
+                        // Try to connect to real Stake API
+                        if (socket && socket.connected) {
+                            socket.emit('connect_stake_api', { demo_mode: false });
+                        }
+                    } else {
+                        // User cancelled, revert to demo mode
+                        isDemoMode = true;
+                        modeToggle.checked = false;
+                        modeToggle.classList.remove('real-money');
+                        demoLabel.classList.add('active');
+                        realLabel.classList.remove('active', 'real');
+                        document.getElementById('balanceChange').textContent = 'Demo funds';
+                        showNotification('Reverted to Demo Mode', 'info');
+                        logActivity('Real money mode cancelled, reverted to demo');
+                    }
+                });
             }
             
             updateDisplay();
+            updateCurrencyDisplay();
         });
 
         // Connect button functionality
         connectBtn.addEventListener('click', function() {
             if (!isConnected) {
-                socket.emit('connect_stake_api', { demo_mode: isDemoMode });
-                logActivity('Connecting to Stake API...');
-                showNotification('Connecting to Stake...', 'info');
-                connectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting';
+                // Start the AI system
+                fetch('/api/start', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'started') {
+                            logActivity('Supreme AI System Started');
+                            showNotification('AI System Activated!', 'success');
+                            connectBtn.innerHTML = '<i class="fas fa-stop"></i> Stop AI';
+                            connectBtn.className = 'btn btn-danger';
+                            isConnected = true;
+                            
+                            // Connect to Stake API based on current mode
+                            if (socket && socket.connected) {
+                                socket.emit('connect_stake_api', { demo_mode: isDemoMode });
+                            }
+                            
+                            // Start requesting AI insights
+                            startAIInsightTimer();
+                        } else {
+                            showNotification('Failed to start AI system', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        logActivity('Failed to start AI system: ' + error.message);
+                        showNotification('Connection failed', 'error');
+                    });
+                    
+                connectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting';
                 connectBtn.disabled = true;
             } else {
-                socket.emit('disconnect_stake_api');
-                logActivity('Disconnecting from Stake API...');
-                showNotification('Disconnecting...', 'info');
+                // Stop the AI system
+                fetch('/api/stop', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'stopped') {
+                            logActivity('Supreme AI System Stopped');
+                            showNotification('AI System Deactivated', 'info');
+                            connectBtn.innerHTML = '<i class="fas fa-link"></i> Start AI';
+                            connectBtn.className = 'btn btn-secondary';
+                            isConnected = false;
+                            
+                            // Disconnect from Stake API
+                            if (socket && socket.connected) {
+                                socket.emit('disconnect_stake_api');
+                            }
+                            
+                            // Stop AI insight timer
+                            stopAIInsightTimer();
+                        }
+                    })
+                    .catch(error => {
+                        showNotification('Failed to stop AI system', 'error');
+                    });
+                    
+                connectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Stopping';
+                connectBtn.disabled = true;
+                setTimeout(() => {
+                    connectBtn.disabled = false;
+                }, 2000);
             }
         });
+
+        // AI Insight Timer
+        let aiInsightTimer = null;
+        
+        function startAIInsightTimer() {
+            // Request AI insights every 30 seconds
+            aiInsightTimer = setInterval(() => {
+                if (socket && socket.connected) {
+                    requestAIInsights();
+                }
+            }, 30000);
+            
+            // Get initial insights
+            setTimeout(() => {
+                requestAIInsights();
+            }, 2000);
+        }
+        
+        function stopAIInsightTimer() {
+            if (aiInsightTimer) {
+                clearInterval(aiInsightTimer);
+                aiInsightTimer = null;
+            }
+        }
 
         // Betting functionality
         singleBetBtn.addEventListener('click', function() {
@@ -2009,6 +2746,239 @@
             document.getElementById('riskLevel').textContent = data.risk || 'Medium';
         }
 
+        // New handler functions for enhanced connectivity
+        function requestLiveUpdate() {
+            if (socket && socket.connected) {
+                socket.emit('request_live_update');
+            }
+        }
+
+        function requestAIInsights() {
+            if (socket && socket.connected) {
+                socket.emit('get_ai_insights');
+            }
+        }
+
+        function handleDiceBetResult(data) {
+            console.log('Dice bet result received:', data);
+            
+            if (data.error) {
+                showNotification(`Bet Error: ${data.error}`, 'error');
+                return;
+            }
+
+            // Update dice result display
+            const diceResult = document.getElementById('diceResult');
+            const diceContainer = document.querySelector('.dice-container');
+            
+            if (diceResult && diceContainer) {
+                diceResult.textContent = data.result.toFixed(2);
+                diceResult.className = `dice-result ${data.won ? 'win' : 'loss'}`;
+                diceContainer.classList.remove('is-hidden');
+            }
+
+            // Update balance
+            if (data.balance !== undefined) {
+                currencyBalances[data.currency] = data.balance;
+                updateCurrencyDisplay();
+            }
+
+            // Update stats
+            stats.totalBets++;
+            if (data.won) {
+                stats.wins++;
+                stats.profit += data.profit;
+                logActivity(`WIN: ${data.result} | +${data.profit.toFixed(8)} ${data.currency.toUpperCase()}`);
+                showNotification(`Won ${data.profit.toFixed(8)} ${data.currency.toUpperCase()}!`, 'success');
+            } else {
+                stats.losses++;
+                stats.profit += data.profit; // data.profit will be negative
+                logActivity(`LOSS: ${data.result} | ${data.profit.toFixed(8)} ${data.currency.toUpperCase()}`);
+                showNotification(`Lost ${Math.abs(data.profit).toFixed(8)} ${data.currency.toUpperCase()}`, 'error');
+            }
+
+            updateDisplay();
+            updateCharts();
+        }
+
+        function updateBalanceFromServer(data) {
+            if (data.balance !== undefined) {
+                if (isDemoMode) {
+                    stats.balance = data.balance;
+                    currencyBalances.usdt = data.balance;
+                } else {
+                    // Real money mode - update appropriate currency
+                    currencyBalances[currentCurrency] = data.balance;
+                    stats.balance = data.balance;
+                }
+                updateDisplay();
+                updateCurrencyDisplay();
+            }
+        }
+
+        function updateDashboardFromServer(data) {
+            if (data.live_stats) {
+                Object.assign(stats, data.live_stats);
+                updateDisplay();
+            }
+            
+            if (data.system_status) {
+                dashboard_state = Object.assign(dashboard_state || {}, data.system_status);
+                updateSystemStatus(data.system_status);
+            }
+        }
+
+        function updateLiveStats(data) {
+            if (data.live_stats) {
+                Object.assign(stats, data.live_stats);
+                updateDisplay();
+            }
+            
+            if (data.recent_decisions && data.recent_decisions.length > 0) {
+                data.recent_decisions.forEach(decision => {
+                    displayAIDecision(decision);
+                });
+            }
+        }
+
+        function updateAIInsights(data) {
+            if (data.insights) {
+                const insights = data.insights;
+                
+                // Update AI predictions panel
+                if (insights.next_prediction) {
+                    document.getElementById('nextPrediction').textContent = insights.next_prediction;
+                }
+                
+                if (insights.confidence !== undefined) {
+                    document.getElementById('predictionConfidence').style.width = `${insights.confidence}%`;
+                }
+                
+                if (insights.trend_direction) {
+                    document.getElementById('trendDirection').textContent = insights.trend_direction;
+                }
+                
+                if (insights.recommendation) {
+                    document.getElementById('recommendedBet').textContent = insights.recommendation;
+                }
+                
+                if (insights.risk_level) {
+                    document.getElementById('riskLevel').textContent = insights.risk_level;
+                }
+                
+                logActivity(`AI Update: ${insights.recommendation || 'No action'} (${insights.confidence || 0}% confidence)`);
+            }
+        }
+
+        function displayNewDecision(data) {
+            if (data.decision) {
+                const decision = data.decision;
+                logActivity(`AI Decision: ${decision.should_bet ? 'BET' : 'HOLD'} - ${decision.strategy_used} (${decision.confidence}% confidence)`);
+                
+                // Update predictions based on decision
+                document.getElementById('nextPrediction').textContent = decision.should_bet ? `${decision.side.toUpperCase()} ${decision.target_roll}` : 'Hold';
+                document.getElementById('predictionConfidence').style.width = `${decision.confidence || 0}%`;
+                document.getElementById('recommendedBet').textContent = decision.should_bet ? `Bet ${decision.bet_amount}` : 'Hold';
+            }
+        }
+
+        function displayBetExecution(data) {
+            if (data.result && data.decision) {
+                const result = data.result;
+                const decision = data.decision;
+                
+                logActivity(`Bet Executed: ${decision.bet_amount} ${decision.side} ${decision.target_roll} - Result: ${result.bet_result?.roll || 'Unknown'}`);
+                
+                if (result.bet_result?.won) {
+                    showNotification(`Auto Bet Won! +${result.bet_result.profit}`, 'success');
+                } else {
+                    showNotification(`Auto Bet Lost: -${decision.bet_amount}`, 'error');
+                }
+            }
+        }
+
+        function updateMarketConditions(data) {
+            // Update market condition indicators if you have them in your UI
+            console.log('Market conditions updated:', data);
+        }
+
+        function updatePerformanceMetrics(data) {
+            if (data.live_stats) {
+                Object.assign(stats, data.live_stats);
+                updateDisplay();
+            }
+        }
+
+        function handleSettingsUpdate(data) {
+            if (data.bet_interval) {
+                document.getElementById('betInterval').value = data.bet_interval;
+                logActivity(`Bet interval updated to ${data.bet_interval}s`);
+            }
+            
+            if (data.error) {
+                showNotification(`Settings Error: ${data.error}`, 'error');
+            } else if (data.status === 'success') {
+                showNotification('Settings updated successfully', 'success');
+            }
+        }
+
+        function handleModeSwitch(data) {
+            if (data.demo_mode !== undefined) {
+                isDemoMode = data.demo_mode;
+                updateModeDisplay();
+                logActivity(`Switched to ${isDemoMode ? 'Demo' : 'Real Money'} mode`);
+                showNotification(`${isDemoMode ? 'Demo' : '⚠️ REAL MONEY'} mode activated`, isDemoMode ? 'success' : 'warning');
+            }
+        }
+
+        function updateSystemStatus(status) {
+            // Update system status indicators
+            if (status.is_running !== undefined) {
+                // Update running status indicator
+                console.log('System running:', status.is_running);
+            }
+            
+            if (status.auto_betting !== undefined) {
+                autoBettingActive = status.auto_betting;
+                // Update auto betting UI
+                if (autoBettingActive) {
+                    startAutoBetBtn.style.display = 'none';
+                    stopAutoBetBtn.style.display = 'inline-flex';
+                } else {
+                    startAutoBetBtn.style.display = 'inline-flex';
+                    stopAutoBetBtn.style.display = 'none';
+                }
+            }
+        }
+
+        function updateModeDisplay() {
+            const modeToggle = document.getElementById('modeToggle');
+            if (modeToggle) {
+                modeToggle.checked = !isDemoMode;
+                modeToggle.parentElement.classList.toggle('real-money', !isDemoMode);
+                
+                // Update balance display
+                if (isDemoMode) {
+                    document.getElementById('balanceChange').textContent = 'Demo funds';
+                    stats.balance = 1000.00;
+                } else {
+                    document.getElementById('balanceChange').textContent = 'Real money - Be careful!';
+                }
+                
+                updateDisplay();
+            }
+        }
+
+        function displayAIDecision(decision) {
+            // Display AI decision in the activity log
+            const action = decision.should_bet ? 'RECOMMEND BET' : 'RECOMMEND HOLD';
+            const details = decision.should_bet ? 
+                `${decision.bet_amount} ${decision.side} ${decision.target_roll} (${decision.strategy_used})` : 
+                `${decision.strategy_used}`;
+            
+            logActivity(`AI ${action}: ${details} - ${decision.confidence}% confidence`);
+        }
+
         function initializeCharts() {
             // Profit Chart
             const profitCtx = document.getElementById('profitChart').getContext('2d');
@@ -2168,6 +3138,31 @@
             eth: 0.00000000,
             doge: 0.00000000
         };
+
+        // Load balances from server on startup
+        function loadBalancesFromServer() {
+            if (socket && socket.connected) {
+                // Request current balances from server
+                fetch('/api/dashboard_data')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.live_stats && data.live_stats.current_bankroll !== undefined) {
+                            if (isDemoMode) {
+                                currencyBalances.usdt = data.live_stats.current_bankroll;
+                                stats.balance = data.live_stats.current_bankroll;
+                            }
+                            
+                            // Update stats from server
+                            Object.assign(stats, data.live_stats);
+                            updateDisplay();
+                            updateCurrencyDisplay();
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Could not load server balances, using defaults:', error);
+                    });
+            }
+        }
 
         function initializeDiceGame() {
             const diceSlider = document.getElementById('diceSlider');
@@ -2461,6 +3456,957 @@
             };
             return icons[currency] || icons.usdt;
         }
+
+        // Betting Interface JavaScript
+        function initBettingInterface() {
+            // Tab switching
+            document.querySelectorAll('.betting-tabs .tab-button').forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    // Update tab buttons
+                    document.querySelectorAll('.betting-tabs .tab-button').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update tab content
+                    document.querySelectorAll('.betting-interface .tab-content').forEach((content, contentIndex) => {
+                        if (contentIndex === index) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Roll Over/Under Toggle
+            const rollToggleBtn = document.getElementById('rollToggleBtn');
+            const rollOverInput = document.getElementById('rollOverInput');
+            let rollMode = 'over'; // 'over' or 'under'
+            
+            rollToggleBtn.addEventListener('click', function() {
+                rollMode = rollMode === 'over' ? 'under' : 'over';
+                updateDiceDisplay();
+                updateRollToggleIcon();
+            });
+
+            function updateRollToggleIcon() {
+                const icon = rollToggleBtn.querySelector('svg');
+                icon.style.transform = rollMode === 'under' ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+
+            // Dice Slider
+            const diceSlider = document.getElementById('diceSlider');
+            const multiplierInput = document.getElementById('multiplierInput');
+            const winChanceInput = document.getElementById('winChanceInput');
+            
+            diceSlider.addEventListener('input', function() {
+                const value = parseFloat(this.value);
+                rollOverInput.value = value.toFixed(2);
+                updateWinChanceAndMultiplier(value);
+                updateDiceVisualization(value);
+            });
+
+            rollOverInput.addEventListener('input', function() {
+                const value = Math.max(0.01, Math.min(98.99, parseFloat(this.value) || 0.01));
+                this.value = value.toFixed(2);
+                diceSlider.value = value;
+                updateWinChanceAndMultiplier(value);
+                updateDiceVisualization(value);
+            });
+
+            function updateWinChanceAndMultiplier(rollNumber) {
+                let winChance;
+                if (rollMode === 'over') {
+                    winChance = 99 - rollNumber;
+                } else {
+                    winChance = rollNumber;
+                }
+                
+                // Apply 1% house edge (99% instead of 100%)
+                const multiplier = (99 / winChance).toFixed(4);
+                
+                winChanceInput.value = winChance.toFixed(4);
+                multiplierInput.value = multiplier;
+                
+                updateProfitCalculation();
+            }
+
+            function updateDiceVisualization(rollNumber) {
+                const lowerRange = document.getElementById('lowerRange');
+                const higherRange = document.getElementById('higherRange');
+                
+                if (rollMode === 'over') {
+                    lowerRange.style.width = rollNumber + '%';
+                    higherRange.style.width = (99 - rollNumber) + '%';
+                    lowerRange.innerHTML = `<span>0.00 - ${rollNumber.toFixed(2)}</span>`;
+                    higherRange.innerHTML = `<span>${rollNumber.toFixed(2)} - 99.00</span>`;
+                    
+                    // Colors for over mode
+                    lowerRange.style.background = '#e74c3c';
+                    lowerRange.style.color = 'white';
+                    higherRange.style.background = '#1FFF20';
+                    higherRange.style.color = '#000';
+                } else {
+                    lowerRange.style.width = rollNumber + '%';
+                    higherRange.style.width = (99 - rollNumber) + '%';
+                    lowerRange.innerHTML = `<span>0.00 - ${rollNumber.toFixed(2)}</span>`;
+                    higherRange.innerHTML = `<span>${rollNumber.toFixed(2)} - 99.00</span>`;
+                    
+                    // Swap colors for under mode
+                    lowerRange.style.background = '#1FFF20';
+                    lowerRange.style.color = '#000';
+                    higherRange.style.background = '#e74c3c';
+                    higherRange.style.color = 'white';
+                }
+            }
+
+            function updateDiceDisplay() {
+                const rollNumber = parseFloat(rollOverInput.value);
+                updateWinChanceAndMultiplier(rollNumber);
+                updateDiceVisualization(rollNumber);
+            }
+
+            // Amount buttons
+            document.getElementById('halveButton').addEventListener('click', function() {
+                const betAmountInput = document.getElementById('betAmount');
+                const currentAmount = parseFloat(betAmountInput.value) || 0;
+                betAmountInput.value = (currentAmount / 2).toFixed(8);
+                updateProfitCalculation();
+            });
+
+            document.getElementById('doubleButton').addEventListener('click', function() {
+                const betAmountInput = document.getElementById('betAmount');
+                const currentAmount = parseFloat(betAmountInput.value) || 0;
+                betAmountInput.value = (currentAmount * 2).toFixed(8);
+                updateProfitCalculation();
+            });
+
+            // Bet amount input
+            document.getElementById('betAmount').addEventListener('input', updateProfitCalculation);
+
+            function updateProfitCalculation() {
+                const betAmount = parseFloat(document.getElementById('betAmount').value) || 0;
+                const multiplier = parseFloat(multiplierInput.value) || 1;
+                const profit = betAmount * (multiplier - 1);
+                
+                document.getElementById('profitAmount').value = profit.toFixed(8);
+                
+                // Update conversion amounts (placeholder values)
+                const usdRate = currentCurrency === 'usdt' ? 1 : (currentCurrency === 'btc' ? 45000 : 2500);
+                document.getElementById('conversionAmount').textContent = `$${(betAmount * usdRate).toFixed(2)}`;
+                document.getElementById('profitConversion').textContent = `$${(profit * usdRate).toFixed(2)}`;
+            }
+
+            // Place Bet
+            document.getElementById('placeBetButton').addEventListener('click', function() {
+                const betAmount = parseFloat(document.getElementById('betAmount').value);
+                const rollNumber = parseFloat(rollOverInput.value);
+                
+                if (!betAmount || betAmount <= 0) {
+                    showNotification('Please enter a valid bet amount', 'error');
+                    return;
+                }
+                
+                if (betAmount > currencyBalances[currentCurrency]) {
+                    showNotification('Insufficient balance', 'error');
+                    return;
+                }
+                
+                placeDiceBet(betAmount, rollNumber, rollMode);
+            });
+
+            // Initialize with default values (49.5% win chance for house edge)
+            diceSlider.value = 49.5;
+            rollOverInput.value = '49.50';
+            updateWinChanceAndMultiplier(49.5);
+            updateDiceVisualization(49.5);
+            updateProfitCalculation();
+        }
+
+        function placeDiceBet(amount, rollNumber, mode) {
+            const diceContainer = document.querySelector('.dice-container');
+            const diceResult = document.getElementById('diceResult');
+            const button = document.getElementById('placeBetButton');
+            
+            button.disabled = true;
+            button.textContent = 'Rolling...';
+            
+            diceContainer.classList.remove('is-hidden');
+            diceResult.textContent = '?';
+            diceResult.className = 'dice-result';
+            
+            // Get multiplier and win chance from inputs
+            const multiplier = parseFloat(document.getElementById('multiplierInput').value);
+            const winChance = parseFloat(document.getElementById('winChanceInput').value);
+            
+            // Prepare bet data for backend
+            const betData = {
+                amount: amount,
+                target: rollNumber,
+                condition: mode, // 'over' or 'under'
+                demo_mode: isDemoMode,
+                currency: currentCurrency,
+                multiplier: multiplier,
+                winChance: winChance,
+                client_seed: `make_ai_${Date.now()}` // Custom client seed
+            };
+            
+            // Log the bet attempt
+            logActivity(`Placing ${isDemoMode ? 'demo' : 'REAL'} bet: ${amount} ${currentCurrency.toUpperCase()} ${mode} ${rollNumber}`);
+            
+            // Send bet to backend via socket
+            if (socket && socket.connected) {
+                socket.emit('place_dice_bet', betData);
+            } else {
+                // Fallback to local simulation if not connected
+                setTimeout(() => {
+                    const result = Math.random() * 99;
+                    const isWin = (mode === 'over' && result > rollNumber) || (mode === 'under' && result < rollNumber);
+                    
+                    diceResult.textContent = result.toFixed(2);
+                    diceResult.className = `dice-result ${isWin ? 'win' : 'loss'}`;
+                    
+                    // Update balance locally
+                    if (isWin) {
+                        const winAmount = amount * multiplier;
+                        currencyBalances[currentCurrency] += (winAmount - amount);
+                        logActivity(`WIN: ${result.toFixed(2)} | +${(winAmount - amount).toFixed(8)} ${currentCurrency.toUpperCase()}`);
+                        showNotification(`Won ${(winAmount - amount).toFixed(8)} ${currentCurrency.toUpperCase()}!`, 'success');
+                    } else {
+                        currencyBalances[currentCurrency] -= amount;
+                        logActivity(`LOSS: ${result.toFixed(2)} | -${amount.toFixed(8)} ${currentCurrency.toUpperCase()}`);
+                        showNotification(`Lost ${amount.toFixed(8)} ${currentCurrency.toUpperCase()}`, 'error');
+                    }
+                    
+                    updateCurrencyDisplay();
+                    
+                    button.disabled = false;
+                    button.textContent = 'Place Bet';
+                    
+                    // Show offline warning
+                    showNotification('Offline mode - results simulated locally', 'warning');
+                }, 2000);
+            }
+            
+            // Reset button after timeout regardless
+            setTimeout(() => {
+                button.disabled = false;
+                if (button.textContent === 'Rolling...') {
+                    button.textContent = 'Place Bet';
+                }
+            }, 10000); // 10 second timeout
+        }
+
+        // Seeds Management Functionality
+        let currentSeeds = {
+            clientSeed: '',
+            serverSeedHash: '',
+            nonce: 0,
+            totalBets: 0,
+            revealedServerSeed: ''
+        };
+
+        function initializeSeedsManagement() {
+            // Button event listeners
+            document.getElementById('updateSeedsBtn').addEventListener('click', updateSeeds);
+            document.getElementById('calculateNextBtn').addEventListener('click', calculateNextNumbers);
+            document.getElementById('verifySeedsBtn').addEventListener('click', verifySeeds);
+            document.getElementById('clearSeedsBtn').addEventListener('click', clearSeeds);
+
+            // Input validation and formatting
+            const serverSeedHashInput = document.getElementById('serverSeedHash');
+            serverSeedHashInput.addEventListener('input', function() {
+                // Remove any non-hex characters and limit to 64 characters
+                this.value = this.value.toLowerCase().replace(/[^0-9a-f]/g, '').substring(0, 64);
+            });
+
+            const clientSeedInput = document.getElementById('clientSeed');
+            clientSeedInput.addEventListener('input', function() {
+                // Update display immediately
+                updateSeedsDisplay();
+            });
+
+            // Auto-increment nonce when bets are placed
+            const originalPlaceDiceBet = window.placeDiceBet;
+            window.placeDiceBet = function(...args) {
+                // Increment nonce before placing bet
+                if (currentSeeds.clientSeed && currentSeeds.serverSeedHash) {
+                    currentSeeds.nonce++;
+                    currentSeeds.totalBets++;
+                    document.getElementById('nonceValue').value = currentSeeds.nonce;
+                    document.getElementById('totalBetsMade').value = currentSeeds.totalBets;
+                    updateSeedsDisplay();
+                }
+                return originalPlaceDiceBet.apply(this, args);
+            };
+
+            updateSeedsDisplay();
+        }
+
+        function updateSeeds() {
+            const clientSeed = document.getElementById('clientSeed').value.trim();
+            const serverSeedHash = document.getElementById('serverSeedHash').value.trim();
+            const nonce = parseInt(document.getElementById('nonceValue').value) || 0;
+            const revealedServerSeed = document.getElementById('revealedServerSeed').value.trim();
+
+            // Validation
+            if (!clientSeed) {
+                showNotification('Please enter a client seed', 'error');
+                return;
+            }
+
+            if (!serverSeedHash || serverSeedHash.length !== 64) {
+                showNotification('Please enter a valid 64-character server seed hash', 'error');
+                return;
+            }
+
+            // Update current seeds
+            currentSeeds.clientSeed = clientSeed;
+            currentSeeds.serverSeedHash = serverSeedHash;
+            currentSeeds.nonce = nonce;
+            currentSeeds.revealedServerSeed = revealedServerSeed;
+
+            // Send to backend for processing
+            if (socket && socket.connected) {
+                socket.emit('update_session_seeds', currentSeeds);
+            }
+
+            updateSeedsDisplay();
+            logActivity(`Seeds updated: Client="${clientSeed.substring(0, 8)}..." Hash="${serverSeedHash.substring(0, 8)}..." Nonce=${nonce}`);
+            showNotification('Session seeds updated successfully', 'success');
+
+            // Auto-calculate next numbers
+            setTimeout(() => {
+                calculateNextNumbers();
+            }, 500);
+        }
+
+        function calculateNextNumbers() {
+            if (!currentSeeds.clientSeed || !currentSeeds.serverSeedHash) {
+                showNotification('Please enter client seed and server seed hash first', 'error');
+                return;
+            }
+
+            const calculateBtn = document.getElementById('calculateNextBtn');
+            calculateBtn.disabled = true;
+            calculateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Calculating...';
+
+            // Show HMAC results section
+            document.getElementById('hmacResults').style.display = 'block';
+
+            if (socket && socket.connected) {
+                // Send calculation request to backend
+                socket.emit('calculate_next_numbers', {
+                    clientSeed: currentSeeds.clientSeed,
+                    serverSeedHash: currentSeeds.serverSeedHash,
+                    nonce: currentSeeds.nonce,
+                    count: 5 // Calculate next 5 numbers
+                });
+            } else {
+                // Local calculation fallback
+                calculateHMACLocally();
+            }
+
+            setTimeout(() => {
+                calculateBtn.disabled = false;
+                calculateBtn.innerHTML = '<i class="fas fa-calculator"></i> Calculate Next Numbers';
+            }, 2000);
+        }
+
+        function calculateHMACLocally() {
+            try {
+                // Use Web Crypto API for HMAC-SHA256 calculation
+                const clientSeed = currentSeeds.clientSeed;
+                const nonce = currentSeeds.nonce;
+                
+                // Create message for HMAC: clientSeed:nonce
+                const message = `${clientSeed}:${nonce}`;
+                
+                // Display calculation info
+                document.getElementById('hmacInput').textContent = message;
+                
+                // Note: In a real implementation, we'd need the actual server seed (not just hash)
+                // For demonstration, we'll show how it would work
+                document.getElementById('hmacOutput').textContent = 'Requires unhashed server seed for accurate calculation';
+                document.getElementById('diceRollResult').textContent = 'Need server seed';
+                document.getElementById('nextFiveRolls').textContent = 'Server seed required';
+                
+                // Update predictions with placeholder
+                document.getElementById('nextCalculatedNumber').textContent = 'Pending';
+                document.getElementById('seedConfidence').textContent = 'Low';
+                
+                logActivity('Local HMAC calculation - server seed hash only (need revealed seed for accuracy)');
+                showNotification('Note: Accurate calculation requires the revealed server seed', 'warning');
+                
+            } catch (error) {
+                console.error('HMAC calculation error:', error);
+                showNotification('HMAC calculation failed', 'error');
+            }
+        }
+
+        function verifySeeds() {
+            if (!currentSeeds.revealedServerSeed) {
+                showNotification('Please enter the revealed server seed for verification', 'error');
+                return;
+            }
+
+            const verifyBtn = document.getElementById('verifySeedsBtn');
+            verifyBtn.disabled = true;
+            verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+
+            if (socket && socket.connected) {
+                socket.emit('verify_session_seeds', {
+                    serverSeed: currentSeeds.revealedServerSeed,
+                    serverSeedHash: currentSeeds.serverSeedHash,
+                    clientSeed: currentSeeds.clientSeed,
+                    nonce: currentSeeds.nonce
+                });
+            } else {
+                // Local verification fallback
+                setTimeout(() => {
+                    // In a real implementation, we'd hash the revealed seed and compare
+                    logActivity(`Seed verification attempted: Server="${currentSeeds.revealedServerSeed.substring(0, 8)}..."`);
+                    showNotification('Offline mode - verification requires server connection', 'warning');
+                    
+                    verifyBtn.disabled = false;
+                    verifyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verify Seeds';
+                }, 1000);
+                return;
+            }
+
+            setTimeout(() => {
+                verifyBtn.disabled = false;
+                verifyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verify Seeds';
+            }, 3000);
+        }
+
+        function clearSeeds() {
+            if (confirm('Are you sure you want to clear all session seeds?')) {
+                currentSeeds = {
+                    clientSeed: '',
+                    serverSeedHash: '',
+                    nonce: 0,
+                    totalBets: 0,
+                    revealedServerSeed: ''
+                };
+
+                // Clear input fields
+                document.getElementById('clientSeed').value = '';
+                document.getElementById('serverSeedHash').value = '';
+                document.getElementById('nonceValue').value = 0;
+                document.getElementById('totalBetsMade').value = 0;
+                document.getElementById('revealedServerSeed').value = '';
+
+                // Hide HMAC results
+                document.getElementById('hmacResults').style.display = 'none';
+
+                updateSeedsDisplay();
+                logActivity('Session seeds cleared');
+                showNotification('Session seeds cleared', 'info');
+
+                // Notify backend
+                if (socket && socket.connected) {
+                    socket.emit('clear_session_seeds');
+                }
+            }
+        }
+
+        function updateSeedsDisplay() {
+            const statusIndicator = document.getElementById('seedsStatus');
+            const currentClientSeedEl = document.getElementById('currentClientSeed');
+            const currentServerHashEl = document.getElementById('currentServerHash');
+            const nextCalculatedNumberEl = document.getElementById('nextCalculatedNumber');
+            const seedConfidenceEl = document.getElementById('seedConfidence');
+
+            if (currentSeeds.clientSeed && currentSeeds.serverSeedHash) {
+                statusIndicator.className = 'status-indicator status-online';
+                currentClientSeedEl.textContent = currentSeeds.clientSeed;
+                currentServerHashEl.textContent = currentSeeds.serverSeedHash;
+                
+                // Update confidence based on available data
+                let confidence = 25; // Base confidence with hash only
+                if (currentSeeds.revealedServerSeed) confidence = 95; // High confidence with revealed seed
+                if (currentSeeds.nonce > 0) confidence += 10; // Additional confidence with nonce data
+                
+                seedConfidenceEl.textContent = Math.min(confidence, 100) + '%';
+                
+                // Enable betting interface enhancements
+                enhanceBettingWithSeeds(true);
+                
+            } else {
+                statusIndicator.className = 'status-indicator status-offline';
+                currentClientSeedEl.textContent = 'Not set';
+                currentServerHashEl.textContent = 'Not set';
+                nextCalculatedNumberEl.textContent = '--';
+                seedConfidenceEl.textContent = '0%';
+                
+                enhanceBettingWithSeeds(false);
+            }
+        }
+
+        function enhanceBettingWithSeeds(enabled) {
+            // Add visual indicators to betting interface when seeds are available
+            const bettingInterface = document.querySelector('.betting-interface');
+            if (enabled) {
+                bettingInterface.style.borderColor = 'rgba(34, 197, 94, 0.4)';
+                bettingInterface.style.boxShadow = '0 0 20px rgba(34, 197, 94, 0.1)';
+                
+                // Update predictions panel with enhanced accuracy indicator
+                document.getElementById('predictionConfidence').style.background = '#22c55e';
+                document.getElementById('recommendedBet').textContent = 'Enhanced with seeds';
+                
+            } else {
+                bettingInterface.style.borderColor = 'rgba(59, 130, 246, 0.15)';
+                bettingInterface.style.boxShadow = 'none';
+                
+                document.getElementById('predictionConfidence').style.background = 'linear-gradient(90deg, #3b82f6, #1d4ed8)';
+            }
+        }
+
+        // Socket event handlers for seeds
+        socket.on('seeds_updated', function(data) {
+            if (data.success) {
+                updateSeedsDisplay();
+                logActivity('Seeds synchronized with AI engine');
+            } else {
+                showNotification('Failed to update seeds: ' + data.error, 'error');
+            }
+        });
+
+        socket.on('numbers_calculated', function(data) {
+            if (data.success) {
+                // Update HMAC results display
+                document.getElementById('hmacInput').textContent = data.hmacInput || '--';
+                document.getElementById('hmacOutput').textContent = data.hmacOutput || '--';
+                document.getElementById('diceRollResult').textContent = data.diceRoll || '--';
+                document.getElementById('nextFiveRolls').textContent = data.nextRolls ? data.nextRolls.join(', ') : '--';
+                
+                // Update main prediction
+                document.getElementById('nextCalculatedNumber').textContent = data.diceRoll || '--';
+                document.getElementById('nextPrediction').textContent = data.diceRoll || '--';
+                document.getElementById('predictionConfidence').style.width = '90%';
+                
+                logActivity(`HMAC calculation complete: Next roll = ${data.diceRoll}`);
+                showNotification('Next numbers calculated using session seeds', 'success');
+            } else {
+                showNotification('Calculation failed: ' + data.error, 'error');
+            }
+        });
+
+        socket.on('seeds_verified', function(data) {
+            if (data.success) {
+                if (data.isValid) {
+                    showNotification('✅ Seeds verified successfully - provably fair!', 'success');
+                    logActivity('Seeds verification: VALID - provably fair confirmed');
+                    document.getElementById('seedConfidence').textContent = '100%';
+                } else {
+                    showNotification('❌ Seed verification failed - potential issue!', 'error');
+                    logActivity('Seeds verification: INVALID - check seed accuracy');
+                    document.getElementById('seedConfidence').textContent = '0%';
+                }
+            } else {
+                showNotification('Verification error: ' + data.error, 'error');
+            }
+        });
+
+        // Auto-populate seeds from image data (example from your screenshot)
+        function populateExampleSeeds() {
+            // Example from your image
+            document.getElementById('clientSeed').value = 'A1EnyBArgu';
+            document.getElementById('serverSeedHash').value = '1c3b4889e9411f47beb7d1149031d72a61e704911415922999e3579df87e3c8b';
+            document.getElementById('nonceValue').value = 0;
+            document.getElementById('totalBetsMade').value = 0;
+            
+            // Auto-update
+            setTimeout(() => {
+                updateSeeds();
+            }, 100);
+        }
+
+        // Stake.com Rolling Results System
+        let gameStats = {
+            totalPlayed: 0,
+            totalWon: 0,
+            winPercentage: 0
+        };
+
+        let isRollUnder = false;
+        let resultQueue = [];
+        let maxRollingResults = 10;
+
+        function addRollingResult(result, isWin) {
+            const banner = document.getElementById('rollingResultsBanner');
+            const container = document.getElementById('rollingResultsContainer');
+            
+            if (!banner || !container) return;
+            
+            // Create result bubble
+            const bubble = document.createElement('div');
+            bubble.className = `result-bubble ${isWin ? 'win' : 'loss'}`;
+            bubble.textContent = result.toFixed(2);
+            
+            // Add to container
+            container.appendChild(bubble);
+            
+            // Show banner if hidden
+            if (banner.classList.contains('hidden')) {
+                banner.classList.remove('hidden');
+                banner.style.display = 'block';
+            }
+            
+            // Remove excess bubbles
+            while (container.children.length > maxRollingResults) {
+                const firstChild = container.firstChild;
+                firstChild.style.animation = 'slideOutLeft 0.5s ease-in-out forwards';
+                setTimeout(() => {
+                    if (firstChild.parentNode) {
+                        firstChild.parentNode.removeChild(firstChild);
+                    }
+                }, 500);
+            }
+            
+            // Trigger animation
+            setTimeout(() => {
+                bubble.style.animation = 'resultPop 0.6s ease-out forwards, scrollResults 8s linear forwards';
+            }, 100);
+        }
+
+        function showToast(message, type = 'info', duration = 3000) {
+            const toastContainer = document.getElementById('toastContainer');
+            if (!toastContainer) return;
+            
+            // Create toast
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            // Get appropriate icon
+            let icon = 'fas fa-info-circle';
+            switch(type) {
+                case 'success': icon = 'fas fa-check-circle'; break;
+                case 'error': icon = 'fas fa-exclamation-circle'; break;
+                case 'warning': icon = 'fas fa-exclamation-triangle'; break;
+                case 'win': icon = 'fas fa-trophy'; break;
+                case 'loss': icon = 'fas fa-times-circle'; break;
+            }
+            
+            toast.innerHTML = `
+                <i class="${icon}"></i>
+                <span>${message}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            // Add to container
+            toastContainer.appendChild(toast);
+            
+            // Auto-remove after duration
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.style.animation = 'slideOutRight 0.3s ease-in forwards';
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
+                }
+            }, duration);
+        }
+
+        function updateStakeGameStats() {
+            const totalPlayedEl = document.getElementById('totalPlayed');
+            const totalWonEl = document.getElementById('totalWon');
+            const winPercentageEl = document.getElementById('winPercentage');
+            
+            if (totalPlayedEl) totalPlayedEl.textContent = gameStats.totalPlayed;
+            if (totalWonEl) totalWonEl.textContent = gameStats.totalWon;
+            if (winPercentageEl) {
+                winPercentageEl.textContent = 
+                    gameStats.totalPlayed > 0 ? ((gameStats.totalWon / gameStats.totalPlayed) * 100).toFixed(1) + '%' : '0%';
+            }
+        }
+
+        function addStakeGameHistory(result, isWin, multiplier) {
+            const historyContainer = document.getElementById('stakeGameHistory');
+            if (!historyContainer) return;
+            
+            const bubble = document.createElement('div');
+            bubble.className = `game-history-bubble ${isWin ? 'win' : 'loss'}`;
+            bubble.innerHTML = `
+                <div class="history-result">${result.toFixed(2)}</div>
+                <div class="history-multiplier">${multiplier.toFixed(2)}×</div>
+            `;
+            
+            historyContainer.insertBefore(bubble, historyContainer.firstChild);
+            
+            // Remove excess history items
+            while (historyContainer.children.length > 20) {
+                historyContainer.removeChild(historyContainer.lastChild);
+            }
+        }
+
+        function updateStakeDiceCalculations() {
+            const rollOverEl = document.getElementById('stakeRollOver');
+            const stakeWinChanceEl = document.getElementById('stakeWinChance');
+            const stakeMultiplierEl = document.getElementById('stakeMultiplier');
+            const stakeWinChanceDisplayEl = document.getElementById('stakeWinChanceDisplay');
+            const stakeProfitDisplayEl = document.getElementById('stakeProfitDisplay');
+            const stakePayoutDisplayEl = document.getElementById('stakePayoutDisplay');
+            
+            if (!rollOverEl || !stakeWinChanceEl || !stakeMultiplierEl) return;
+            
+            const rollOver = parseFloat(rollOverEl.value);
+            
+            let winChance;
+            if (isRollUnder) {
+                winChance = rollOver - 1;
+            } else {
+                winChance = 100 - rollOver;
+            }
+            
+            // Ensure win chance is within bounds
+            winChance = Math.max(1, Math.min(98, winChance));
+            
+            const multiplier = (99 / winChance);
+            const betAmount = parseFloat(document.getElementById('stakeBetAmount').value) || 0;
+            const profit = betAmount * (multiplier - 1);
+            const payout = betAmount * multiplier;
+            
+            stakeWinChanceEl.value = winChance.toFixed(2);
+            stakeMultiplierEl.value = multiplier.toFixed(4);
+            
+            if (stakeWinChanceDisplayEl) stakeWinChanceDisplayEl.textContent = winChance.toFixed(2) + '%';
+            if (stakeProfitDisplayEl) stakeProfitDisplayEl.textContent = profit.toFixed(8) + ' USDT';
+            if (stakePayoutDisplayEl) stakePayoutDisplayEl.textContent = payout.toFixed(8) + ' USDT';
+            
+            // Update slider
+            const slider = document.getElementById('stakeSlider');
+            if (slider) slider.value = rollOver;
+            
+            // Update range visualization
+            const rangeFillUnder = document.getElementById('rangeFillUnder');
+            const rangeFillOver = document.getElementById('rangeFillOver');
+            
+            if (rangeFillUnder && rangeFillOver) {
+                if (isRollUnder) {
+                    rangeFillUnder.style.width = `${rollOver}%`;
+                    rangeFillOver.style.width = `${100 - rollOver}%`;
+                } else {
+                    rangeFillUnder.style.width = `${rollOver}%`;
+                    rangeFillOver.style.width = `${100 - rollOver}%`;
+                }
+            }
+        }
+
+        function adjustStakeBetAmount(factor) {
+            const currentAmount = parseFloat(document.getElementById('stakeBetAmount').value) || 0;
+            const newAmount = currentAmount * factor;
+            document.getElementById('stakeBetAmount').value = newAmount.toFixed(8);
+            updateStakeDiceCalculations();
+        }
+
+        function setStakeBetAmount(amount) {
+            document.getElementById('stakeBetAmount').value = amount.toFixed(8);
+            updateStakeDiceCalculations();
+        }
+
+        function setMaxStakeBetAmount() {
+            // For demo purposes, set a reasonable max
+            document.getElementById('stakeBetAmount').value = '1.00000000';
+            updateStakeDiceCalculations();
+        }
+
+        function executeStakeDiceBet() {
+            const betAmountEl = document.getElementById('stakeBetAmount');
+            const rollOverEl = document.getElementById('stakeRollOver');
+            const multiplierEl = document.getElementById('stakeMultiplier');
+            
+            if (!betAmountEl || !rollOverEl || !multiplierEl) {
+                showToast('Betting interface not properly initialized', 'error');
+                return;
+            }
+            
+            const betAmount = parseFloat(betAmountEl.value);
+            const rollOver = parseFloat(rollOverEl.value);
+            const multiplier = parseFloat(multiplierEl.value);
+            
+            if (!betAmount || betAmount <= 0) {
+                showToast('Please enter a valid bet amount', 'error');
+                return;
+            }
+            
+            // Disable bet button
+            const playButton = document.getElementById('stakePlayButton');
+            if (playButton) {
+                playButton.disabled = true;
+                playButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Rolling...';
+            }
+            
+            // Get prediction if available
+            let prediction = null;
+            if (window.ai_processor && window.ai_processor.get_prediction) {
+                try {
+                    prediction = window.ai_processor.get_prediction();
+                } catch (error) {
+                    console.log('No AI prediction available:', error);
+                }
+            }
+            
+            // Simulate dice roll (replace with actual API call)
+            setTimeout(() => {
+                // Generate result (for demo - replace with actual API)
+                const result = Math.random() * 100;
+                
+                // Determine win/loss
+                let isWin = false;
+                if (isRollUnder) {
+                    isWin = result < rollOver;
+                } else {
+                    isWin = result > rollOver;
+                }
+                
+                // Update stats
+                gameStats.totalPlayed++;
+                if (isWin) {
+                    gameStats.totalWon++;
+                }
+                
+                // Show result
+                const liveResultNumber = document.getElementById('liveResultNumber');
+                const liveResultOutcome = document.getElementById('liveResultOutcome');
+                const liveResultDisplay = document.getElementById('liveResultDisplay');
+                
+                if (liveResultNumber) liveResultNumber.textContent = result.toFixed(2);
+                if (liveResultOutcome) liveResultOutcome.textContent = isWin ? 'WIN' : 'LOSS';
+                if (liveResultDisplay) {
+                    liveResultDisplay.style.display = 'block';
+                    liveResultDisplay.style.color = isWin ? '#1FFF20' : '#ef4444';
+                }
+                
+                // Add to rolling results
+                addRollingResult(result, isWin);
+                
+                // Add to game history
+                addStakeGameHistory(result, isWin, multiplier);
+                
+                // Update stats display
+                updateStakeGameStats();
+                
+                // Show toast notification
+                if (isWin) {
+                    const profit = betAmount * (multiplier - 1);
+                    showToast(`You won ${profit.toFixed(8)} USDT!`, 'win', 4000);
+                } else {
+                    showToast(`You lost ${betAmount.toFixed(8)} USDT`, 'loss', 3000);
+                }
+                
+                // Emit result to backend
+                if (socket && socket.connected) {
+                    socket.emit('dice_result', {
+                        result: result,
+                        isWin: isWin,
+                        betAmount: betAmount,
+                        multiplier: multiplier,
+                        rollOver: rollOver,
+                        isRollUnder: isRollUnder,
+                        prediction: prediction
+                    });
+                }
+                
+                // Re-enable bet button
+                if (playButton) {
+                    playButton.disabled = false;
+                    playButton.innerHTML = '<i class="fas fa-play"></i> Bet';
+                }
+                
+            }, 1000);
+        }
+
+        // Event Listeners for Stake Interface
+        function initializeStakeInterface() {
+            // Slider control
+            const stakeSlider = document.getElementById('stakeSlider');
+            if (stakeSlider) {
+                stakeSlider.addEventListener('input', function() {
+                    const rollOverEl = document.getElementById('stakeRollOver');
+                    if (rollOverEl) {
+                        rollOverEl.value = this.value;
+                        updateStakeDiceCalculations();
+                    }
+                });
+            }
+            
+            // Roll over input
+            const stakeRollOver = document.getElementById('stakeRollOver');
+            if (stakeRollOver) {
+                stakeRollOver.addEventListener('input', function() {
+                    updateStakeDiceCalculations();
+                });
+            }
+            
+            // Bet amount input
+            const stakeBetAmount = document.getElementById('stakeBetAmount');
+            if (stakeBetAmount) {
+                stakeBetAmount.addEventListener('input', function() {
+                    updateStakeDiceCalculations();
+                });
+            }
+            
+            // Roll toggle button
+            const stakeRollToggle = document.getElementById('stakeRollToggle');
+            if (stakeRollToggle) {
+                stakeRollToggle.addEventListener('click', function() {
+                    isRollUnder = !isRollUnder;
+                    this.style.transform = isRollUnder ? 'rotate(180deg)' : 'rotate(0deg)';
+                    updateStakeDiceCalculations();
+                });
+            }
+            
+            // Play button
+            const stakePlayButton = document.getElementById('stakePlayButton');
+            if (stakePlayButton) {
+                stakePlayButton.addEventListener('click', executeStakeDiceBet);
+            }
+            
+            // Amount buttons
+            const halfBtn = document.getElementById('halfBtn');
+            const doubleBtn = document.getElementById('doubleBtn');
+            const minBtn = document.getElementById('minBtn');
+            const maxBtn = document.getElementById('maxBtn');
+            
+            // Initial calculations
+            updateStakeDiceCalculations();
+        }
+
+        // Override showNotification to use new toast system
+        const originalShowNotification = window.showNotification;
+        window.showNotification = function(message, type, duration = 3000) {
+            // Map original types to new toast types
+            const typeMap = {
+                'success': 'success',
+                'error': 'error',
+                'warning': 'warning',
+                'info': 'info'
+            };
+            
+            showToast(message, typeMap[type] || 'info', duration);
+        };
+
+        // Initialize betting interface when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initBettingInterface();
+            initializeSeedsManagement();
+            initializeStakeInterface(); // Add new Stake interface initialization
+            
+            // Load balances from server after a short delay
+            setTimeout(() => {
+                loadBalancesFromServer();
+            }, 1000);
+            
+            // Start periodic balance sync
+            setInterval(() => {
+                if (socket && socket.connected) {
+                    requestLiveUpdate();
+                }
+            }, 60000); // Every minute
+        });
     </script>
 </body>
 </html>

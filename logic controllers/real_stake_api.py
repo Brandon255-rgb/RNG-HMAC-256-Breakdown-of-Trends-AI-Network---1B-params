@@ -477,5 +477,41 @@ def test_real_api():
     print("\n✅ REAL API INTEGRATION TEST COMPLETE!")
     return True
 
+# Alias for backward compatibility
+StakeAPIAccess = RealStakeAPI
+
+class StakeDataFetcher:
+    """Helper class for fetching Stake data"""
+    
+    def __init__(self, api_instance=None):
+        self.api = api_instance
+        self.last_seeds = {}
+        self.last_update = 0
+    
+    def get_latest_seeds(self):
+        """Get the latest seeds with caching"""
+        now = time.time()
+        if now - self.last_update > 5:  # Cache for 5 seconds
+            if self.api and self.api.is_connected:
+                seeds = self.api.get_current_seeds()
+                if seeds:
+                    self.last_seeds = seeds
+                    self.last_update = now
+        return self.last_seeds
+    
+    def get_user_stats(self):
+        """Get user statistics"""
+        if self.api and self.api.is_connected:
+            return {
+                'name': self.api.user_info.get('name', 'Unknown'),
+                'balance': self.api.get_balance(),
+                'connected': True
+            }
+        return {
+            'name': 'Disconnected',
+            'balance': 0.0,
+            'connected': False
+        }
+
 if __name__ == "__main__":
     test_real_api()

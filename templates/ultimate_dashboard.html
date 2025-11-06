@@ -3,53 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 SUPREME AI BETTING COMMAND CENTER - PROFIT MAXIMIZER 💰</title>
-    
-    <!-- External Libraries -->
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
+    <title>Supreme AI Betting Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --neon-blue: #00d4ff;
-            --neon-green: #39ff14;
-            --neon-purple: #bf00ff;
-            --neon-orange: #ff6600;
-            --dark-bg: #0a0a0f;
-            --card-bg: #1a1a2e;
-            --accent-bg: #16213e;
-        }
-
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Orbitron', monospace;
-            background: var(--dark-bg);
-            color: #ffffff;
-            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0F212E, #1A2C38, #0F212E);
+            background-attachment: fixed;
+            color: #e4e6ea;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* Animated background */
-        .cyber-bg {
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 50%, var(--neon-blue)15, transparent 50%),
-                radial-gradient(circle at 80% 20%, var(--neon-purple)15, transparent 50%),
-                radial-gradient(circle at 40% 80%, var(--neon-green)15, transparent 50%),
-                linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f23 100%);
-            z-index: -2;
+                radial-gradient(circle at 25% 25%, rgba(31, 255, 32, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(16, 94, 180, 0.1) 0%, transparent 50%);
+            z-index: -1;
         }
 
         .grid-overlay {
@@ -59,1233 +43,2424 @@
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 20s linear infinite;
+                linear-gradient(rgba(31, 255, 32, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(31, 255, 32, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
             z-index: -1;
         }
 
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-
-        /* Neon glow effects */
-        .neon-glow {
-            text-shadow: 
-                0 0 5px currentColor,
-                0 0 10px currentColor,
-                0 0 20px currentColor,
-                0 0 40px currentColor;
-        }
-
-        .card-glow {
-            box-shadow: 
-                0 0 20px rgba(0, 212, 255, 0.3),
-                inset 0 0 20px rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            background: rgba(26, 26, 46, 0.8);
-            backdrop-filter: blur(10px);
-        }
-
-        .profit-card {
-            box-shadow: 
-                0 0 30px rgba(57, 255, 20, 0.5),
-                inset 0 0 20px rgba(57, 255, 20, 0.1);
-            border: 1px solid rgba(57, 255, 20, 0.5);
-            animation: profitPulse 2s infinite;
-        }
-
-        .loss-card {
-            box-shadow: 
-                0 0 30px rgba(255, 0, 100, 0.5),
-                inset 0 0 20px rgba(255, 0, 100, 0.1);
-            border: 1px solid rgba(255, 0, 100, 0.5);
-            animation: lossPulse 2s infinite;
-        }
-
-        @keyframes profitPulse {
-            0%, 100% { box-shadow: 0 0 30px rgba(57, 255, 20, 0.5); }
-            50% { box-shadow: 0 0 50px rgba(57, 255, 20, 0.8); }
-        }
-
-        @keyframes lossPulse {
-            0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 100, 0.5); }
-            50% { box-shadow: 0 0 50px rgba(255, 0, 100, 0.8); }
-        }
-
-        /* Button styles */
-        .cyber-btn {
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-            border: none;
-            color: white;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
             position: relative;
-            overflow: hidden;
+            z-index: 1;
         }
 
-        .cyber-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.4);
+        .header {
+            background: rgba(26, 44, 56, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(31, 255, 32, 0.15);
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 32px;
+            text-align: center;
         }
 
-        .cyber-btn:active {
-            transform: translateY(0);
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
         }
 
-        .cyber-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+        .header-logo svg {
+            filter: drop-shadow(0 0 8px rgba(31, 255, 32, 0.3));
         }
 
-        .cyber-btn:hover::before {
-            left: 100%;
-        }
-
-        /* Status indicators */
-        .status-online {
-            background: linear-gradient(45deg, var(--neon-green), #00ff88);
-            color: #000;
-            animation: statusPulse 1.5s infinite;
-        }
-
-        .status-offline {
-            background: linear-gradient(45deg, #ff0040, #ff6600);
-            color: #fff;
-        }
-
-        @keyframes statusPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        /* Terminal styling */
-        .cyber-terminal {
-            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
-            border: 1px solid var(--neon-green);
-            color: var(--neon-green);
-            font-family: 'JetBrains Mono', monospace;
-            text-shadow: 0 0 10px var(--neon-green);
-        }
-
-        /* Scrollbars */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--dark-bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-            border-radius: 4px;
-        }
-
-        /* Stat number animation */
-        .stat-number {
-            font-family: 'JetBrains Mono', monospace;
+        .header h1 {
+            font-size: 32px;
             font-weight: 700;
-            text-shadow: 0 0 10px currentColor;
+            color: #1FFF20;
+            margin: 0;
         }
 
-        /* Loading animation */
-        .loading-spinner {
-            border: 3px solid rgba(0, 212, 255, 0.3);
-            border-radius: 50%;
-            border-top: 3px solid var(--neon-blue);
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
+        .header p {
+            font-size: 16px;
+            color: #9ca3af;
+            margin-bottom: 20px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .mode-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 16px;
         }
 
-        /* Card hover effects */
-        .stat-card {
-            transition: all 0.3s ease;
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: rgba(55, 65, 81, 0.5);
+            border-radius: 15px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .toggle-switch.real-money {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 26px;
+            height: 26px;
+            background: #ffffff;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.real-money .toggle-slider {
+            transform: translateX(30px);
+        }
+
+        .mode-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            transition: color 0.3s ease;
+        }
+
+        .mode-label.active {
+            color: #34d399;
+        }
+
+        .mode-label.active.real {
+            color: #ef4444;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: rgba(26, 35, 50, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
         }
 
-        /* Decision card styling */
-        .decision-card {
-            background: linear-gradient(135deg, rgba(191, 0, 255, 0.1), rgba(0, 212, 255, 0.1));
-            border-left: 4px solid var(--neon-purple);
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
         }
 
-        /* Progress bars */
-        .progress-bar {
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
-            height: 6px;
-            border-radius: 3px;
-            transition: width 0.5s ease;
+        .stat-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .grid-cols-6 {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-            
-            .text-3xl {
-                font-size: 1.5rem;
-            }
+        .stat-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
         }
 
-        /* Chart container styling */
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .stat-change.positive {
+            color: #10b981;
+        }
+
+        .stat-change.negative {
+            color: #ef4444;
+        }
+
+        .control-panel {
+            background: rgba(26, 35, 50, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .control-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 24px;
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input, .form-select {
+            background: rgba(55, 65, 81, 0.4);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+            border-radius: 6px;
+            padding: 10px 12px;
+            color: #ffffff;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(55, 65, 81, 0.6);
+            color: #d1d5db;
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(75, 85, 99, 0.6);
+            border-color: rgba(107, 114, 128, 0.4);
+        }
+
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
         .chart-container {
-            position: relative;
-            background: rgba(26, 26, 46, 0.6);
+            background: rgba(26, 35, 50, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
             border-radius: 12px;
             padding: 20px;
-            border: 1px solid rgba(0, 212, 255, 0.2);
+            height: 350px;
         }
 
-        /* Notification styling */
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .predictions-panel {
+            background: rgba(26, 35, 50, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .prediction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.2);
+        }
+
+        .prediction-item:last-child {
+            border-bottom: none;
+        }
+
+        .prediction-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .prediction-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .confidence-bar {
+            width: 80px;
+            height: 3px;
+            background: rgba(75, 85, 99, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            transition: width 0.3s ease;
+        }
+
+        .logs-panel {
+            background: rgba(26, 35, 50, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            height: 250px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.1);
+            font-size: 12px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+        }
+
+        .log-time {
+            color: #6b7280;
+        }
+
+        .log-message {
+            color: #d1d5db;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .status-online {
+            background: #10b981;
+        }
+
+        .status-offline {
+            background: #6b7280;
+        }
+
+        .status-error {
+            background: #ef4444;
+        }
+
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--neon-blue);
+            background: rgba(26, 35, 50, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
             border-radius: 8px;
-            padding: 15px;
-            color: white;
-            z-index: 1000;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 13px;
             transform: translateX(400px);
             transition: transform 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
         }
 
         .notification.show {
             transform: translateX(0);
         }
+
+        .notification.success {
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .notification.error {
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .notification.warning {
+            border-color: rgba(245, 158, 11, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* New Stake-Style Interface Styles */
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .balance-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-left: auto;
+            margin-right: 25%;
+        }
+
+        .currency-button {
+            background: #374151;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px 0 0 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .currency-button:hover {
+            background: #4b5563;
+        }
+
+        .balance-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .balance-amount {
+            color: white;
+            font-weight: 600;
+            max-width: 16ch;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .currency-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            margin-top: 4px;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .currency-dropdown.hidden {
+            display: none;
+        }
+
+        .currency-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .currency-option:hover {
+            background: #374151;
+        }
+
+        .currency-option span:last-child {
+            margin-left: auto;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .wallet-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 0 8px 8px 0;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .wallet-button:hover {
+            background: #2563eb;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #10b981;
+            transition: 0.3s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: 0.3s;
+        }
+
+        input:checked + .slider {
+            background-color: #ef4444;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .game-frame {
+            background: rgba(26, 35, 50, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .game-sidebar {
+            width: 300px;
+            background: rgba(15, 20, 25, 0.8);
+            border-right: 1px solid rgba(75, 85, 99, 0.2);
+            padding: 20px;
+            max-height: 646px;
+            overflow-y: auto;
+        }
+
+        .game-tabs {
+            margin-bottom: 24px;
+        }
+
+        .tabs-wrapper {
+            background: rgba(55, 65, 81, 0.5);
+            border-radius: 8px;
+            padding: 4px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .tab-button {
+            flex: 1;
+            background: transparent;
+            color: #9ca3af;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .tab-button:hover {
+            background: rgba(75, 85, 99, 0.4);
+            color: white;
+        }
+
+        .tab-button.active {
+            background: #374151;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .bet-input-label {
+            display: flex;
+            flex-direction: column-reverse;
+            margin-bottom: 16px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(55, 65, 81, 0.6);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .input-content:focus-within {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .input {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-family: inherit;
+            flex: 1;
+            outline: none;
+        }
+
+        .input::placeholder {
+            color: #6b7280;
+        }
+
+        .after-icon {
+            padding: 0 12px;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-button-wrap {
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+        }
+
+        .amount-button {
+            background: #374151;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .amount-button:hover {
+            background: #4b5563;
+        }
+
+        .label-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .bet-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #e5e7eb;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .currency-conversion {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .bet-button {
+            width: 100%;
+            background: #22c55e;
+            color: #000;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 16px 0;
+            box-shadow: 0 4px 8px rgba(34, 197, 94, 0.2);
+        }
+
+        .bet-button:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+
+        .bet-button:disabled {
+            background: #6b7280;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .profit {
+            margin-top: 16px;
+        }
+
+        .game-content {
+            flex: 1;
+            padding: 20px;
+            background: rgba(15, 20, 25, 0.4);
+        }
+
+        .dice-content {
+            margin: 40px 0;
+        }
+
+        .dice-wrap {
+            max-width: 730px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .scale-wrap {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .scale-content {
+            position: absolute;
+            transform: translateX(-50%);
+        }
+
+        .scale-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .dice-content-inner {
+            position: relative;
+            height: 80px;
+            margin: 20px 0;
+        }
+
+        .range {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: #374151;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .lower {
+            position: absolute;
+            left: 0;
+            height: 100%;
+            background: #ef4444;
+            width: 49.5%;
+        }
+
+        .higher {
+            position: absolute;
+            right: 0;
+            height: 100%;
+            background: #22c55e;
+        }
+
+        .dice-slider {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            height: 8px;
+            background: transparent;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .dice-slider::-webkit-slider-thumb {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 36px;
+            height: 36px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 3px solid white;
+        }
+
+        .dice-slider::-moz-range-thumb {
+            width: 36px;
+            height: 36px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 3px solid white;
+        }
+
+        .dice-container {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dice {
+            width: 40px;
+            height: 40px;
+        }
+
+        .dice-result {
+            font-size: 12px;
+            font-weight: 600;
+            color: #e5e7eb;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .game-footer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .footer-input-label {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .auto-bet-controls, .advanced-controls {
+            padding: 20px 0;
+        }
+
+        .content {
+            display: flex;
+        }
+
+        .right-align {
+            margin-left: auto;
+        }
+
+        .labels {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .game-sidebar {
+                width: 100%;
+                max-height: none;
+            }
+            
+            .game-footer {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Betting Interface Styles */
+        .betting-interface {
+            background: #1A2C38;
+            border: 1px solid #105EB4;
+            border-radius: 10px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .betting-tabs {
+            display: flex;
+            background: #0F212E;
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 10px 16px;
+            background: transparent;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .tab-button.active {
+            background: #1FFF20;
+            color: #000;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .betting-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: #0F212E;
+            border: 1px solid #105EB4;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .input-group:focus-within {
+            border-color: #1FFF20;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .currency-icon-input {
+            padding: 12px;
+            background: #1A2C38;
+            border-right: 1px solid #105EB4;
+            display: flex;
+            align-items: center;
+        }
+
+        .amount-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .amount-btn {
+            padding: 6px 12px;
+            background: #0F212E;
+            border: 1px solid #105EB4;
+            border-radius: 6px;
+            color: #1FFF20;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .amount-btn:hover {
+            background: #105EB4;
+            border-color: #1FFF20;
+        }
+
+        .conversion-amount {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Dice Game Styles */
+        .dice-game {
+            background: #0F212E;
+            border: 1px solid #105EB4;
+            border-radius: 10px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .dice-slider-container {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .slider-track {
+            position: relative;
+            height: 60px;
+        }
+
+        .dice-slider {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            height: 8px;
+            background: transparent;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .dice-slider::-webkit-slider-thumb {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 36px;
+            height: 36px;
+            background: #1FFF20;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid #0F212E;
+            box-shadow: 0 2px 8px rgba(31, 255, 32, 0.3);
+        }
+
+        .dice-slider::-moz-range-thumb {
+            width: 36px;
+            height: 36px;
+            background: #1FFF20;
+            border-radius: 50%;
+            border: 3px solid #0F212E;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(31, 255, 32, 0.3);
+        }
+
+        .dice-range-visualization {
+            display: flex;
+            height: 40px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .range-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .lower-range {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .higher-range {
+            background: #1FFF20;
+            color: #000;
+        }
+
+        .dice-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .dice-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .roll-toggle-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .roll-toggle-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #105EB4;
+            border: none;
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            color: #1FFF20;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .roll-toggle-btn:hover {
+            background: #1FFF20;
+            color: #000;
+        }
+
+        .dice-input {
+            padding: 12px 36px 12px 12px;
+            background: #0F212E;
+            border: 1px solid #105EB4;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: center;
+            outline: none;
+        }
+
+        .dice-input:focus {
+            border-color: #1FFF20;
+        }
+
+        .place-bet-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(45deg, #1FFF20, #105EB4);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .place-bet-button:hover {
+            background: linear-gradient(45deg, #105EB4, #1FFF20);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(31, 255, 32, 0.3);
+        }
+
+        .place-bet-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .dice-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #1A2C38;
+            border-radius: 8px;
+        }
+
+        .dice-container.is-hidden {
+            display: none;
+        }
+
+        .dice-result {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .dice-result.win {
+            color: #1FFF20;
+            text-shadow: 0 0 10px rgba(31, 255, 32, 0.5);
+        }
+
+        .dice-result.loss {
+            color: #e74c3c;
+            text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+        }
+
+        /* Auto/Advanced placeholder styles */
+        .auto-betting-placeholder,
+        .advanced-placeholder {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="cyber-bg"></div>
     <div class="grid-overlay"></div>
-    
-    <!-- Notification Container -->
-    <div id="notification" class="notification">
-        <div class="flex items-center space-x-3">
-            <i class="fas fa-bell text-yellow-400"></i>
-            <span id="notificationText">System Ready</span>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-logo">
+                <svg width="80" height="40" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <g id="Layer_5">
+                        <path fill="#1FFF20" d="M31.47,58.5c-.1-25.81,16.42-40.13,46.75-40.23,21.82-.08,25.72,14.2,25.72,19.39,0,9.94-14.06,20.48-14.06,20.48,0,0,.78,6.19,12.85,6.14,12.07-.05,23.83-8.02,23.76-27.96-.06-22.91-24.06-33.38-47.78-33.29C58.87,3.09,6.24,5.88,6.42,58.13c.18,46.41,87.76,50.5,87.83,80.21.12,32.27-36.08,40.96-48.33,40.96s-17.23-8.67-17.25-13.43c-.09-26.13,25.92-33.41,25.92-33.41,0-1.95-1.52-10.64-11.59-10.6-25.95.05-36.28,22.36-36.21,44.14.07,18.53,13.16,30.09,32.94,30.01,37.82-.14,80.46-18.59,80.3-59.56-.14-38.32-88.46-48.33-88.57-77.96Z"></path>
+                        <path fill="#1FFF20" d="M391.96,161.17c-.3-.73-1.15-.56-2.27.37-4.29,3.54-14.1,13.56-37.06,13.65-41.85.16-49.12-68.83-49.12-68.83,0,0,31.9-23.81,36.88-33.42,4.98-9.61-10.87-11.7-10.87-11.7,0,0-22.31,27.15-38.13,35.1,1.72-11.81,13.42-38.72,14.09-54.2.67-15.48-18.63-11.7-21.72-10.22,0,6.76-17.06,68.1-23.27,101.82-3.66,5.85-8.88,12.54-13.56,12.55-2.71,0-3.71-5.02-3.73-12.22,0-9.99,5.5-25.99,5.46-35.71,0-6.73-3.09-7.13-5.75-7.12-.58,0-3.77.09-4.36.09-6.83,0-4.58-5.85-10.73-5.79-18.8.07-42.75,20.59-43.79,51.57-6.35,4.2-15.23,9.5-19.77,9.52-4.76,0-5.94-4.4-5.95-8.2,0-6.68,10.8-46.37,10.8-46.37,0,0,13.76-3.53,19.77-4.69,4.54-.89,5.85-1.22,7.62-3.41s5.22-6.73,8.01-10.8c2.79-4.08.05-7.23-5.11-7.21-6.77,0-24.88,4.29-24.88,4.29,0,0,8.7-37.5,8.69-38.26s-.98-1.16-2.45-1.15c-3.3,0-9.18,1.77-12.94,3.12-5.76,2.06-10.45,9.12-11.4,12.4s-7.46,29.02-7.46,29.02c0,0-34.88,12.04-39.65,13.85-.29.1-.49.37-.49.68s3.99,15.6,12.17,15.54c5.85,0,23.04-7.04,23.04-7.04,0,0-8.83,35.1-8.78,46.81,0,7.51,3.54,16.3,18.21,16.26,13.65,0,25.6-7.05,32.29-11.96,3.66,9.25,12.3,11.79,18.2,11.77,13.22,0,23.4-10.55,24.71-11.96,1.72,4.06,5.76,11.85,15.01,11.82,5.23,0,10.64-5.85,14.63-11.53-.08,1.18-.06,2.36.05,3.54,1.6,14.55,23.2,6,24.38,3.97.73-10.52.27-32.03,4.48-45.31,5.58,45.3,26.74,75.78,64.78,75.64,21.27-.08,32.18-6.19,36.69-11.23,3.69-4.08,4.94-9.81,3.29-15.06ZM209.45,146.23c-18.26.07,5.59-47.27,21.17-47.33.02,6.1-.32,47.26-21.17,47.33Z"></path>
+                        <path fill="#1FFF20" d="M357.73,160.74c16.49-.06,29.25-10.91,31.59-14.44,3.02-4.59-3.51-11.53-5.59-11.41-5.21,4.98-10.65,11.01-22.87,11.05-14.38.06-11.13-15.77-11.13-15.77,0,0,27.68,3.58,38.81-16.32,3.56-6.37,3.71-15.17,2.27-18.97s-9.49-10.81-22.3-9.75c-15.74,1.33-35.57,17.74-39.93,37.45-3.5,15.86,3.12,38.26,29.14,38.17ZM375.28,94.33c2.59-.09,2.36,4.18,1.67,8.65-.98,6.06-9.29,21.45-25.17,20.85,1.1-8.96,12.91-29.15,23.53-29.5h-.03Z"></path>
+                    </g>
+                </svg>
+                <h1>Make AI Dashboard</h1>
+            </div>
+            <p>Professional trading interface with real-time analytics</p>
+            
+            <!-- Demo/Real Money Toggle -->
+                    <div class="top-controls">
+            <!-- Demo/Real Money Toggle -->
+            <div class="mode-toggle">
+                <span class="toggle-label">Demo</span>
+                <label class="switch">
+                    <input type="checkbox" id="modeToggle">
+                    <span class="slider round"></span>
+                </label>
+                <span class="toggle-label">Real Money</span>
+            </div>
+            
+            <!-- Currency Selection with Balance -->
+            <div class="balance-toggle" data-testid="balance-toggle">
+                <div class="coin-toggle">
+                    <div class="wrapper currency-view-compact">
+                        <div class="dropdown flex">
+                            <button type="button" tabindex="0" class="currency-button" aria-label="Open Dropdown" data-testid="coin-toggle" data-active-currency="usdt">
+                                <div class="wrap truncate">
+                                    <div class="balance-display">
+                                        <span class="balance-amount" id="currentBalance">0.00004897</span>
+                                        <span class="currency-icon" title="usdt">
+                                            <svg data-ds-icon="USDT" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                                <path fill="#26A17B" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11"></path>
+                                                <path fill="#fff" d="M13.322 12.95c-.076.005-.466.028-1.336.028-.694 0-1.183-.02-1.355-.029v.002c-2.673-.117-4.668-.583-4.668-1.14s1.995-1.021 4.668-1.14v1.817c.175.013.675.042 1.367.042.83 0 1.246-.034 1.324-.041v-1.817c2.667.119 4.657.584 4.657 1.14s-1.99 1.02-4.657 1.139m0-2.467V8.856h3.722v-2.48H6.909v2.48h3.722v1.626c-3.025.139-5.3.738-5.3 1.456s2.275 1.317 5.3 1.456v5.213h2.69v-5.214c3.02-.139 5.29-.738 5.29-1.455s-2.27-1.316-5.29-1.455"></path>
+                                            </svg>
+                                        </span>
+                                        <svg data-ds-icon="ChevronDown" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                            <path fill="currentColor" d="M17.293 8.293a1 1 0 1 1 1.414 1.414l-6 6a1 1 0 0 1-1.414 0l-6-6-.068-.076A1 1 0 0 1 6.63 8.225l.076.068L12 13.586z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </button>
+                            <!-- Currency Dropdown -->
+                            <div id="currencyDropdown" class="currency-dropdown hidden">
+                                <div class="currency-option" data-currency="usdt">
+                                    <svg data-ds-icon="USDT" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <path fill="#26A17B" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11"></path>
+                                        <path fill="#fff" d="M13.322 12.95c-.076.005-.466.028-1.336.028-.694 0-1.183-.02-1.355-.029v.002c-2.673-.117-4.668-.583-4.668-1.14s1.995-1.021 4.668-1.14v1.817c.175.013.675.042 1.367.042.83 0 1.246-.034 1.324-.041v-1.817c2.667.119 4.657.584 4.657 1.14s-1.99 1.02-4.657 1.139m0-2.467V8.856h3.722v-2.48H6.909v2.48h3.722v1.626c-3.025.139-5.3.738-5.3 1.456s2.275 1.317 5.3 1.456v5.213h2.69v-5.214c3.02-.139 5.29-.738 5.29-1.455s-2.27-1.316-5.29-1.455"></path>
+                                    </svg>
+                                    <span>USDT</span>
+                                    <span class="balance" id="usdtBalance">0.00004897</span>
+                                </div>
+                                <div class="currency-option" data-currency="btc">
+                                    <svg data-ds-icon="BTC" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <path fill="#F7931A" d="M23.638 14.904c-1.602 6.43-8.113 10.34-14.542 8.736C2.67 22.05-1.244 15.525.362 9.105 1.962 2.67 8.475-1.243 14.9.358c6.43 1.605 10.342 8.115 8.738 14.546z"></path>
+                                        <path fill="#FFF" d="M16.103 10.626c.229-1.525-.934-2.345-2.525-2.892l.516-2.068-1.258-.314-.502 2.016c-.33-.083-.67-.16-1.008-.236l.505-2.027-1.259-.314-.515 2.068c-.274-.063-.542-.124-.803-.187v-.007l-1.735-.432-.334 1.343s.934.214.914.227c.51.127.602.465.586.732l-.587 2.357c.035.009.08.022.13.043l-.131-.033-.822 3.297c-.062.155-.22.39-.576.301.013.019-.914-.228-.914-.228l-.624 1.439 1.638.408c.305.077.603.157.896.232l-.52 2.088 1.258.314.515-2.067c.342.093.675.178 1 .256l-.513 2.058 1.259.314.52-2.084c2.14.405 3.75.242 4.426-1.694.545-1.555-.027-2.452-1.151-3.036.819-.189 1.436-.728 1.602-1.844zm-2.87 4.026c-.388 1.56-3.014.716-3.865.505l.689-2.761c.851.212 3.581.631 3.176 2.256zm.387-4.051c-.354 1.421-2.545.699-3.255.522l.625-2.506c.71.177 3.005.507 2.63 1.984z"></path>
+                                    </svg>
+                                    <span>BTC</span>
+                                    <span class="balance" id="btcBalance">0.00000000</span>
+                                </div>
+                                <div class="currency-option" data-currency="eth">
+                                    <svg data-ds-icon="ETH" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <path fill="#627EEA" d="m11.944 17.97-4.788-7.13 4.788 2.855 4.788-2.855z"></path>
+                                        <path fill="#8A92B2" d="m7.157 10.84 4.787 7.13V1z"></path>
+                                        <path fill="#627EEA" d="M11.944 1v16.97l4.788-7.13z"></path>
+                                        <path fill="#8A92B2" d="M11.944 20.31v2.69L7.157 13.07z"></path>
+                                        <path fill="#627EEA" d="M11.944 23v-2.69L16.73 13.07z"></path>
+                                    </svg>
+                                    <span>ETH</span>
+                                    <span class="balance" id="ethBalance">0.00000000</span>
+                                </div>
+                                <div class="currency-option" data-currency="doge">
+                                    <svg data-ds-icon="DOGE" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <path fill="#C2A633" d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12z"></path>
+                                        <path fill="#FFF" d="M10.069 16.74h2.964c3.226 0 5.084-1.707 5.084-4.71 0-3.003-1.858-4.71-5.084-4.71h-2.964v9.42zm1.903-1.692V9.415h.82c1.958 0 3.18.906 3.18 2.817 0 1.91-1.222 2.816-3.18 2.816h-.82z"></path>
+                                        <path fill="#FFF" d="M8.718 7.32H6.815v9.42h1.903V7.32z"></path>
+                                        <path fill="#FFF" d="M14.967 11.73h3.18v1.692h-3.18V11.73z"></path>
+                                    </svg>
+                                    <span>DOGE</span>
+                                    <span class="balance" id="dogeBalance">0.00000000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" tabindex="0" class="wallet-button" data-testid="wallet">
+                    <span>Wallet</span>
+                </button>
+            </div>
         </div>
-    </div>
 
-    <!-- Header -->
-    <header class="relative z-10 bg-black bg-opacity-50 backdrop-blur-md border-b border-cyan-500 p-6">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <h1 class="text-4xl font-black neon-glow text-cyan-400">
-                    🚀 SUPREME AI COMMAND CENTER
-                </h1>
-                <div class="hidden md:block text-sm text-cyan-300">
-                    <div>Neural Network • Machine Learning • 22 Strategies</div>
-                    <div class="text-xs text-gray-400">Real-time Profit Maximization System</div>
+        <!-- Stake-Style Betting Interface -->
+        <div class="betting-interface">
+            <div class="betting-tabs">
+                <button class="tab-button active">Manual</button>
+                <button class="tab-button">Auto</button>
+                <button class="tab-button">Advanced</button>
+            </div>
+            
+            <div class="tab-content active">
+                <!-- Manual Betting Content -->
+                <div class="betting-controls">
+                    <div class="control-group">
+                        <label class="control-label">Bet Amount</label>
+                        <div class="input-group">
+                            <div class="currency-icon-input">
+                                <svg data-ds-icon="USDT" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" id="betCurrencyIcon">
+                                    <path fill="#26A17B" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11"></path>
+                                    <path fill="#fff" d="M13.322 12.95c-.076.005-.466.028-1.336.028-.694 0-1.183-.02-1.355-.029v.002c-2.673-.117-4.668-.583-4.668-1.14s1.995-1.021 4.668-1.14v1.817c.175.013.675.042 1.367.042.83 0 1.246-.034 1.324-.041v-1.817c2.667.119 4.657.584 4.657 1.14s-1.99 1.02-4.657 1.139m0-2.467V8.856h3.722v-2.48H6.909v2.48h3.722v1.626c-3.025.139-5.3.738-5.3 1.456s2.275 1.317 5.3 1.456v5.213h2.69v-5.214c3.02-.139 5.29-.738 5.29-1.455s-2.27-1.316-5.29-1.455"></path>
+                                </svg>
+                            </div>
+                            <input type="number" id="betAmount" placeholder="0.00000000" step="0.00000001" min="0" />
+                        </div>
+                        <div class="amount-buttons">
+                            <button class="amount-btn" id="halveButton">½</button>
+                            <button class="amount-btn" id="doubleButton">2×</button>
+                        </div>
+                        <div class="conversion-amount" id="conversionAmount">$0.00</div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label">Profit on Win</label>
+                        <div class="input-group">
+                            <div class="currency-icon-input">
+                                <svg data-ds-icon="USDT" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" id="profitCurrencyIcon">
+                                    <path fill="#26A17B" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11"></path>
+                                    <path fill="#fff" d="M13.322 12.95c-.076.005-.466.028-1.336.028-.694 0-1.183-.02-1.355-.029v.002c-2.673-.117-4.668-.583-4.668-1.14s1.995-1.021 4.668-1.14v1.817c.175.013.675.042 1.367.042.83 0 1.246-.034 1.324-.041v-1.817c2.667.119 4.657.584 4.657 1.14s-1.99 1.02-4.657 1.139m0-2.467V8.856h3.722v-2.48H6.909v2.48h3.722v1.626c-3.025.139-5.3.738-5.3 1.456s2.275 1.317 5.3 1.456v5.213h2.69v-5.214c3.02-.139 5.29-.738 5.29-1.455s-2.27-1.316-5.29-1.455"></path>
+                                </svg>
+                            </div>
+                            <input type="number" id="profitAmount" placeholder="0.00000000" readonly />
+                        </div>
+                        <div class="conversion-amount" id="profitConversion">$0.00</div>
+                    </div>
+                </div>
+
+                <!-- Dice Game Interface -->
+                <div class="dice-game">
+                    <div class="dice-slider-container">
+                        <div class="slider-label">
+                            <span>0.00</span>
+                            <span>100.00</span>
+                        </div>
+                        <div class="slider-track">
+                            <input type="range" class="dice-slider" id="diceSlider" min="2" max="98" value="50" step="0.01">
+                            <div class="dice-range-visualization">
+                                <div class="range-section lower-range" id="lowerRange" style="width: 50%;">
+                                    <span>ROLL UNDER</span>
+                                </div>
+                                <div class="range-section higher-range" id="higherRange" style="width: 50%;">
+                                    <span>ROLL OVER</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dice-inputs">
+                        <div class="dice-input-group">
+                            <label class="control-label">Multiplier</label>
+                            <input type="number" class="dice-input" id="multiplierInput" value="2.0000" step="0.0001" min="1.0102" max="9900">
+                        </div>
+                        
+                        <div class="dice-input-group">
+                            <label class="control-label">Roll Over/Under</label>
+                            <div class="roll-toggle-container">
+                                <input type="number" class="dice-input" id="rollOverInput" value="50.00" step="0.01" min="0.01" max="99.99">
+                                <button class="roll-toggle-btn" id="rollToggleBtn" title="Switch between Roll Over and Roll Under">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2v20m0-20l-4 4m4-4l4 4m-4 16l-4-4m4 4l4-4"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="dice-input-group">
+                            <label class="control-label">Win Chance</label>
+                            <input type="number" class="dice-input" id="winChanceInput" value="49.5000" step="0.0001" min="1" max="98">
+                        </div>
+                    </div>
+
+                    <button class="place-bet-button" id="placeBetButton">
+                        Place Bet
+                    </button>
+
+                    <div class="dice-container is-hidden">
+                        <div class="dice-result" id="diceResult">--</div>
+                    </div>
                 </div>
             </div>
             
-            <div class="flex items-center space-x-4">
-                <button id="startBtn" class="cyber-btn px-8 py-3 rounded-lg font-bold text-lg">
-                    <i class="fas fa-rocket mr-2"></i> ACTIVATE
-                </button>
-                <button id="stopBtn" class="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 px-8 py-3 rounded-lg font-bold text-lg transition-all duration-300" disabled>
-                    <i class="fas fa-stop mr-2"></i> SHUTDOWN
-                </button>
-                <div id="systemStatus" class="status-offline px-6 py-3 rounded-lg font-bold text-lg">
-                    <i class="fas fa-circle mr-2"></i> OFFLINE
+            <div class="tab-content">
+                <!-- Auto Betting Content (placeholder) -->
+                <div class="auto-betting-placeholder">
+                    <p>Auto betting coming soon...</p>
+                </div>
+            </div>
+            
+            <div class="tab-content">
+                <!-- Advanced Content (placeholder) -->
+                <div class="advanced-placeholder">
+                    <p>Advanced features coming soon...</p>
                 </div>
             </div>
         </div>
-    </header>
 
-    <!-- Main Dashboard -->
-    <div class="container mx-auto p-8 relative z-10">
-        
-        <!-- Live Stats Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
-            <!-- Current Bankroll -->
-            <div class="stat-card card-glow p-6 rounded-xl text-center">
-                <div class="text-sm text-cyan-400 mb-2 font-semibold uppercase tracking-wide">💰 Bankroll</div>
-                <div id="currentBankroll" class="stat-number text-3xl font-black text-green-400">$1,000.00</div>
-                <div class="progress-bar mt-3" style="width: 100%"></div>
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Balance</div>
+                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="balance">$1,000.00</div>
+                <div class="stat-change" id="balanceChange">Demo funds</div>
             </div>
-            
-            <!-- Total Profit -->
-            <div class="stat-card card-glow p-6 rounded-xl text-center" id="profitCard">
-                <div class="text-sm text-gray-400 mb-2 font-semibold uppercase tracking-wide">📈 Profit</div>
-                <div id="totalProfit" class="stat-number text-3xl font-black">$0.00</div>
-                <div id="profitProgress" class="progress-bar mt-3" style="width: 0%"></div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Total Bets</div>
+                    <div class="stat-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="totalBets">0</div>
+                <div class="stat-change" id="betsChange">No bets placed</div>
             </div>
-            
-            <!-- Win Rate -->
-            <div class="stat-card card-glow p-6 rounded-xl text-center">
-                <div class="text-sm text-blue-400 mb-2 font-semibold uppercase tracking-wide">🎯 Win Rate</div>
-                <div id="winRate" class="stat-number text-3xl font-black text-blue-400">0%</div>
-                <div id="winRateProgress" class="progress-bar mt-3" style="width: 0%"></div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Win Rate</div>
+                    <div class="stat-icon" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">
+                        <i class="fas fa-target"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="winRate">0%</div>
+                <div class="stat-change" id="winRateChange">0/0 wins</div>
             </div>
-            
-            <!-- Total Bets -->
-            <div class="stat-card card-glow p-6 rounded-xl text-center">
-                <div class="text-sm text-purple-400 mb-2 font-semibold uppercase tracking-wide">🔥 Bets</div>
-                <div id="totalBets" class="stat-number text-3xl font-black text-purple-400">0</div>
-                <div class="progress-bar mt-3" style="width: 0%"></div>
-            </div>
-            
-            <!-- Session Duration -->
-            <div class="stat-card card-glow p-6 rounded-xl text-center">
-                <div class="text-sm text-yellow-400 mb-2 font-semibold uppercase tracking-wide">⏱️ Session</div>
-                <div id="sessionDuration" class="stat-number text-3xl font-black text-yellow-400">0m</div>
-                <div id="sessionProgress" class="progress-bar mt-3" style="width: 0%"></div>
-            </div>
-            
-            <!-- AI Confidence -->
-            <div class="stat-card card-glow p-6 rounded-xl text-center">
-                <div class="text-sm text-orange-400 mb-2 font-semibold uppercase tracking-wide">🧠 AI Power</div>
-                <div id="aiConfidence" class="stat-number text-3xl font-black text-orange-400">0%</div>
-                <div id="confidenceProgress" class="progress-bar mt-3" style="width: 0%"></div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Status</div>
+                    <div class="stat-icon" style="background: rgba(75, 85, 99, 0.15); color: #6b7280;">
+                        <i class="fas fa-signal"></i>
+                    </div>
+                </div>
+                <div class="stat-value">
+                    <span class="status-indicator status-offline" id="connectionStatus"></span>
+                    <span id="connectionText" style="font-size: 16px;">Offline</span>
+                </div>
+                <div class="stat-change" id="connectionUptime">Disconnected</div>
             </div>
         </div>
 
         <!-- Control Panel -->
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
-            <!-- Auto Betting Controls -->
-            <div class="card-glow p-8 rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-cyan-400 neon-glow flex items-center">
-                    <i class="fas fa-robot mr-3"></i> AI AUTOPILOT
-                </h3>
-                <div class="space-y-6">
-                    <button id="toggleAutoBetting" class="cyber-btn w-full py-4 rounded-lg font-bold text-lg">
-                        <i class="fas fa-brain mr-2"></i> ENABLE AUTOPILOT
-                    </button>
-                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
-                        <label class="block text-sm font-semibold text-gray-300 mb-2">Bet Interval (seconds):</label>
-                        <input id="betInterval" type="range" min="10" max="300" value="30" 
-                               class="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400 mt-2">
-                            <span>10s</span>
-                            <span id="intervalValue">30s</span>
-                            <span>300s</span>
-                        </div>
-                    </div>
+        <div class="control-panel">
+            <div class="control-title">Betting Controls</div>
+            <div class="control-grid">
+                <div class="form-group">
+                    <label class="form-label">Bet Amount</label>
+                    <input type="number" class="form-input" id="betAmount" value="1.00" min="0.01" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Target</label>
+                    <input type="number" class="form-input" id="targetNumber" value="50.00" min="0.01" max="99.99" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Condition</label>
+                    <select class="form-select" id="betCondition">
+                        <option value="under">Under</option>
+                        <option value="over">Over</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Interval (seconds)</label>
+                    <input type="number" class="form-input" id="betInterval" value="5" min="2" max="60" step="1">
                 </div>
             </div>
             
-            <!-- Manual Controls -->
-            <div class="card-glow p-8 rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-green-400 neon-glow flex items-center">
-                    <i class="fas fa-gamepad mr-3"></i> MANUAL CONTROL
-                </h3>
-                <div class="space-y-4">
-                    <button id="manualDecision" class="w-full bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 py-4 rounded-lg font-bold text-lg transition-all duration-300">
-                        <i class="fas fa-lightning-bolt mr-2"></i> FIRE DECISION
-                    </button>
-                    <button id="refreshData" class="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 py-3 rounded-lg font-semibold transition-all duration-300">
-                        <i class="fas fa-sync-alt mr-2"></i> REFRESH DATA
-                    </button>
-                    <button id="emergencyStop" class="w-full bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 py-3 rounded-lg font-semibold transition-all duration-300">
-                        <i class="fas fa-exclamation-triangle mr-2"></i> EMERGENCY STOP
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Risk Management -->
-            <div class="card-glow p-8 rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-red-400 neon-glow flex items-center">
-                    <i class="fas fa-shield-alt mr-3"></i> RISK SHIELD
-                </h3>
-                <div class="space-y-4">
-                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-semibold">Stop Loss:</span>
-                            <span class="text-red-400 font-bold">-20%</span>
-                        </div>
-                        <div class="progress-bar bg-red-600" style="width: 20%"></div>
-                    </div>
-                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-semibold">Stop Win:</span>
-                            <span class="text-green-400 font-bold">+50%</span>
-                        </div>
-                        <div class="progress-bar bg-green-600" style="width: 50%"></div>
-                    </div>
-                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-semibold">Max Bet:</span>
-                            <span class="text-yellow-400 font-bold">5%</span>
-                        </div>
-                        <div class="progress-bar bg-yellow-600" style="width: 5%"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Performance Metrics -->
-            <div class="card-glow p-8 rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-purple-400 neon-glow flex items-center">
-                    <i class="fas fa-chart-line mr-3"></i> PERFORMANCE
-                </h3>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm">Best Streak:</span>
-                        <span id="bestStreak" class="text-green-400 font-bold">0</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm">Worst Streak:</span>
-                        <span id="worstStreak" class="text-red-400 font-bold">0</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm">Avg Profit/Bet:</span>
-                        <span id="avgProfit" class="text-blue-400 font-bold">$0.00</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm">Strategy Score:</span>
-                        <span id="strategyScore" class="text-yellow-400 font-bold">100%</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AI Decision Display -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            <!-- Latest AI Decision -->
-            <div class="card-glow p-8 rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-purple-400 neon-glow flex items-center">
-                    <i class="fas fa-brain mr-3"></i> AI NEURAL DECISION
-                    <div class="loading-spinner ml-auto hidden" id="decisionSpinner"></div>
-                </h3>
-                <div id="latestDecision" class="decision-card p-6 rounded-lg">
-                    <div class="text-center py-8 text-gray-400">
-                        <i class="fas fa-robot text-6xl mb-4 opacity-50"></i>
-                        <div class="text-lg">AI Brain Sleeping...</div>
-                        <div class="text-sm">Start the system to awaken the neural network!</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Market Conditions -->
-            <div class="card-glow p-8 rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-orange-400 neon-glow flex items-center">
-                    <i class="fas fa-chart-area mr-3"></i> MARKET NEURAL SCAN
-                </h3>
-                <div id="marketConditions" class="space-y-4">
-                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg flex justify-between items-center">
-                        <span class="font-semibold">Volatility:</span>
-                        <span id="volatility" class="text-orange-400 font-bold">-</span>
-                    </div>
-                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg flex justify-between items-center">
-                        <span class="font-semibold">Trend Force:</span>
-                        <span id="trend" class="text-orange-400 font-bold">-</span>
-                    </div>
-                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg flex justify-between items-center">
-                        <span class="font-semibold">Entropy Chaos:</span>
-                        <span id="entropy" class="text-orange-400 font-bold">-</span>
-                    </div>
-                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg flex justify-between items-center">
-                        <span class="font-semibold">Last Roll:</span>
-                        <span id="lastRoll" class="text-orange-400 font-bold text-2xl">-</span>
-                    </div>
-                </div>
+            <div class="button-group">
+                <button class="btn btn-primary" id="singleBetBtn">
+                    <i class="fas fa-dice"></i>
+                    Place Bet
+                </button>
+                <button class="btn btn-success" id="startAutoBetBtn">
+                    <i class="fas fa-play"></i>
+                    Start Auto
+                </button>
+                <button class="btn btn-danger" id="stopAutoBetBtn" style="display: none;">
+                    <i class="fas fa-stop"></i>
+                    Stop Auto
+                </button>
+                <button class="btn btn-secondary" id="connectBtn">
+                    <i class="fas fa-link"></i>
+                    Connect
+                </button>
             </div>
         </div>
 
         <!-- Charts Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            <!-- Profit Chart -->
-            <div class="card-glow p-8 rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-green-400 neon-glow flex items-center">
-                    <i class="fas fa-chart-line mr-3"></i> PROFIT TRAJECTORY
-                </h3>
-                <div class="chart-container">
-                    <canvas id="profitChart" width="400" height="250"></canvas>
-                </div>
+        <div class="charts-section">
+            <div class="chart-container">
+                <div class="chart-title">Profit/Loss Trend</div>
+                <canvas id="profitChart" style="height: 280px;"></canvas>
             </div>
             
-            <!-- Win Rate Chart -->
-            <div class="card-glow p-8 rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-blue-400 neon-glow flex items-center">
-                    <i class="fas fa-bullseye mr-3"></i> ACCURACY MATRIX
-                </h3>
-                <div class="chart-container">
-                    <canvas id="winRateChart" width="400" height="250"></canvas>
-                </div>
+            <div class="chart-container">
+                <div class="chart-title">Result Distribution</div>
+                <canvas id="resultsChart" style="height: 280px;"></canvas>
             </div>
         </div>
 
-        <!-- Activity Streams -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Recent Decisions -->
-            <div class="card-glow p-8 rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-blue-400 neon-glow flex items-center">
-                    <i class="fas fa-history mr-3"></i> DECISION STREAM
-                </h3>
-                <div id="recentDecisions" class="space-y-3 max-h-96 overflow-y-auto">
-                    <!-- Recent decisions will be populated here -->
+        <!-- Predictions Panel -->
+        <div class="predictions-panel">
+            <div class="control-title">AI Predictions</div>
+            <div class="prediction-item">
+                <span class="prediction-label">Next Result</span>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="prediction-value" id="nextPrediction">--</span>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" id="predictionConfidence" style="width: 0%"></div>
+                    </div>
                 </div>
             </div>
-            
-            <!-- System Neural Logs -->
-            <div class="card-glow p-8 rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-green-400 neon-glow flex items-center">
-                    <i class="fas fa-terminal mr-3"></i> NEURAL SYSTEM LOGS
-                </h3>
-                <div id="systemLogs" class="cyber-terminal p-6 rounded-lg text-sm max-h-96 overflow-y-auto font-mono">
-                    <div class="text-green-400">[NEURAL] Dashboard consciousness initialized</div>
-                    <div class="text-cyan-400">[SYSTEM] Quantum processors standing by...</div>
-                    <div class="text-yellow-400">[WAIT] Awaiting neural activation command...</div>
+            <div class="prediction-item">
+                <span class="prediction-label">Trend</span>
+                <span class="prediction-value" id="trendDirection">Neutral</span>
+            </div>
+            <div class="prediction-item">
+                <span class="prediction-label">Recommendation</span>
+                <span class="prediction-value" id="recommendedBet">Hold</span>
+            </div>
+            <div class="prediction-item">
+                <span class="prediction-label">Risk Level</span>
+                <span class="prediction-value" id="riskLevel">Medium</span>
+            </div>
+        </div>
+
+        <!-- Activity Logs -->
+        <div class="logs-panel">
+            <div class="control-title" style="margin-bottom: 16px;">Activity Log</div>
+            <div id="activityLog">
+                <div class="log-entry">
+                    <span class="log-time">[00:00:00]</span>
+                    <span class="log-message">Dashboard initialized in demo mode</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="relative z-10 bg-black bg-opacity-50 backdrop-blur-md border-t border-cyan-500 p-6 mt-12">
-        <div class="container mx-auto text-center">
-            <p class="text-2xl font-bold text-cyan-400 neon-glow mb-2">
-                🚀 SUPREME AI BETTING COMMAND CENTER 💰
-            </p>
-            <p class="text-lg text-purple-400 mb-2">
-                Powered by Amazon Bedrock AI • Machine Learning • 22 Neural Strategies
-            </p>
-            <p class="text-sm text-gray-400">
-                Next-Generation Quantum Profit Maximization System • Built for Maximum Domination
-            </p>
-        </div>
-    </footer>
+    <!-- Notification Container -->
+    <div id="notification" class="notification"></div>
 
     <script>
-        // Initialize SocketIO
-        const socket = io();
-        
-        // Chart instances
-        let profitChart, winRateChart;
-        
-        // Dashboard state
-        let dashboardState = {
-            isRunning: false,
-            autoBetting: false,
-            profitHistory: [],
-            winRateHistory: [],
-            notifications: []
+        // Global variables
+        let socket;
+        let isConnected = false;
+        let isDemoMode = true;
+        let autoBettingActive = false;
+        let autoBettingInterval;
+        let stats = {
+            balance: 1000.00,
+            totalBets: 0,
+            wins: 0,
+            losses: 0,
+            profit: 0,
+            startTime: Date.now()
+        };
+        let chartData = {
+            profit: [0],
+            results: [],
+            times: ['Start']
         };
 
-        // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeCharts();
-            setupEventListeners();
-            loadInitialData();
-            startAnimations();
+        // Initialize charts
+        let profitChart, resultsChart;
+
+        // DOM elements
+        const modeToggle = document.getElementById('modeToggle');
+        const demoLabel = document.getElementById('demoLabel');
+        const realLabel = document.getElementById('realLabel');
+        const connectBtn = document.getElementById('connectBtn');
+        const singleBetBtn = document.getElementById('singleBetBtn');
+        const startAutoBetBtn = document.getElementById('startAutoBetBtn');
+        const stopAutoBetBtn = document.getElementById('stopAutoBetBtn');
+
+        // Initialize socket connection
+        function initializeSocket() {
+            socket = io();
+            
+            socket.on('connect', function() {
+                console.log('Connected to server');
+                updateConnectionStatus(true);
+                logActivity('Connected to server');
+                showNotification('Connected to dashboard server', 'success');
+            });
+            
+            socket.on('disconnect', function() {
+                console.log('Disconnected from server');
+                updateConnectionStatus(false);
+                logActivity('Disconnected from server');
+                showNotification('Disconnected from server', 'error');
+            });
+            
+            socket.on('bet_result', function(data) {
+                handleBetResult(data);
+            });
+            
+            socket.on('prediction_update', function(data) {
+                updatePredictions(data);
+            });
+            
+            socket.on('api_status', function(data) {
+                updateApiStatus(data);
+            });
+
+            socket.on('balance_update', function(data) {
+                if (!isDemoMode) {
+                    stats.balance = data.balance;
+                    updateDisplay();
+                }
+            });
+        }
+
+        // Mode toggle functionality
+        modeToggle.addEventListener('click', function() {
+            isDemoMode = !isDemoMode;
+            modeToggle.classList.toggle('real-money');
+            
+            if (isDemoMode) {
+                demoLabel.classList.add('active');
+                demoLabel.classList.remove('real');
+                realLabel.classList.remove('active', 'real');
+                stats.balance = 1000.00;
+                document.getElementById('balanceChange').textContent = 'Demo funds';
+                logActivity('Switched to Demo Mode');
+                showNotification('Demo Mode: Virtual $1,000 balance', 'success');
+            } else {
+                demoLabel.classList.remove('active');
+                realLabel.classList.add('active', 'real');
+                document.getElementById('balanceChange').textContent = 'Real money - Be careful!';
+                logActivity('Switched to Real Money Mode - USE CAUTION!');
+                showNotification('⚠️ REAL MONEY MODE - Trade carefully!', 'warning');
+            }
+            
+            updateDisplay();
         });
 
-        // Event Listeners
-        function setupEventListeners() {
-            document.getElementById('startBtn').addEventListener('click', startSystem);
-            document.getElementById('stopBtn').addEventListener('click', stopSystem);
-            document.getElementById('toggleAutoBetting').addEventListener('click', toggleAutoBetting);
-            document.getElementById('manualDecision').addEventListener('click', makeManualDecision);
-            document.getElementById('refreshData').addEventListener('click', refreshData);
-            document.getElementById('emergencyStop').addEventListener('click', emergencyStop);
-            
-            // Bet interval slider
-            const betIntervalSlider = document.getElementById('betInterval');
-            const intervalValue = document.getElementById('intervalValue');
-            
-            betIntervalSlider.addEventListener('input', function() {
-                intervalValue.textContent = this.value + 's';
-                updateSettings({bet_interval: this.value});
-            });
-            
-            // Stat card click animations
-            document.querySelectorAll('.stat-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    this.style.transform = 'scale(1.05)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 200);
-                });
-            });
-        }
-
-        // System Control Functions
-        async function startSystem() {
-            try {
-                showNotification('🚀 Initiating Supreme AI System...', 'info');
-                addLog('[USER] Activating Supreme Betting Neural Network...', 'text-cyan-400');
-                
-                document.getElementById('startBtn').innerHTML = '<div class="loading-spinner inline-block mr-2"></div> ACTIVATING...';
-                document.getElementById('startBtn').disabled = true;
-                
-                const response = await fetch('/api/start', {method: 'POST'});
-                const data = await response.json();
-                
-                if (response.ok) {
-                    dashboardState.isRunning = true;
-                    updateSystemStatus(true);
-                    addLog('[NEURAL] Supreme AI System FULLY ACTIVATED! 🚀', 'text-green-400');
-                    showNotification('🎯 AI System Online - Ready for Profit!', 'success');
-                } else {
-                    addLog('[ERROR] Neural activation failed: ' + data.error, 'text-red-400');
-                    showNotification('⚠️ System activation failed', 'error');
-                }
-            } catch (error) {
-                addLog('[CRITICAL] System activation failed: ' + error.message, 'text-red-400');
-                showNotification('💥 Critical system error', 'error');
-            } finally {
-                document.getElementById('startBtn').innerHTML = '<i class="fas fa-rocket mr-2"></i> ACTIVATE';
-                document.getElementById('startBtn').disabled = false;
-            }
-        }
-
-        async function stopSystem() {
-            try {
-                showNotification('🛑 Shutting down AI system...', 'warning');
-                addLog('[USER] Initiating system shutdown...', 'text-yellow-400');
-                
-                const response = await fetch('/api/stop', {method: 'POST'});
-                const data = await response.json();
-                
-                if (response.ok) {
-                    dashboardState.isRunning = false;
-                    dashboardState.autoBetting = false;
-                    updateSystemStatus(false);
-                    addLog('[SYSTEM] Supreme AI System DEACTIVATED', 'text-red-400');
-                    showNotification('💤 AI System Offline', 'info');
-                } else {
-                    addLog('[ERROR] Shutdown failed: ' + data.error, 'text-red-400');
-                    showNotification('⚠️ Shutdown error', 'error');
-                }
-            } catch (error) {
-                addLog('[ERROR] System shutdown failed: ' + error.message, 'text-red-400');
-                showNotification('💥 Shutdown error', 'error');
-            }
-        }
-
-        async function emergencyStop() {
-            if (confirm('⚠️ EMERGENCY STOP will immediately halt all operations. Continue?')) {
-                await stopSystem();
-                addLog('[EMERGENCY] EMERGENCY STOP ACTIVATED', 'text-red-400');
-                showNotification('🚨 EMERGENCY STOP ACTIVATED', 'error');
-            }
-        }
-
-        async function toggleAutoBetting() {
-            try {
-                const response = await fetch('/api/toggle_auto_betting', {method: 'POST'});
-                const data = await response.json();
-                
-                if (response.ok) {
-                    dashboardState.autoBetting = data.auto_betting;
-                    updateAutoBettingStatus(data.auto_betting);
-                    addLog(`[AI] Autopilot ${data.auto_betting ? 'ENGAGED' : 'DISENGAGED'} 🤖`, 'text-cyan-400');
-                    showNotification(`🤖 Autopilot ${data.auto_betting ? 'Engaged' : 'Disengaged'}`, 'info');
-                } else {
-                    addLog('[ERROR] Autopilot toggle failed: ' + data.error, 'text-red-400');
-                    showNotification('⚠️ Autopilot error', 'error');
-                }
-            } catch (error) {
-                addLog('[ERROR] Autopilot toggle failed: ' + error.message, 'text-red-400');
-                showNotification('💥 Autopilot error', 'error');
-            }
-        }
-
-        async function makeManualDecision() {
-            try {
-                addLog('[USER] Requesting manual neural decision...', 'text-purple-400');
-                showNotification('🧠 AI Brain processing...', 'info');
-                
-                document.getElementById('decisionSpinner').classList.remove('hidden');
-                document.getElementById('manualDecision').innerHTML = '<div class="loading-spinner inline-block mr-2"></div> THINKING...';
-                document.getElementById('manualDecision').disabled = true;
-                
-                const response = await fetch('/api/manual_decision', {method: 'POST'});
-                const data = await response.json();
-                
-                if (response.ok) {
-                    addLog('[NEURAL] Manual decision neural processing initiated 🧠', 'text-purple-400');
-                    showNotification('⚡ Decision fired!', 'success');
-                } else {
-                    addLog('[ERROR] Neural decision failed: ' + data.error, 'text-red-400');
-                    showNotification('⚠️ Decision failed', 'error');
-                }
-            } catch (error) {
-                addLog('[ERROR] Manual decision failed: ' + error.message, 'text-red-400');
-                showNotification('💥 Decision error', 'error');
-            } finally {
-                document.getElementById('decisionSpinner').classList.add('hidden');
-                document.getElementById('manualDecision').innerHTML = '<i class="fas fa-lightning-bolt mr-2"></i> FIRE DECISION';
-                document.getElementById('manualDecision').disabled = false;
-            }
-        }
-
-        async function refreshData() {
-            try {
-                addLog('[USER] Refreshing neural data streams...', 'text-yellow-400');
-                showNotification('🔄 Refreshing data...', 'info');
-                
-                const response = await fetch('/api/dashboard_data');
-                const data = await response.json();
-                
-                if (response.ok) {
-                    updateDashboard(data);
-                    addLog('[SYSTEM] Neural data streams refreshed ✅', 'text-green-400');
-                    showNotification('✅ Data refreshed', 'success');
-                } else {
-                    addLog('[ERROR] Data refresh failed: ' + data.error, 'text-red-400');
-                    showNotification('⚠️ Refresh failed', 'error');
-                }
-            } catch (error) {
-                addLog('[ERROR] Data refresh failed: ' + error.message, 'text-red-400');
-                showNotification('💥 Refresh error', 'error');
-            }
-        }
-
-        async function updateSettings(settings) {
-            try {
-                const response = await fetch('/api/settings', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(settings)
-                });
-                
-                const data = await response.json();
-                if (response.ok) {
-                    addLog('[SYSTEM] Neural settings updated', 'text-blue-400');
-                }
-            } catch (error) {
-                addLog('[ERROR] Settings update failed: ' + error.message, 'text-red-400');
-            }
-        }
-
-        async function loadInitialData() {
-            try {
-                const response = await fetch('/api/dashboard_data');
-                const data = await response.json();
-                
-                if (response.ok) {
-                    updateDashboard(data);
-                }
-            } catch (error) {
-                console.error('Failed to load initial data:', error);
-            }
-        }
-
-        // Animation Functions
-        function startAnimations() {
-            // Animate stat numbers
-            setInterval(() => {
-                if (dashboardState.isRunning) {
-                    document.querySelectorAll('.stat-number').forEach(el => {
-                        el.style.textShadow = `0 0 ${Math.random() * 20 + 10}px currentColor`;
-                    });
-                }
-            }, 1000);
-            
-            // Update progress bars
-            setInterval(updateProgressBars, 2000);
-        }
-
-        function updateProgressBars() {
-            if (!dashboardState.isRunning) return;
-            
-            // Update win rate progress
-            const winRate = parseFloat(document.getElementById('winRate').textContent) || 0;
-            document.getElementById('winRateProgress').style.width = `${winRate}%`;
-            
-            // Update confidence progress
-            const confidence = parseFloat(document.getElementById('aiConfidence').textContent) || 0;
-            document.getElementById('confidenceProgress').style.width = `${confidence}%`;
-            
-            // Update session progress (example: 0-240 minutes = 0-100%)
-            const sessionMinutes = parseFloat(document.getElementById('sessionDuration').textContent) || 0;
-            const sessionProgress = Math.min((sessionMinutes / 240) * 100, 100);
-            document.getElementById('sessionProgress').style.width = `${sessionProgress}%`;
-            
-            // Update profit progress (relative to bankroll)
-            const profit = parseFloat(document.getElementById('totalProfit').textContent.replace('$', '')) || 0;
-            const bankroll = parseFloat(document.getElementById('currentBankroll').textContent.replace('$', '')) || 1000;
-            const profitProgress = Math.abs(profit / bankroll) * 100;
-            document.getElementById('profitProgress').style.width = `${Math.min(profitProgress, 100)}%`;
-        }
-
-        // Update Functions
-        function updateSystemStatus(isRunning) {
-            const statusElement = document.getElementById('systemStatus');
-            const startBtn = document.getElementById('startBtn');
-            const stopBtn = document.getElementById('stopBtn');
-            
-            if (isRunning) {
-                statusElement.className = 'status-online px-6 py-3 rounded-lg font-bold text-lg';
-                statusElement.innerHTML = '<i class="fas fa-circle mr-2"></i> ONLINE';
-                startBtn.disabled = true;
-                stopBtn.disabled = false;
+        // Connect button functionality
+        connectBtn.addEventListener('click', function() {
+            if (!isConnected) {
+                socket.emit('connect_stake_api', { demo_mode: isDemoMode });
+                logActivity('Connecting to Stake API...');
+                showNotification('Connecting to Stake...', 'info');
+                connectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting';
+                connectBtn.disabled = true;
             } else {
-                statusElement.className = 'status-offline px-6 py-3 rounded-lg font-bold text-lg';
-                statusElement.innerHTML = '<i class="fas fa-circle mr-2"></i> OFFLINE';
-                startBtn.disabled = false;
-                stopBtn.disabled = true;
+                socket.emit('disconnect_stake_api');
+                logActivity('Disconnecting from Stake API...');
+                showNotification('Disconnecting...', 'info');
             }
+        });
+
+        // Betting functionality
+        singleBetBtn.addEventListener('click', function() {
+            placeSingleBet();
+        });
+
+        startAutoBetBtn.addEventListener('click', function() {
+            startAutoBetting();
+        });
+
+        stopAutoBetBtn.addEventListener('click', function() {
+            stopAutoBetting();
+        });
+
+        function placeSingleBet() {
+            const betAmount = parseFloat(document.getElementById('betAmount').value);
+            const targetNumber = parseFloat(document.getElementById('targetNumber').value);
+            const condition = document.getElementById('betCondition').value;
+            
+            if (betAmount <= 0 || betAmount > stats.balance) {
+                showNotification('Invalid bet amount or insufficient funds', 'error');
+                return;
+            }
+            
+            if (targetNumber <= 0 || targetNumber >= 100) {
+                showNotification('Target must be between 0.01 and 99.99', 'error');
+                return;
+            }
+            
+            const betData = {
+                amount: betAmount,
+                target: targetNumber,
+                condition: condition,
+                demo_mode: isDemoMode
+            };
+            
+            socket.emit('place_bet', betData);
+            logActivity(`Placing ${isDemoMode ? 'demo' : 'REAL'} bet: $${betAmount} ${condition} ${targetNumber}`);
+            singleBetBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Betting';
+            singleBetBtn.disabled = true;
+            
+            setTimeout(() => {
+                singleBetBtn.innerHTML = '<i class="fas fa-dice"></i> Place Bet';
+                singleBetBtn.disabled = false;
+            }, 2000);
         }
 
-        function updateAutoBettingStatus(enabled) {
-            const btn = document.getElementById('toggleAutoBetting');
+        function startAutoBetting() {
+            if (autoBettingActive) return;
             
-            if (enabled) {
-                btn.className = 'w-full bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 py-4 rounded-lg font-bold text-lg transition-all duration-300';
-                btn.innerHTML = '<i class="fas fa-pause mr-2"></i> DISABLE AUTOPILOT';
+            const interval = parseInt(document.getElementById('betInterval').value) * 1000;
+            if (interval < 2000 || interval > 60000) {
+                showNotification('Interval must be between 2-60 seconds', 'error');
+                return;
+            }
+            
+            autoBettingActive = true;
+            startAutoBetBtn.style.display = 'none';
+            stopAutoBetBtn.style.display = 'inline-flex';
+            
+            autoBettingInterval = setInterval(() => {
+                if (stats.balance <= 0) {
+                    stopAutoBetting();
+                    showNotification('Auto betting stopped: Insufficient funds', 'error');
+                    return;
+                }
+                placeSingleBet();
+            }, interval);
+            
+            logActivity(`Auto betting started (${interval/1000}s interval)`);
+            showNotification(`Auto betting started (${interval/1000}s interval)`, 'success');
+        }
+
+        function stopAutoBetting() {
+            if (!autoBettingActive) return;
+            
+            autoBettingActive = false;
+            startAutoBetBtn.style.display = 'inline-flex';
+            stopAutoBetBtn.style.display = 'none';
+            
+            if (autoBettingInterval) {
+                clearInterval(autoBettingInterval);
+            }
+            
+            logActivity('Auto betting stopped');
+            showNotification('Auto betting stopped', 'info');
+        }
+
+        function handleBetResult(data) {
+            stats.totalBets++;
+            
+            const profitLoss = data.won ? (data.payout - data.amount) : -data.amount;
+            stats.balance += profitLoss;
+            stats.profit += profitLoss;
+            
+            if (data.won) {
+                stats.wins++;
             } else {
-                btn.className = 'cyber-btn w-full py-4 rounded-lg font-bold text-lg';
-                btn.innerHTML = '<i class="fas fa-brain mr-2"></i> ENABLE AUTOPILOT';
+                stats.losses++;
+            }
+            
+            // Update chart data
+            chartData.results.push(data.result);
+            chartData.profit.push(stats.profit);
+            chartData.times.push(new Date().toLocaleTimeString());
+            
+            // Limit data points to last 50
+            if (chartData.results.length > 50) {
+                chartData.results.shift();
+                chartData.profit.shift();
+                chartData.times.shift();
+            }
+            
+            updateDisplay();
+            updateCharts();
+            
+            const resultText = data.won ? 'WON' : 'LOST';
+            const resultClass = data.won ? 'success' : 'error';
+            const profitText = data.won ? `+$${(data.payout - data.amount).toFixed(2)}` : `-$${data.amount.toFixed(2)}`;
+            
+            logActivity(`${resultText}: Result ${data.result} | ${profitText} | Balance: $${stats.balance.toFixed(2)}`);
+            showNotification(`${resultText}: ${profitText}`, resultClass);
+        }
+
+        function updateConnectionStatus(connected) {
+            const statusIndicator = document.getElementById('connectionStatus');
+            const connectionText = document.getElementById('connectionText');
+            
+            if (connected) {
+                statusIndicator.className = 'status-indicator status-online';
+                connectionText.textContent = 'Connected';
+                document.getElementById('connectionUptime').textContent = 'Server online';
+            } else {
+                statusIndicator.className = 'status-indicator status-offline';
+                connectionText.textContent = 'Offline';
+                document.getElementById('connectionUptime').textContent = 'Disconnected';
             }
         }
 
-        function updateDashboard(data) {
-            if (data.live_stats) {
-                // Animate number changes
-                animateValue('currentBankroll', data.live_stats.current_bankroll, '$');
-                animateValue('totalProfit', data.live_stats.total_profit, '$');
-                animateValue('winRate', data.live_stats.win_rate, '%', 1);
-                animateValue('totalBets', data.live_stats.total_bets, '');
-                animateValue('sessionDuration', Math.floor(data.live_stats.session_duration), 'm');
-                
-                // Update profit card styling
-                const profitCard = document.getElementById('profitCard');
-                if (data.live_stats.total_profit > 0) {
-                    profitCard.className = 'stat-card profit-card p-6 rounded-xl text-center';
-                    document.getElementById('totalProfit').className = 'stat-number text-3xl font-black text-green-400';
-                } else if (data.live_stats.total_profit < 0) {
-                    profitCard.className = 'stat-card loss-card p-6 rounded-xl text-center';
-                    document.getElementById('totalProfit').className = 'stat-number text-3xl font-black text-red-400';
-                } else {
-                    profitCard.className = 'stat-card card-glow p-6 rounded-xl text-center';
-                    document.getElementById('totalProfit').className = 'stat-number text-3xl font-black';
+        function updateApiStatus(data) {
+            isConnected = data.connected;
+            const connectBtn = document.getElementById('connectBtn');
+            
+            if (data.connected) {
+                connectBtn.innerHTML = '<i class="fas fa-unlink"></i> Disconnect';
+                connectBtn.className = 'btn btn-danger';
+                connectBtn.disabled = false;
+                logActivity('Connected to Stake API successfully');
+                showNotification('Connected to Stake API', 'success');
+            } else {
+                connectBtn.innerHTML = '<i class="fas fa-link"></i> Connect';
+                connectBtn.className = 'btn btn-secondary';
+                connectBtn.disabled = false;
+                logActivity('Disconnected from Stake API');
+                showNotification('Disconnected from Stake API', 'error');
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('balance').textContent = `$${stats.balance.toFixed(2)}`;
+            document.getElementById('totalBets').textContent = stats.totalBets;
+            
+            const winRate = stats.totalBets > 0 ? ((stats.wins / stats.totalBets) * 100).toFixed(1) : 0;
+            document.getElementById('winRate').textContent = `${winRate}%`;
+            document.getElementById('winRateChange').textContent = `${stats.wins}/${stats.totalBets} wins`;
+            
+            if (stats.totalBets > 0) {
+                const profitChange = stats.profit >= 0 ? '+' : '';
+                document.getElementById('betsChange').textContent = `${profitChange}$${stats.profit.toFixed(2)} P/L`;
+                document.getElementById('betsChange').className = `stat-change ${stats.profit >= 0 ? 'positive' : 'negative'}`;
+            }
+        }
+
+        function updatePredictions(data) {
+            document.getElementById('nextPrediction').textContent = data.prediction || '--';
+            document.getElementById('predictionConfidence').style.width = `${data.confidence || 0}%`;
+            document.getElementById('trendDirection').textContent = data.trend || 'Neutral';
+            document.getElementById('recommendedBet').textContent = data.recommendation || 'Hold';
+            document.getElementById('riskLevel').textContent = data.risk || 'Medium';
+        }
+
+        function initializeCharts() {
+            // Profit Chart
+            const profitCtx = document.getElementById('profitChart').getContext('2d');
+            profitChart = new Chart(profitCtx, {
+                type: 'line',
+                data: {
+                    labels: chartData.times,
+                    datasets: [{
+                        label: 'Profit/Loss',
+                        data: chartData.profit,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 2,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            ticks: { 
+                                color: '#6b7280',
+                                font: { size: 11 }
+                            },
+                            grid: { 
+                                color: 'rgba(75, 85, 99, 0.1)',
+                                drawBorder: false
+                            }
+                        }
+                    },
+                    elements: {
+                        point: {
+                            backgroundColor: '#3b82f6'
+                        }
+                    }
                 }
-            }
-            
-            if (data.recent_decisions && data.recent_decisions.length > 0) {
-                updateLatestDecision(data.recent_decisions[data.recent_decisions.length - 1]);
-                updateRecentDecisions(data.recent_decisions);
-            }
-            
-            updateCharts(data);
-        }
+            });
 
-        function animateValue(elementId, targetValue, suffix = '', decimals = 2) {
-            const element = document.getElementById(elementId);
-            const currentValue = parseFloat(element.textContent.replace(/[$%m]/g, '')) || 0;
-            const increment = (targetValue - currentValue) / 20;
-            
-            let currentStep = 0;
-            const timer = setInterval(() => {
-                currentStep++;
-                const newValue = currentValue + (increment * currentStep);
-                
-                if (currentStep >= 20) {
-                    element.textContent = suffix + targetValue.toFixed(decimals) + (suffix === '$' || suffix === '%' || suffix === 'm' ? '' : suffix);
-                    clearInterval(timer);
-                } else {
-                    element.textContent = suffix + newValue.toFixed(decimals) + (suffix === '$' || suffix === '%' || suffix === 'm' ? '' : suffix);
+            // Results Chart
+            const resultsCtx = document.getElementById('resultsChart').getContext('2d');
+            resultsChart = new Chart(resultsCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Results',
+                        data: chartData.results.map((result, index) => ({ x: index + 1, y: result })),
+                        backgroundColor: '#a855f7',
+                        borderColor: '#a855f7',
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { 
+                                color: '#6b7280',
+                                font: { size: 11 }
+                            },
+                            grid: { 
+                                color: 'rgba(75, 85, 99, 0.1)',
+                                drawBorder: false
+                            }
+                        },
+                        y: {
+                            min: 0,
+                            max: 100,
+                            ticks: { 
+                                color: '#6b7280',
+                                font: { size: 11 }
+                            },
+                            grid: { 
+                                color: 'rgba(75, 85, 99, 0.1)',
+                                drawBorder: false
+                            }
+                        }
+                    }
                 }
-            }, 50);
+            });
         }
 
-        function updateLatestDecision(decision) {
-            if (!decision) return;
-            
-            const element = document.getElementById('latestDecision');
-            animateValue('aiConfidence', decision.confidence, '%', 1);
-            
-            element.innerHTML = `
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center bg-gray-800 bg-opacity-50 p-4 rounded-lg">
-                        <span class="font-semibold">Neural Decision:</span>
-                        <span class="text-2xl font-bold ${decision.should_bet ? 'text-green-400' : 'text-red-400'}">
-                            ${decision.should_bet ? '✅ ENGAGE' : '❌ HOLD'}
-                        </span>
-                    </div>
-                    ${decision.should_bet ? `
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg text-center">
-                                <div class="text-xs text-gray-400 mb-1">Amount</div>
-                                <div class="text-yellow-400 font-bold text-lg">$${decision.bet_amount.toFixed(2)}</div>
-                            </div>
-                            <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg text-center">
-                                <div class="text-xs text-gray-400 mb-1">Multiplier</div>
-                                <div class="text-blue-400 font-bold text-lg">${decision.multiplier.toFixed(2)}x</div>
-                            </div>
-                            <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg text-center">
-                                <div class="text-xs text-gray-400 mb-1">Side</div>
-                                <div class="text-purple-400 font-bold">${decision.side.toUpperCase()}</div>
-                            </div>
-                            <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg text-center">
-                                <div class="text-xs text-gray-400 mb-1">Target</div>
-                                <div class="text-orange-400 font-bold">${decision.target_roll.toFixed(1)}</div>
-                            </div>
-                        </div>
-                    ` : ''}
-                    <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
-                        <div class="text-xs text-gray-400 mb-2">Strategy & Reasoning:</div>
-                        <div class="text-cyan-400 font-semibold mb-2">${decision.strategy_used}</div>
-                        <div class="text-sm text-gray-300">${decision.ai_reasoning || 'Neural network processing...'}</div>
-                    </div>
-                </div>
-            `;
+        function updateCharts() {
+            if (profitChart) {
+                profitChart.data.labels = chartData.times;
+                profitChart.data.datasets[0].data = chartData.profit;
+                profitChart.update('none');
+            }
+
+            if (resultsChart) {
+                resultsChart.data.datasets[0].data = chartData.results.map((result, index) => ({ x: index + 1, y: result }));
+                resultsChart.update('none');
+            }
         }
 
-        function updateRecentDecisions(decisions) {
-            const element = document.getElementById('recentDecisions');
+        function logActivity(message) {
+            const logContainer = document.getElementById('activityLog');
+            const time = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="log-time">[${time}]</span> <span class="log-message">${message}</span>`;
             
-            element.innerHTML = decisions.slice(-10).reverse().map((decision, index) => `
-                <div class="decision-card p-4 rounded-lg border-l-4 ${decision.should_bet ? 'border-green-500' : 'border-red-500'} transform transition-all duration-300 hover:scale-105">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-sm font-mono">${new Date(decision.timestamp).toLocaleTimeString()}</span>
-                        <span class="text-lg font-bold ${decision.should_bet ? 'text-green-400' : 'text-red-400'}">
-                            ${decision.should_bet ? `$${decision.bet_amount.toFixed(2)} @ ${decision.multiplier.toFixed(1)}x` : 'NO BET'}
-                        </span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs text-gray-400">${decision.strategy_used}</span>
-                        <span class="text-xs text-cyan-400">${decision.confidence.toFixed(1)}% confidence</span>
-                    </div>
-                </div>
-            `).join('');
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            // Limit log entries to last 100
+            const entries = logContainer.querySelectorAll('.log-entry');
+            if (entries.length > 100) {
+                entries[0].remove();
+            }
         }
 
         function showNotification(message, type = 'info') {
             const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notificationText');
-            
-            // Set color based on type
-            const colors = {
-                'info': 'border-cyan-500 text-cyan-400',
-                'success': 'border-green-500 text-green-400',
-                'warning': 'border-yellow-500 text-yellow-400',
-                'error': 'border-red-500 text-red-400'
-            };
-            
-            notification.className = `notification ${colors[type] || colors.info}`;
-            notificationText.textContent = message;
-            notification.classList.add('show');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
             
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
 
-        function addLog(message, className = 'text-green-400') {
-            const logsElement = document.getElementById('systemLogs');
-            const timestamp = new Date().toLocaleTimeString();
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSocket();
+            initializeCharts();
+            initializeDiceGame();
+            initializeCurrencyDropdown();
+            updateDisplay();
             
-            const logEntry = document.createElement('div');
-            logEntry.className = className;
-            logEntry.textContent = `[${timestamp}] ${message}`;
-            
-            logsElement.appendChild(logEntry);
-            logsElement.scrollTop = logsElement.scrollHeight;
-            
-            // Keep only last 100 logs
-            const logs = logsElement.children;
-            if (logs.length > 100) {
-                logsElement.removeChild(logs[0]);
-            }
-        }
+            logActivity('Professional dashboard initialized');
+            showNotification('Welcome to the Supreme AI Dashboard', 'success');
+        });
 
-        // Charts
-        function initializeCharts() {
-            // Advanced chart configuration
-            const chartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#00d4ff',
-                            font: {
-                                family: 'Orbitron',
-                                weight: 'bold'
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#00d4ff',
-                            font: {
-                                family: 'JetBrains Mono'
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 212, 255, 0.2)'
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: '#00d4ff',
-                            font: {
-                                family: 'JetBrains Mono'
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 212, 255, 0.2)'
-                        }
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                }
-            };
+        // Dice Game Functionality
+        let currentCurrency = 'usdt';
+        let currencyBalances = {
+            usdt: 1000.00004897,
+            btc: 0.00000000,
+            eth: 0.00000000,
+            doge: 0.00000000
+        };
 
-            // Profit Chart
-            const profitCtx = document.getElementById('profitChart').getContext('2d');
-            profitChart = new Chart(profitCtx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Profit ($)',
-                        data: [],
-                        borderColor: '#39ff14',
-                        backgroundColor: 'rgba(57, 255, 20, 0.1)',
-                        borderWidth: 3,
-                        tension: 0.4,
-                        pointBackgroundColor: '#39ff14',
-                        pointBorderColor: '#ffffff',
-                        pointRadius: 5,
-                        pointHoverRadius: 8,
-                        shadow: true
-                    }]
-                },
-                options: {
-                    ...chartOptions,
-                    plugins: {
-                        ...chartOptions.plugins,
-                        title: {
-                            display: true,
-                            text: 'NEURAL PROFIT TRAJECTORY',
-                            color: '#39ff14',
-                            font: {
-                                family: 'Orbitron',
-                                size: 16,
-                                weight: 'bold'
-                            }
-                        }
-                    }
+        function initializeDiceGame() {
+            const diceSlider = document.getElementById('diceSlider');
+            const multiplierInput = document.getElementById('multiplierInput');
+            const rollOverInput = document.getElementById('rollOverInput');
+            const winChanceInput = document.getElementById('winChanceInput');
+            const betAmountInput = document.getElementById('betAmount');
+            const profitAmount = document.getElementById('profitAmount');
+
+            // Initialize tab functionality
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    button.classList.add('active');
+                    tabContents[index].classList.add('active');
+                });
+            });
+
+            // Amount modification buttons
+            document.getElementById('halveButton').addEventListener('click', function() {
+                const current = parseFloat(betAmountInput.value) || 0;
+                betAmountInput.value = (current / 2).toFixed(8);
+                updateProfitCalculation();
+            });
+
+            document.getElementById('doubleButton').addEventListener('click', function() {
+                const current = parseFloat(betAmountInput.value) || 0;
+                betAmountInput.value = (current * 2).toFixed(8);
+                updateProfitCalculation();
+            });
+
+            // Dice slider logic
+            diceSlider.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                updateDiceCalculations(value);
+                updateRangeVisualization(value);
+            });
+
+            // Input field synchronization
+            multiplierInput.addEventListener('input', function() {
+                const multiplier = parseFloat(this.value);
+                if (multiplier >= 1.0102 && multiplier <= 9900) {
+                    const winChance = (99 / multiplier).toFixed(4);
+                    const rollOver = (100 - parseFloat(winChance)).toFixed(2);
+                    
+                    winChanceInput.value = winChance;
+                    rollOverInput.value = rollOver;
+                    diceSlider.value = Math.round(parseFloat(rollOver));
+                    
+                    updateRangeVisualization(Math.round(parseFloat(rollOver)));
+                    updateProfitCalculation();
                 }
             });
 
-            // Win Rate Chart
-            const winRateCtx = document.getElementById('winRateChart').getContext('2d');
-            winRateChart = new Chart(winRateCtx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Win Rate (%)',
-                        data: [],
-                        borderColor: '#00d4ff',
-                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
-                        borderWidth: 3,
-                        tension: 0.4,
-                        pointBackgroundColor: '#00d4ff',
-                        pointBorderColor: '#ffffff',
-                        pointRadius: 5,
-                        pointHoverRadius: 8
-                    }]
-                },
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        ...chartOptions.scales,
-                        y: {
-                            ...chartOptions.scales.y,
-                            min: 0,
-                            max: 100
-                        }
-                    },
-                    plugins: {
-                        ...chartOptions.plugins,
-                        title: {
-                            display: true,
-                            text: 'AI ACCURACY MATRIX',
-                            color: '#00d4ff',
-                            font: {
-                                family: 'Orbitron',
-                                size: 16,
-                                weight: 'bold'
-                            }
-                        }
-                    }
+            winChanceInput.addEventListener('input', function() {
+                const winChance = parseFloat(this.value);
+                if (winChance >= 0.01 && winChance <= 98) {
+                    const multiplier = (99 / winChance).toFixed(4);
+                    const rollOver = (100 - winChance).toFixed(2);
+                    
+                    multiplierInput.value = multiplier;
+                    rollOverInput.value = rollOver;
+                    diceSlider.value = Math.round(parseFloat(rollOver));
+                    
+                    updateRangeVisualization(Math.round(parseFloat(rollOver)));
+                    updateProfitCalculation();
                 }
+            });
+
+            // Bet amount changes
+            betAmountInput.addEventListener('input', function() {
+                updateProfitCalculation();
+            });
+
+            // Place bet button
+            document.getElementById('placeBetButton').addEventListener('click', function() {
+                placeDiceBet();
+            });
+
+            // Initialize with default values
+            updateDiceCalculations(50);
+            updateProfitCalculation();
+        }
+
+        function updateDiceCalculations(rollOver) {
+            const winChance = (100 - rollOver).toFixed(4);
+            const multiplier = (99 / parseFloat(winChance)).toFixed(4);
+            
+            document.getElementById('winChanceInput').value = winChance;
+            document.getElementById('multiplierInput').value = multiplier;
+            document.getElementById('rollOverInput').value = rollOver.toFixed(2);
+            
+            updateProfitCalculation();
+        }
+
+        function updateRangeVisualization(rollOver) {
+            const lowerRange = document.getElementById('lowerRange');
+            const higherRange = document.getElementById('higherRange');
+            
+            const winChance = 100 - rollOver;
+            lowerRange.style.width = `${rollOver}%`;
+            higherRange.style.width = `${winChance}%`;
+        }
+
+        function updateProfitCalculation() {
+            const betAmount = parseFloat(document.getElementById('betAmount').value) || 0;
+            const multiplier = parseFloat(document.getElementById('multiplierInput').value) || 1;
+            
+            const profit = (betAmount * (multiplier - 1)).toFixed(8);
+            document.getElementById('profitAmount').value = profit;
+            
+            // Update conversion amounts (mock USD conversion)
+            const usdRate = currentCurrency === 'usdt' ? 1 : (currentCurrency === 'btc' ? 45000 : 3000);
+            document.getElementById('conversionAmount').textContent = `$${(betAmount * usdRate).toFixed(2)}`;
+            document.getElementById('profitConversion').textContent = `$${(parseFloat(profit) * usdRate).toFixed(2)}`;
+        }
+
+        function placeDiceBet() {
+            const betAmount = parseFloat(document.getElementById('betAmount').value) || 0;
+            const rollOver = parseFloat(document.getElementById('rollOverInput').value) || 50;
+            const winChance = parseFloat(document.getElementById('winChanceInput').value) || 50;
+            const multiplier = parseFloat(document.getElementById('multiplierInput').value) || 2;
+
+            // Validate bet
+            if (betAmount <= 0) {
+                showNotification('Please enter a valid bet amount', 'error');
+                return;
+            }
+
+            if (betAmount > currencyBalances[currentCurrency]) {
+                showNotification('Insufficient balance', 'error');
+                return;
+            }
+
+            // Disable bet button during processing
+            const betButton = document.getElementById('placeBetButton');
+            betButton.disabled = true;
+            betButton.textContent = 'Rolling...';
+
+            // Show processing state
+            showNotification('Placing bet via Stake API...', 'info');
+            logActivity(`Placing bet: ${betAmount} ${currentCurrency.toUpperCase()} | Roll Over ${rollOver} | ${winChance}% chance`);
+
+            // Send bet to backend for Stake API processing
+            socket.emit('place_dice_bet', {
+                amount: betAmount,
+                target: rollOver,
+                condition: 'over',
+                demo_mode: isDemoMode,
+                currency: currentCurrency,
+                multiplier: multiplier,
+                winChance: winChance,
+                client_seed: generateClientSeed()
             });
         }
 
-        function updateCharts(data) {
-            if (data.live_stats) {
-                const now = new Date().toLocaleTimeString();
-                
-                dashboardState.profitHistory.push({
-                    time: now,
-                    profit: data.live_stats.total_profit
-                });
-                
-                dashboardState.winRateHistory.push({
-                    time: now,
-                    winRate: data.live_stats.win_rate
-                });
-                
-                // Keep only last 30 data points for smooth animation
-                if (dashboardState.profitHistory.length > 30) {
-                    dashboardState.profitHistory.shift();
-                    dashboardState.winRateHistory.shift();
-                }
-                
-                // Update profit chart with animation
-                profitChart.data.labels = dashboardState.profitHistory.map(d => d.time);
-                profitChart.data.datasets[0].data = dashboardState.profitHistory.map(d => d.profit);
-                profitChart.update('smooth');
-                
-                // Update win rate chart with animation
-                winRateChart.data.labels = dashboardState.winRateHistory.map(d => d.time);
-                winRateChart.data.datasets[0].data = dashboardState.winRateHistory.map(d => d.winRate);
-                winRateChart.update('smooth');
+        // Handle dice bet result from Stake API
+        socket.on('dice_bet_result', function(data) {
+            const betButton = document.getElementById('placeBetButton');
+            betButton.disabled = false;
+            betButton.textContent = 'Place Bet';
+
+            if (data.error) {
+                showNotification(`Bet failed: ${data.error}`, 'error');
+                logActivity(`❌ Bet error: ${data.error}`);
+                return;
             }
-        }
 
-        // SocketIO Event Handlers
-        socket.on('connect', function() {
-            addLog('[SOCKET] Connected to Supreme Neural Dashboard', 'text-cyan-400');
-            showNotification('🔗 Neural link established', 'success');
-        });
+            // Extract result from Stake API response
+            const result = data.result.toFixed(2);
+            const won = data.won;
+            const profit = data.profit || 0;
+            const betAmount = data.bet_amount;
+            const rollOver = data.target;
 
-        socket.on('disconnect', function() {
-            addLog('[SOCKET] Neural link disconnected', 'text-red-400');
-            showNotification('⚠️ Neural link lost', 'warning');
-        });
-
-        socket.on('system_status', function(data) {
-            addLog(`[NEURAL] System status: ${data.status}`, 'text-blue-400');
-            updateSystemStatus(data.status === 'started');
-            
-            if (data.status === 'started') {
-                showNotification('🚀 Neural network online!', 'success');
+            // Update local balances based on API result
+            if (won) {
+                currencyBalances[currentCurrency] += profit;
+                stats.wins++;
             } else {
-                showNotification('💤 Neural network sleeping', 'info');
+                currencyBalances[currentCurrency] -= betAmount;
+                stats.losses++;
             }
-        });
-
-        socket.on('new_decision', function(data) {
-            addLog('[AI] Neural decision computed 🧠', 'text-purple-400');
-            updateLatestDecision(data.decision);
-            showNotification('⚡ New neural decision!', 'info');
-        });
-
-        socket.on('bet_executed', function(data) {
-            const result = data.result.bet_result;
-            const won = result?.won || false;
-            const profit = result?.profit || 0;
             
-            addLog(`[BET] ${won ? 'NEURAL WIN' : 'NEURAL LOSS'} - ${profit > 0 ? '+' : ''}$${profit.toFixed(2)} 💰`, 
-                   won ? 'text-green-400' : 'text-red-400');
-                   
-            showNotification(`${won ? '🎯 Neural Victory!' : '💥 Neural Miss'} ${profit > 0 ? '+' : ''}$${profit.toFixed(2)}`, 
-                           won ? 'success' : 'error');
+            stats.totalBets++;
+            updateCurrencyDisplay();
+            
+            // Show result with Stake API data
+            const diceContainer = document.querySelector('.dice-container');
+            const diceResult = document.getElementById('diceResult');
+            
+            diceContainer.classList.remove('is-hidden');
+            diceResult.textContent = result;
+            diceResult.className = `dice-result ${won ? 'win' : 'loss'}`;
+            
+            // Display additional Stake API info if available
+            const apiInfo = data.server_seed_hash ? ` | Hash: ${data.server_seed_hash.substring(0, 8)}...` : '';
+            const nonce = data.nonce ? ` | Nonce: ${data.nonce}` : '';
+            
+            const resultMessage = won ? 
+                `🎉 WIN! ${result} > ${rollOver} | +${profit.toFixed(8)} ${currentCurrency.toUpperCase()}${apiInfo}${nonce}` :
+                `❌ LOSS! ${result} ≤ ${rollOver} | -${betAmount.toFixed(8)} ${currentCurrency.toUpperCase()}${apiInfo}${nonce}`;
+            
+            logActivity(resultMessage);
+            showNotification(resultMessage, won ? 'success' : 'error');
+
+            setTimeout(() => {
+                diceContainer.classList.add('is-hidden');
+            }, 3000);
         });
 
-        socket.on('market_update', function(data) {
-            // Update market conditions display with enhanced formatting
-            if (data.volatility_metrics && !data.volatility_metrics.insufficient_data) {
-                document.getElementById('volatility').textContent = (data.volatility_metrics.session_volatility * 100).toFixed(1) + '%';
-            }
-            if (data.trend_indicators && !data.trend_indicators.insufficient_data) {
-                const trendValue = data.trend_indicators.trend_slope;
-                document.getElementById('trend').innerHTML = `
-                    <span class="${trendValue > 0 ? 'text-green-400' : trendValue < 0 ? 'text-red-400' : 'text-yellow-400'}">
-                        ${trendValue > 0 ? '📈' : trendValue < 0 ? '📉' : '➡️'} ${trendValue.toFixed(3)}
-                    </span>
-                `;
-            }
-            if (data.entropy_analysis && !data.entropy_analysis.insufficient_data) {
-                const entropyValue = data.entropy_analysis.shannon_entropy;
-                document.getElementById('entropy').innerHTML = `
-                    <span class="text-orange-400 font-bold">${entropyValue.toFixed(3)} ⚡</span>
-                `;
-            }
-            if (data.game_state) {
-                const rollValue = data.game_state.last_roll;
-                document.getElementById('lastRoll').innerHTML = `
-                    <span class="neon-glow ${rollValue > 50 ? 'text-green-400' : 'text-red-400'}">${rollValue.toFixed(1)}</span>
-                `;
-            }
-        });
+        // Generate client seed for provably fair gaming
+        function generateClientSeed() {
+            return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        }
 
-        socket.on('performance_update', function(data) {
-            updateDashboard(data);
-        });
+        function initializeCurrencyDropdown() {
+            const currencyButton = document.querySelector('.currency-button');
+            const currencyDropdown = document.getElementById('currencyDropdown');
+            const currencyOptions = document.querySelectorAll('.currency-option');
 
-        socket.on('error', function(data) {
-            addLog('[NEURAL ERROR] ' + data.message, 'text-red-400');
-            showNotification('💥 Neural error: ' + data.message, 'error');
-        });
+            currencyButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currencyDropdown.classList.toggle('hidden');
+            });
 
-        socket.on('ai_insights_updated', function(data) {
-            addLog('[AI] Neural insights updated 🧠', 'text-purple-400');
-            showNotification('🧠 AI insights updated', 'info');
-        });
+            document.addEventListener('click', function() {
+                currencyDropdown.classList.add('hidden');
+            });
 
-        socket.on('auto_betting_toggled', function(data) {
-            updateAutoBettingStatus(data.auto_betting);
-            addLog(`[AUTO] Autopilot ${data.auto_betting ? 'ENGAGED' : 'DISENGAGED'}`, 'text-cyan-400');
-        });
-
-        // Auto refresh every 15 seconds with enhanced feedback
-        setInterval(() => {
-            if (dashboardState.isRunning) {
-                socket.emit('request_live_update');
-                
-                // Visual feedback for live updates
-                document.querySelectorAll('.stat-number').forEach(el => {
-                    el.style.animation = 'none';
-                    setTimeout(() => {
-                        el.style.animation = 'pulse 0.5s ease-in-out';
-                    }, 10);
+            currencyOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const currency = this.dataset.currency;
+                    switchCurrency(currency);
+                    currencyDropdown.classList.add('hidden');
                 });
-            }
-        }, 15000);
+            });
 
-        // Heartbeat indicator
-        setInterval(() => {
-            if (dashboardState.isRunning) {
-                const heartbeat = document.createElement('div');
-                heartbeat.className = 'fixed top-4 left-4 w-3 h-3 bg-green-400 rounded-full z-50';
-                heartbeat.style.animation = 'pulse 0.5s ease-in-out';
-                document.body.appendChild(heartbeat);
-                
-                setTimeout(() => {
-                    if (heartbeat.parentNode) {
-                        heartbeat.parentNode.removeChild(heartbeat);
-                    }
-                }, 500);
-            }
-        }, 2000);
+            updateCurrencyDisplay();
+        }
+
+        function switchCurrency(currency) {
+            currentCurrency = currency;
+            
+            // Update current balance display
+            const balance = currencyBalances[currency];
+            document.getElementById('currentBalance').textContent = balance.toFixed(8);
+            
+            // Update currency icon
+            const currencyIcon = document.querySelector('.currency-icon svg');
+            const betCurrencyIcon = document.getElementById('betCurrencyIcon');
+            const profitCurrencyIcon = document.getElementById('profitCurrencyIcon');
+            
+            const iconSVG = getCurrencyIcon(currency);
+            currencyIcon.outerHTML = iconSVG;
+            betCurrencyIcon.outerHTML = iconSVG.replace('width="20"', 'width="20" id="betCurrencyIcon"');
+            profitCurrencyIcon.outerHTML = iconSVG.replace('width="20"', 'width="20" id="profitCurrencyIcon"');
+            
+            // Update button attribute
+            currencyButton.dataset.activeCurrency = currency;
+            
+            // Reset bet amount and recalculate
+            document.getElementById('betAmount').value = '';
+            updateProfitCalculation();
+            
+            logActivity(`Switched to ${currency.toUpperCase()} | Balance: ${balance.toFixed(8)}`);
+            showNotification(`Currency changed to ${currency.toUpperCase()}`, 'info');
+        }
+
+        function updateCurrencyDisplay() {
+            const balance = currencyBalances[currentCurrency];
+            document.getElementById('currentBalance').textContent = balance.toFixed(8);
+            document.getElementById(`${currentCurrency}Balance`).textContent = balance.toFixed(8);
+            
+            // Update stats balance display
+            stats.balance = balance;
+            updateDisplay();
+        }
+
+        function getCurrencyIcon(currency) {
+            const icons = {
+                usdt: '<svg data-ds-icon="USDT" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path fill="#26A17B" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11"></path><path fill="#fff" d="M13.322 12.95c-.076.005-.466.028-1.336.028-.694 0-1.183-.02-1.355-.029v.002c-2.673-.117-4.668-.583-4.668-1.14s1.995-1.021 4.668-1.14v1.817c.175.013.675.042 1.367.042.83 0 1.246-.034 1.324-.041v-1.817c2.667.119 4.657.584 4.657 1.14s-1.99 1.02-4.657 1.139m0-2.467V8.856h3.722v-2.48H6.909v2.48h3.722v1.626c-3.025.139-5.3.738-5.3 1.456s2.275 1.317 5.3 1.456v5.213h2.69v-5.214c3.02-.139 5.29-.738 5.29-1.455s-2.27-1.316-5.29-1.455"></path></svg>',
+                btc: '<svg data-ds-icon="BTC" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path fill="#F7931A" d="M23.638 14.904c-1.602 6.43-8.113 10.34-14.542 8.736C2.67 22.05-1.244 15.525.362 9.105 1.962 2.67 8.475-1.243 14.9.358c6.43 1.605 10.342 8.115 8.738 14.546z"></path><path fill="#FFF" d="M16.103 10.626c.229-1.525-.934-2.345-2.525-2.892l.516-2.068-1.258-.314-.502 2.016c-.33-.083-.67-.16-1.008-.236l.505-2.027-1.259-.314-.515 2.068c-.274-.063-.542-.124-.803-.187v-.007l-1.735-.432-.334 1.343s.934.214.914.227c.51.127.602.465.586.732l-.587 2.357c.035.009.08.022.13.043l-.131-.033-.822 3.297c-.062.155-.22.39-.576.301.013.019-.914-.228-.914-.228l-.624 1.439 1.638.408c.305.077.603.157.896.232l-.52 2.088 1.258.314.515-2.067c.342.093.675.178 1 .256l-.513 2.058 1.259.314.52-2.084c2.14.405 3.75.242 4.426-1.694.545-1.555-.027-2.452-1.151-3.036.819-.189 1.436-.728 1.602-1.844zm-2.87 4.026c-.388 1.56-3.014.716-3.865.505l.689-2.761c.851.212 3.581.631 3.176 2.256zm.387-4.051c-.354 1.421-2.545.699-3.255.522l.625-2.506c.71.177 3.005.507 2.63 1.984z"></path></svg>',
+                eth: '<svg data-ds-icon="ETH" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path fill="#627EEA" d="m11.944 17.97-4.788-7.13 4.788 2.855 4.788-2.855z"></path><path fill="#8A92B2" d="m7.157 10.84 4.787 7.13V1z"></path><path fill="#627EEA" d="M11.944 1v16.97l4.788-7.13z"></path><path fill="#8A92B2" d="M11.944 20.31v2.69L7.157 13.07z"></path><path fill="#627EEA" d="M11.944 23v-2.69L16.73 13.07z"></path></svg>',
+                doge: '<svg data-ds-icon="DOGE" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path fill="#C2A633" d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12z"></path><path fill="#FFF" d="M10.069 16.74h2.964c3.226 0 5.084-1.707 5.084-4.71 0-3.003-1.858-4.71-5.084-4.71h-2.964v9.42zm1.903-1.692V9.415h.82c1.958 0 3.18.906 3.18 2.817 0 1.91-1.222 2.816-3.18 2.816h-.82z"></path><path fill="#FFF" d="M8.718 7.32H6.815v9.42h1.903V7.32z"></path><path fill="#FFF" d="M14.967 11.73h3.18v1.692h-3.18V11.73z"></path></svg>'
+            };
+            return icons[currency] || icons.usdt;
+        }
     </script>
 </body>
 </html>

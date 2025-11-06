@@ -24,7 +24,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from unified_ai_decision_engine import UnifiedAIDecisionEngine, initialize_supreme_engine, get_supreme_engine
 from continuous_learning_system import ContinuousLearningSystem, initialize_learning_system, get_learning_system, TrainingExample
-from real_stake_api import StakeAPIAccess
+from real_stake_api import RealStakeAPI, AdvancedPredictorSystem
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -38,12 +38,14 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 dashboard_state = {
     'is_running': False,
     'current_session': None,
+    'demo_mode': True,  # Start in demo mode
+    'stake_api_connected': False,
     'live_stats': {
         'total_bets': 0,
         'successful_bets': 0,
         'total_profit': 0.0,
         'win_rate': 0.0,
-        'current_bankroll': 1000.0,
+        'current_bankroll': 1000.0,  # Demo balance
         'session_duration': 0,
         'last_decision': None,
         'last_bet': None
@@ -628,6 +630,309 @@ def add_to_learning_system(decision, result):
             
     except Exception as e:
         logging.error(f"Failed to add to learning system: {e}")
+
+# New Socket Event Handlers for Enhanced Dashboard
+@socketio.on('connect_stake_api')
+def handle_connect_stake_api(data):
+    """Handle Stake API connection request"""
+    try:
+        demo_mode = data.get('demo_mode', True)
+        dashboard_state['demo_mode'] = demo_mode
+        
+        if demo_mode:
+            # Demo mode - simulate connection
+            dashboard_state['stake_api_connected'] = True
+            emit('api_status', {'connected': True, 'demo_mode': True})
+            logging.info("Demo mode enabled - simulating Stake API connection")
+        else:
+            # Real mode - attempt actual connection
+            stake_api = initialize_stake_api()
+            if stake_api and stake_api.test_connection():
+                dashboard_state['stake_api_connected'] = True
+                emit('api_status', {'connected': True, 'demo_mode': False})
+                logging.info("Connected to real Stake API")
+            else:
+                dashboard_state['stake_api_connected'] = False
+                emit('api_status', {'connected': False, 'error': 'Failed to connect to Stake API'})
+                logging.error("Failed to connect to Stake API")
+                
+    except Exception as e:
+        emit('api_status', {'connected': False, 'error': str(e)})
+        logging.error(f"Stake API connection error: {e}")
+
+@socketio.on('disconnect_stake_api')
+def handle_disconnect_stake_api():
+    """Handle Stake API disconnection request"""
+    dashboard_state['stake_api_connected'] = False
+    emit('api_status', {'connected': False})
+    logging.info("Disconnected from Stake API")
+
+@socketio.on('place_dice_bet')
+def handle_place_dice_bet(data):
+    """Handle dice bet placement request with Stake API integration"""
+    try:
+        amount = float(data.get('amount', 1.0))
+        target = float(data.get('target', 50.0))
+        condition = data.get('condition', 'over')
+        demo_mode = data.get('demo_mode', dashboard_state['demo_mode'])
+        currency = data.get('currency', 'usdt').lower()
+        multiplier = float(data.get('multiplier', 2.0))
+        win_chance = float(data.get('winChance', 50.0))
+        client_seed = data.get('client_seed', '')
+        
+        if demo_mode:
+            # Simulate bet in demo mode with enhanced logging
+            import random
+            
+            # Simulate dice roll (0-100)
+            result = random.uniform(0, 100)
+            
+            # Calculate if won based on condition
+            won = (condition == 'over' and result > target) or (condition == 'under' and result < target)
+            
+            # Calculate profit/loss
+            profit = amount * (multiplier - 1) if won else -amount
+            
+            # Update demo stats
+            dashboard_state['live_stats']['total_bets'] += 1
+            if won:
+                dashboard_state['live_stats']['successful_bets'] += 1
+            
+            dashboard_state['live_stats']['current_bankroll'] += profit
+            dashboard_state['live_stats']['total_profit'] += profit
+            
+            # Calculate win rate
+            if dashboard_state['live_stats']['total_bets'] > 0:
+                dashboard_state['live_stats']['win_rate'] = (
+                    dashboard_state['live_stats']['successful_bets'] / 
+                    dashboard_state['live_stats']['total_bets'] * 100
+                )
+            
+            # Create comprehensive result
+            bet_result = {
+                'demo': True,
+                'result': round(result, 2),
+                'target': target,
+                'condition': condition,
+                'amount': amount,
+                'bet_amount': amount,
+                'profit': profit,
+                'won': won,
+                'multiplier': multiplier,
+                'win_chance': win_chance,
+                'currency': currency,
+                'balance': dashboard_state['live_stats']['current_bankroll'],
+                'server_seed_hash': f"demo_{random.randint(100000, 999999)}",
+                'nonce': random.randint(1, 1000),
+                'timestamp': datetime.now().isoformat()
+            }
+            
+            emit('dice_bet_result', bet_result)
+            emit('balance_update', {'balance': dashboard_state['live_stats']['current_bankroll']})
+            
+            logging.info(f"Demo dice bet: {amount} {currency.upper()} {condition} {target} = {result:.2f} ({'WON' if won else 'LOST'}) | Profit: {profit:.8f}")
+            
+        else:
+            # Real Stake API bet
+            try:
+                # Initialize direct Stake API connection
+                api_key = os.getenv('STAKE_API_KEY')
+                if not api_key:
+                    emit('dice_bet_result', {'error': 'No Stake API key found'})
+                    return
+                
+                stake_api = RealStakeAPI(api_key)
+                if not stake_api.test_connection():
+                    emit('dice_bet_result', {'error': 'Failed to connect to Stake API'})
+                    return
+                
+                # Place bet via Stake API (async)
+                def place_real_bet():
+                    try:
+                        # Place the actual bet using the real Stake API
+                        api_result = stake_api.place_dice_bet(
+                            amount=amount,
+                            target=target,
+                            condition=condition,
+                            demo_mode=False  # Real money mode
+                        )
+                        
+                        if api_result:
+                            # Extract result from Stake API
+                            result_value = api_result.get('result', 50.0)
+                            won = api_result.get('won', False)
+                            payout = api_result.get('payout', 0.0)
+                            profit = payout - amount if won else -amount
+                            
+                            # Update real stats
+                            dashboard_state['live_stats']['total_bets'] += 1
+                            if won:
+                                dashboard_state['live_stats']['successful_bets'] += 1
+                            
+                            dashboard_state['live_stats']['current_bankroll'] += profit
+                            dashboard_state['live_stats']['total_profit'] += profit
+                            
+                            # Calculate win rate
+                            if dashboard_state['live_stats']['total_bets'] > 0:
+                                dashboard_state['live_stats']['win_rate'] = (
+                                    dashboard_state['live_stats']['successful_bets'] / 
+                                    dashboard_state['live_stats']['total_bets'] * 100
+                                )
+                            
+                            # Send result with real Stake API data
+                            bet_result = {
+                                'demo': False,
+                                'result': result_value,
+                                'target': target,
+                                'condition': condition,
+                                'amount': amount,
+                                'bet_amount': amount,
+                                'profit': profit,
+                                'won': won,
+                                'multiplier': multiplier,
+                                'win_chance': win_chance,
+                                'currency': currency,
+                                'balance': dashboard_state['live_stats']['current_bankroll'],
+                                'server_seed_hash': f"real_{api_result.get('nonce', 0)}",
+                                'nonce': api_result.get('nonce', 0),
+                                'bet_id': api_result.get('id', ''),
+                                'timestamp': datetime.now().isoformat()
+                            }
+                            
+                            socketio.emit('dice_bet_result', bet_result)
+                            socketio.emit('balance_update', {'balance': dashboard_state['live_stats']['current_bankroll']})
+                            
+                            logging.info(f"Real dice bet: {amount} {currency.upper()} {condition} {target} = {result_value:.2f} ({'WON' if won else 'LOST'}) | Profit: {profit:.8f}")
+                        
+                        else:
+                            socketio.emit('dice_bet_result', {'error': 'Stake API returned no result'})
+                            logging.error("Stake API bet failed: No result returned")
+                            
+                    except Exception as e:
+                        socketio.emit('dice_bet_result', {'error': f'Bet execution failed: {str(e)}'})
+                        logging.error(f"Real bet execution error: {e}")
+                
+                # Run in background thread
+                thread = threading.Thread(target=place_real_bet)
+                thread.daemon = True
+                thread.start()
+                
+            except Exception as e:
+                emit('dice_bet_result', {'error': f'Real bet setup failed: {str(e)}'})
+                logging.error(f"Real bet setup error: {e}")
+            
+    except Exception as e:
+        emit('dice_bet_result', {'error': f'Bet processing failed: {str(e)}'})
+        logging.error(f"Dice bet processing error: {e}")
+
+@socketio.on('place_bet')
+def handle_place_bet(data):
+    """Handle bet placement request"""
+    try:
+        amount = float(data.get('amount', 1.0))
+        target = float(data.get('target', 50.0))
+        condition = data.get('condition', 'under')
+        demo_mode = data.get('demo_mode', dashboard_state['demo_mode'])
+        
+        if demo_mode:
+            # Simulate bet in demo mode
+            import random
+            import time
+            
+            # Simulate dice roll
+            result = random.uniform(0, 100)
+            
+            # Calculate if won
+            won = (condition == 'under' and result < target) or (condition == 'over' and result > target)
+            
+            # Calculate payout
+            if condition == 'under':
+                multiplier = 99.0 / target
+            else:
+                multiplier = 99.0 / (100 - target)
+                
+            payout = amount * multiplier if won else 0
+            
+            # Update demo balance
+            dashboard_state['live_stats']['total_bets'] += 1
+            if won:
+                dashboard_state['live_stats']['successful_bets'] += 1
+                dashboard_state['live_stats']['current_bankroll'] += payout - amount
+                dashboard_state['live_stats']['total_profit'] += payout - amount
+            else:
+                dashboard_state['live_stats']['current_bankroll'] -= amount
+                dashboard_state['live_stats']['total_profit'] -= amount
+            
+            # Calculate win rate
+            if dashboard_state['live_stats']['total_bets'] > 0:
+                dashboard_state['live_stats']['win_rate'] = (
+                    dashboard_state['live_stats']['successful_bets'] / 
+                    dashboard_state['live_stats']['total_bets'] * 100
+                )
+            
+            # Emit result
+            bet_result = {
+                'demo': True,
+                'result': round(result, 2),
+                'target': target,
+                'condition': condition,
+                'amount': amount,
+                'payout': payout,
+                'won': won,
+                'multiplier': multiplier,
+                'balance': dashboard_state['live_stats']['current_bankroll']
+            }
+            
+            emit('bet_result', bet_result)
+            emit('balance_update', {'balance': dashboard_state['live_stats']['current_bankroll']})
+            
+            logging.info(f"Demo bet: {amount} {condition} {target} = {result} ({'WON' if won else 'LOST'})")
+            
+        else:
+            # Place real bet (would need actual Stake API integration)
+            emit('bet_result', {'error': 'Real money betting not yet implemented'})
+            logging.warning("Real money betting attempted but not yet implemented")
+            
+    except Exception as e:
+        emit('bet_result', {'error': str(e)})
+        logging.error(f"Bet placement error: {e}")
+
+def initialize_stake_api():
+    """Initialize Stake API connection"""
+    try:
+        api_key = os.getenv('STAKE_API_KEY')
+        if api_key:
+            stake_api = RealStakeAPI(api_key)
+            return stake_api
+        return None
+    except Exception as e:
+        logging.error(f"Failed to initialize Stake API: {e}")
+        return None
+
+@socketio.on('update_settings')
+def handle_update_settings(data):
+    """Handle settings update request"""
+    try:
+        if 'bet_interval' in data:
+            interval = int(data['bet_interval'])
+            if 2 <= interval <= 60:  # Validate interval between 2-60 seconds
+                dashboard_state['bet_interval'] = interval
+                emit('settings_updated', {'bet_interval': interval, 'status': 'success'})
+                logging.info(f"Bet interval updated to {interval} seconds")
+            else:
+                emit('settings_updated', {'error': 'Bet interval must be between 2-60 seconds'})
+                
+        if 'demo_mode' in data:
+            dashboard_state['demo_mode'] = data['demo_mode']
+            emit('mode_switched', {'demo_mode': dashboard_state['demo_mode']})
+            logging.info(f"Mode switched to {'demo' if dashboard_state['demo_mode'] else 'real'}")
+            
+    except Exception as e:
+        emit('settings_updated', {'error': str(e)})
+        logging.error(f"Settings update error: {e}")
+
+# Track session start time
+session_start_time = time.time()
 
 if __name__ == '__main__':
     # Set up logging

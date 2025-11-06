@@ -17,11 +17,15 @@ import logging
 import numpy as np
 import time
 import requests
+import os
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from datetime import datetime
 import hmac
 import hashlib
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -185,8 +189,10 @@ class SupremeBedrockBot:
         self.market_analyzer = MarketAnalyzer()
         self.strategy_engine = AdvancedStrategyEngine()
         
-        # Model configuration
-        self.model_id = "anthropic.claude-3-sonnet-20240229-v1:0"  # Best Bedrock model
+        # Model configuration from environment
+        self.model_id = os.getenv('BEDROCK_MODEL_ID', "anthropic.claude-3-sonnet-20240229-v1:0")
+        self.max_tokens = int(os.getenv('BEDROCK_MAX_TOKENS', 2096))
+        self.temperature = float(os.getenv('BEDROCK_TEMPERATURE', 0.7))
         
         logger.info("🤖 Supreme Bedrock Bot initialized")
     

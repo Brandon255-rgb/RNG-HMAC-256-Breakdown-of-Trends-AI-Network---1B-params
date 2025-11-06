@@ -2,7 +2,7 @@
 """
 STAKE ORACLE v10 — PRETRAINING PHASE
 ====================================
-Dataset: 5,000,000 HMAC-SHA256 Dice Rolls (Simulated Stake RNG)
+Dataset: 10,000,000 HMAC-SHA256 Dice Rolls (Simulated Stake RNG)
 Goal: Learn universal chaos fingerprints across seeds
 Output: stake_oracle_pretrained.pth
 
@@ -180,7 +180,7 @@ def pretrain_oracle():
     criterion = nn.MSELoss()
     
     # Training loop
-    print(f"\n🔥 PRETRAINING ON 5M ENTROPY STREAMS...")
+    print(f"\n🔥 PRETRAINING ON 10M ENTROPY STREAMS...")
     print("=" * 60)
     
     model.train()

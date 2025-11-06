@@ -55,7 +55,7 @@ class BedrockAIBrain:
             aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
         )
         
-        self.model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
+        self.model_id = os.getenv('BEDROCK_MODEL_ID', "anthropic.claude-3-sonnet-20240229-v1:0")
         self.system_prompt = self._create_system_prompt()
         self.decision_history = []
         self.learning_memory = []

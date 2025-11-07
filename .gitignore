@@ -4,3 +4,8 @@ __pycache__/
 .env
 App/.env
 *.env
+
+# Large data files
+*.u16
+rolls_1e9.u16
+logic controllers (old models)/

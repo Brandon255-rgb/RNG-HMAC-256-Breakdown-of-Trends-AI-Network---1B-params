@@ -102,6 +102,7 @@
       "stake_api_key": "YOUR_STAKE_API_KEY",
       "openrouter_api_key": "YOUR_OPENROUTER_API_KEY"
     },
+
     "connection_settings": {
       "timeout_seconds": 30,
       "retry_attempts": 3,

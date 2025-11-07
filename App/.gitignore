@@ -51,4 +51,4 @@ Thumbs.db
 
 
 # configs
-guardrails.json
+*.json

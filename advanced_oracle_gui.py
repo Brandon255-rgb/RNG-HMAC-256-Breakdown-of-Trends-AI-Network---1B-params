@@ -33,6 +33,13 @@ import os
 from dotenv import load_dotenv
 
 # Import our systems
+# Add App directory to path for imports
+import sys
+import os
+app_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'App')
+if app_dir not in sys.path:
+    sys.path.insert(0, app_dir)
+
 from bedrock_ai_brain import BedrockAIBrain, BettingContext, AIDecision
 from demo_analysis_system import DemoAnalysisSystem
 from supreme_bedrock_bot import SupremeBedrockBot, BettingDecision

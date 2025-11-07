@@ -30,7 +30,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize Flask app with SocketIO
-app = Flask(__name__, template_folder='../templates', static_folder='../static')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SECRET_KEY'] = 'supreme_betting_engine_2024'
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 

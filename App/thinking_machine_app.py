@@ -134,15 +134,15 @@ class StakeAPIIntegration:
             'total_bets': 67890
         }
 
-class XAIIntegration:
-    """Integration with xAI API for enhanced intelligence"""
+class OpenRouterIntegration:
+    """Integration with OpenRouter API for enhanced intelligence"""
     
     def __init__(self, api_key: str = None):
-        self.api_key = api_key or "YOUR_XAI_API_KEY"
-        self.base_url = "https://api.x.ai/v1"
+        self.api_key = api_key or os.getenv('OPEN_ROUTER_API_KEY', "YOUR_OPENROUTER_API_KEY")
+        self.base_url = "https://openrouter.ai/api/v1"
         self.session = requests.Session()
         
-        if self.api_key and self.api_key != "YOUR_XAI_API_KEY":
+        if self.api_key and self.api_key != "YOUR_OPENROUTER_API_KEY":
             self.session.headers.update({
                 'Authorization': f'Bearer {self.api_key}',
                 'Content-Type': 'application/json'
@@ -251,13 +251,13 @@ class ThinkingMachine:
             self.stake_api = StakeAPIIntegration(stake_key)
             thinking_machine_state['api_connections']['stake'] = self.stake_api.test_connection()
         
-        # Initialize xAI API  
-        if config.get('api_integration', {}).get('xai_api_enabled', True):
-            xai_key = config.get('api_integration', {}).get('authentication', {}).get('xai_api_key')
-            self.xai_api = XAIIntegration(xai_key)
-            thinking_machine_state['api_connections']['xai'] = self.xai_api.test_connection()
+        # Initialize OpenRouter API  
+        if config.get('api_integration', {}).get('openrouter_api_enabled', True):
+            openrouter_key = config.get('api_integration', {}).get('authentication', {}).get('openrouter_api_key', os.getenv('OPEN_ROUTER_API_KEY'))
+            self.openrouter_api = OpenRouterIntegration(openrouter_key)
+            thinking_machine_state['api_connections']['openrouter'] = self.openrouter_api.test_connection()
         
-        logger.info(f"🔗 API Connections: Stake={thinking_machine_state['api_connections']['stake']}, xAI={thinking_machine_state['api_connections']['xai']}")
+        logger.info(f"🔗 API Connections: Stake={thinking_machine_state['api_connections']['stake']}, OpenRouter={thinking_machine_state['api_connections']['openrouter']}")
     
     async def get_supreme_prediction(self, recent_rolls: List[float], 
                                    server_hash: str = None, client_seed: str = None, 

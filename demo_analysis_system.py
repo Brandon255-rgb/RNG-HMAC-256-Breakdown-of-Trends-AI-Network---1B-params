@@ -19,6 +19,13 @@ from dataclasses import dataclass
 import requests
 from collections import deque
 
+# Add App directory to path for imports
+import sys
+import os
+app_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'App')
+if app_dir not in sys.path:
+    sys.path.insert(0, app_dir)
+
 from bedrock_ai_brain import BedrockAIBrain, BettingContext, AIDecision
 from live_demo_oracle import LiveOracle
 from oracle_support_utils import detect_streaks, shannon_entropy, analyze_tda_holes

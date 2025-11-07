@@ -226,6 +226,13 @@ import hmac
 import hashlib
 from typing import Dict, List, Any, Optional
 
+# Add App directory to path for imports
+import sys
+import os
+app_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'App')
+if app_dir not in sys.path:
+    sys.path.insert(0, app_dir)
+
 # Import our AI systems
 from bedrock_ai_brain import BedrockAIBrain, BettingContext, AIDecision
 from supreme_bedrock_bot import SupremeBedrockBot, BettingDecision, MarketConditions

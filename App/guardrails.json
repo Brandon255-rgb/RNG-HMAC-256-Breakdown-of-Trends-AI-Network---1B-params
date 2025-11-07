@@ -100,7 +100,7 @@
       "aws_access_key": "YOUR_AWS_ACCESS_KEY",
       "aws_secret_key": "YOUR_AWS_SECRET_KEY",
       "stake_api_key": "YOUR_STAKE_API_KEY",
-      "xai_api_key": "YOUR_XAI_API_KEY"
+      "openrouter_api_key": "YOUR_OPENROUTER_API_KEY"
     },
     "connection_settings": {
       "timeout_seconds": 30,

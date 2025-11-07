@@ -242,7 +242,7 @@ from oracle_support_utils import detect_streaks, shannon_entropy, analyze_tda_ho
 from demo_analysis_system import DemoAnalysisSystem, DemoRoll, SeedAnalysis
 
 # Configure Flask application
-app = Flask(__name__, template_folder='.', static_folder='static')
+app = Flask(__name__, template_folder='App/templates', static_folder='App/static')
 app.config['SECRET_KEY'] = 'supreme_oracle_main_2025'
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 

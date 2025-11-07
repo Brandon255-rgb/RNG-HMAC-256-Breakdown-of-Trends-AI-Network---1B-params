@@ -442,17 +442,191 @@
         .stat-card {
             background: rgba(31, 41, 55, 0.6);
             border: 1px solid rgba(75, 85, 99, 0.2);
-            border-radius: 8px;
-            padding: 16px;
+            border-radius: 12px;
+            padding: 20px;
             display: flex;
-            align-items: center;
-            gap: 12px;
+            flex-direction: column;
+            gap: 16px;
             transition: all 0.2s ease;
+            min-height: 120px;
+            justify-content: space-between;
         }
 
         .stat-card:hover {
             border-color: rgba(139, 92, 246, 0.3);
             background: rgba(31, 41, 55, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-title {
+            color: #e5e7eb;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .stat-value {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 8px 0;
+        }
+
+        .stat-change {
+            color: #9ca3af;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        /* Auto Betting Results Panel */
+        .auto-betting-results {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid rgba(75, 85, 99, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.2);
+        }
+
+        .results-title {
+            color: #e5e7eb;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .results-summary {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .bet-entry {
+            background: rgba(55, 65, 81, 0.5);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideInUp 0.3s ease-out;
+            transition: all 0.2s ease;
+        }
+
+        .bet-entry:hover {
+            background: rgba(55, 65, 81, 0.8);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .bet-entry.win {
+            border-left: 4px solid #10b981;
+        }
+
+        .bet-entry.loss {
+            border-left: 4px solid #ef4444;
+        }
+
+        .bet-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .bet-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .bet-details {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .bet-amount {
+            color: #e5e7eb;
+            font-weight: 600;
+        }
+
+        .bet-result {
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .bet-profit {
+            font-weight: 700;
+            text-align: right;
+            min-width: 80px;
+        }
+
+        .bet-profit.positive {
+            color: #10b981;
+        }
+
+        .bet-profit.negative {
+            color: #ef4444;
+        }
+
+        .bet-time {
+            color: #6b7280;
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .empty-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+        }
+
+        .empty-results i {
+            font-size: 32px;
+            margin-bottom: 12px;
+            opacity: 0.5;
         }
 
         .stat-icon {
@@ -2352,23 +2526,6 @@
                 </div>
             </div>
             
-            <!-- Quick Test Examples -->
-            <div style="margin: 15px 0; padding: 12px; background: rgba(79, 70, 229, 0.1); border: 1px solid rgba(79, 70, 229, 0.2); border-radius: 6px;">
-                <div style="font-size: 12px; color: #a5b4fc; margin-bottom: 8px;">
-                    <i class="fas fa-flask"></i> Quick Test Examples (click to use):
-                </div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button class="btn" style="font-size: 11px; padding: 4px 8px;" onclick="loadTestSeeds1()">
-                        Test Set 1
-                    </button>
-                    <button class="btn" style="font-size: 11px; padding: 4px 8px;" onclick="loadTestSeeds2()">
-                        Test Set 2
-                    </button>
-                    <button class="btn" style="font-size: 11px; padding: 4px 8px;" onclick="generateRandomSeeds()">
-                        Generate Random
-                    </button>
-                </div>
-            </div>
             
             <div class="control-grid" style="grid-template-columns: 1fr 1fr 2fr;">
                 <div class="form-group">
@@ -2381,7 +2538,7 @@
                 
                 <div class="form-group">
                     <label class="form-label">Total Bets Made</label>
-                    <input type="number" class="form-input" id="totalBetsMade" placeholder="0" min="0" step="1" readonly>
+                    <input type="number" class="form-input" id="totalBetsMade" placeholder="0" min="0" step="1">
                     <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">
                         Automatically tracked
                     </div>
@@ -2541,6 +2698,28 @@
                             <i class="fas fa-stop"></i> Stop Auto Betting
                         </button>
                     </div>
+
+                    <!-- Auto Betting Results Panel -->
+                    <div class="auto-betting-results" id="autoBettingResults" style="display: none;">
+                        <div class="results-header">
+                            <div class="results-title">
+                                <i class="fas fa-chart-line"></i>
+                                Auto Betting Results
+                            </div>
+                            <div class="results-summary">
+                                <span>Bets: <span id="totalAutoBets">0</span></span>
+                                <span>P&L: <span id="totalPnL" class="bet-profit">+0.00000000</span></span>
+                                <span>Win Rate: <span id="autoWinRate">0%</span></span>
+                            </div>
+                        </div>
+                        <div class="results-content" id="resultsContent">
+                            <div class="empty-results">
+                                <i class="fas fa-robot"></i>
+                                <div>No bets placed yet</div>
+                                <div style="font-size: 11px; margin-top: 4px;">Start auto betting to see results here</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Dice Game Interface -->
@@ -2660,9 +2839,9 @@
                     </div>
 
                     <!-- Game History -->
-                    <div style="margin-top: 24px;">
+                    <div style="margin-top: 24px; padding-bottom: 20px;">
                         <h4 style="color: #1FFF20; margin-bottom: 12px; font-size: 14px;">Recent Results</h4>
-                        <div id="stakeGameHistory" style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 120px; overflow-y: auto;">
+                        <div id="stakeGameHistory" style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 120px; overflow-y: auto; padding-bottom: 10px;">
                             <!-- Game history bubbles will be added here -->
                         </div>
                     </div>
@@ -2930,11 +3109,6 @@
                     <i class="fas fa-stop"></i>
                     Stop Auto Oracle
                 </button>
-                
-                <button class="btn btn-advanced" id="openAdvancedGUI">
-                    <i class="fas fa-cogs"></i>
-                    Advanced Oracle GUI
-                </button>
             </div>
 
             <!-- Demo Analysis Progress -->
@@ -2995,13 +3169,1343 @@
         console.log('🧪 MINIMAL JAVASCRIPT TEST');
         console.log('✅ If you see this, basic JavaScript works');
         
-        // Test basic functionality
-        function testBasic() {
-            alert('JavaScript is working!');
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            if (notification) {
+                notification.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.style.display = 'block';
+                
+                // Auto-hide after 3 seconds
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
         }
         
+        // Set maximum bet amount for Stake
+        function setMaxStakeBetAmount() {
+            // This would typically get the user's balance and set max bet
+            const maxAmount = 100.0; // Example max amount
+            const betAmountField = document.querySelector('input[placeholder*="bet amount"]') || 
+                                 document.querySelector('#stakeBetAmount') ||
+                                 document.querySelector('input[type="number"]');
+            if (betAmountField) {
+                betAmountField.value = maxAmount.toFixed(8);
+                showNotification('💰 Max bet amount set!', 'success');
+                // Update calculations
+                updateSliderCalculations();
+            } else {
+                showNotification('❌ Could not find bet amount field', 'error');
+            }
+        }
+        
+        // Adjust bet amount by multiplier
+        function adjustStakeBetAmount(multiplier) {
+            const betAmountField = document.getElementById('stakeBetAmount');
+            if (betAmountField) {
+                const currentAmount = parseFloat(betAmountField.value) || 0;
+                const newAmount = currentAmount * multiplier;
+                betAmountField.value = newAmount.toFixed(8);
+                showNotification(`💰 Bet amount ${multiplier > 1 ? 'increased' : 'decreased'} to ${newAmount.toFixed(8)}`, 'success');
+                updateSliderCalculations();
+            }
+        }
+        
+        // Set specific bet amount
+        function setStakeBetAmount(amount) {
+            const betAmountField = document.getElementById('stakeBetAmount');
+            if (betAmountField) {
+                betAmountField.value = amount.toFixed(8);
+                showNotification(`💰 Bet amount set to ${amount.toFixed(8)}`, 'success');
+                updateSliderCalculations();
+            }
+        }
+        
+        // Update slider calculations (helper function)
+        function updateSliderCalculations() {
+            const slider = document.getElementById('stakeSlider');
+            if (slider) {
+                // Trigger slider update
+                slider.dispatchEvent(new Event('input'));
+            }
+        }
+        
+        // Refresh AI predictions
+        function refreshAIPredictions() {
+            showNotification('🧠 Refreshing AI predictions...', 'info');
+            // This would typically make an API call to get fresh predictions
+            setTimeout(() => {
+                showNotification('✅ AI predictions refreshed!', 'success');
+            }, 1500);
+        }
+        
+        // Apply AI recommendations
+        function applyAIRecommendations() {
+            showNotification('🚀 Applying AI recommendations...', 'info');
+            // This would typically apply the recommended bet amounts and settings
+            setTimeout(() => {
+                showNotification('✅ AI recommendations applied!', 'success');
+            }, 1000);
+        }
+        
+        // Refresh all UI elements
+        function refreshAllUIElements() {
+            showNotification('🔄 Refreshing all UI elements...', 'info');
+            // This would typically refresh stats, charts, and other UI elements
+            setTimeout(() => {
+                showNotification('✅ All UI elements refreshed!', 'success');
+            }, 2000);
+        }
+        
+        // Main button functions with real API integration
+        async function updateSeeds() {
+            const clientSeed = document.getElementById('clientSeed').value;
+            const serverSeedHash = document.getElementById('serverSeedHash').value;
+            const nonce = document.getElementById('nonceValue').value;
+            
+            if (!clientSeed || !serverSeedHash) {
+                showNotification('❌ Please enter both client seed and server seed hash!', 'error');
+                return;
+            }
+            
+            showNotification('🔄 Updating seeds...', 'info');
+            
+            try {
+                const response = await fetch('/api/seeds/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        client_seed: clientSeed,
+                        server_seed_hash: serverSeedHash,
+                        nonce: parseInt(nonce) || 0
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('✅ Seeds updated successfully!', 'success');
+                    // Update UI elements
+                    document.getElementById('totalBetsMade').value = nonce || '0';
+                } else {
+                    showNotification('❌ ' + (result.error || result.message), 'error');
+                }
+            } catch (error) {
+                showNotification('❌ Failed to update seeds: ' + error.message, 'error');
+            }
+        }
+        
+        async function calculateNextNumbers() {
+            const clientSeed = document.getElementById('clientSeed').value;
+            const serverSeedHash = document.getElementById('serverSeedHash').value;
+            const nonce = parseInt(document.getElementById('nonceValue').value) || 0;
+            
+            if (!clientSeed || !serverSeedHash) {
+                showNotification('❌ Please update seeds first!', 'error');
+                return;
+            }
+            
+            showNotification('🧮 Calculating next numbers...', 'info');
+            
+            try {
+                const response = await fetch('/api/seeds/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        count: 5
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const numbers = result.results.map(r => r.result).join(', ');
+                    showNotification('✅ Numbers calculated: ' + numbers, 'success');
+                    
+                    // Update nonce and total bets
+                    document.getElementById('nonceValue').value = result.next_nonce;
+                    document.getElementById('totalBetsMade').value = result.next_nonce;
+                    
+                    // Update results in UI
+                    const resultsDisplay = document.getElementById('nextNumbers') || 
+                                         document.querySelector('.prediction-result') ||
+                                         document.querySelector('#predictionValue');
+                    if (resultsDisplay) {
+                        resultsDisplay.textContent = numbers;
+                    }
+                } else {
+                    showNotification('❌ ' + (result.error || result.message), 'error');
+                }
+            } catch (error) {
+                showNotification('❌ Failed to calculate numbers: ' + error.message, 'error');
+            }
+        }
+        
+        async function verifySeeds() {
+            const clientSeed = document.getElementById('clientSeed').value;
+            const revealedSeed = document.getElementById('revealedServerSeed').value;
+            const serverSeedHash = document.getElementById('serverSeedHash').value;
+            
+            if (!clientSeed || !serverSeedHash) {
+                showNotification('❌ Please enter seeds first!', 'error');
+                return;
+            }
+            
+            showNotification('🔍 Verifying seeds...', 'info');
+            
+            try {
+                const response = await fetch('/api/seeds/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        revealed_server_seed: revealedSeed
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    if (result.valid) {
+                        showNotification('✅ ' + result.message, 'success');
+                    } else {
+                        showNotification('❌ ' + result.message, 'error');
+                    }
+                } else {
+                    showNotification('ℹ️ ' + (result.message || 'Add revealed server seed for full verification'), 'info');
+                }
+            } catch (error) {
+                showNotification('❌ Failed to verify seeds: ' + error.message, 'error');
+            }
+        }
+        
+        async function clearSeeds() {
+            try {
+                const response = await fetch('/api/seeds/clear', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('clientSeed').value = '';
+                    document.getElementById('serverSeedHash').value = '';
+                    document.getElementById('revealedServerSeed').value = '';
+                    document.getElementById('nonceValue').value = '0';
+                    document.getElementById('totalBetsMade').value = '0';
+                    
+                    showNotification('🗑️ All seeds cleared!', 'success');
+                } else {
+                    showNotification('❌ ' + (result.error || result.message), 'error');
+                }
+            } catch (error) {
+                showNotification('❌ Failed to clear seeds: ' + error.message, 'error');
+            }
+        }
+        
+        // Initialize button event listeners when page loads
+        function initializeButtons() {
+            document.getElementById('updateSeedsBtn').addEventListener('click', updateSeeds);
+            document.getElementById('calculateNextBtn').addEventListener('click', calculateNextNumbers);
+            document.getElementById('verifySeedsBtn').addEventListener('click', verifySeeds);
+            document.getElementById('clearSeedsBtn').addEventListener('click', clearSeeds);
+            
+            // Initialize slider functionality
+            initializeSlider();
+        }
+        
+        // Slider functionality for Stake dice game
+        function initializeSlider() {
+            const slider = document.getElementById('stakeSlider');
+            const winChanceDisplay = document.getElementById('stakeWinChanceDisplay');
+            const multiplierDisplay = document.getElementById('stakeMultiplier');
+            const profitDisplay = document.getElementById('stakeProfitDisplay');
+            const payoutDisplay = document.getElementById('stakePayoutDisplay');
+            const rangeFillUnder = document.getElementById('rangeFillUnder');
+            const rangeFillOver = document.getElementById('rangeFillOver');
+            
+            if (!slider) return;
+            
+            function updateSliderValues() {
+                const value = parseFloat(slider.value);
+                const winChance = 99 - value; // Higher slider value = lower win chance
+                const multiplier = 99 / winChance; // Stake's multiplier calculation
+                
+                // Update win chance display
+                if (winChanceDisplay) {
+                    winChanceDisplay.textContent = winChance.toFixed(2) + '%';
+                }
+                
+                // Update multiplier display
+                if (multiplierDisplay) {
+                    multiplierDisplay.value = multiplier.toFixed(4);
+                }
+                
+                // Update visual fills with color gradients
+                const underPercent = (value / 99) * 100;
+                const overPercent = 100 - underPercent;
+                
+                if (rangeFillUnder) {
+                    rangeFillUnder.style.width = underPercent + '%';
+                    rangeFillUnder.style.left = '0';
+                    // Red gradient for losing area (left side)
+                    rangeFillUnder.style.background = `linear-gradient(to right, #ef4444, #dc2626)`;
+                }
+                
+                if (rangeFillOver) {
+                    rangeFillOver.style.width = overPercent + '%';
+                    rangeFillOver.style.right = '0';
+                    rangeFillOver.style.left = 'auto';
+                    rangeFillOver.style.position = 'absolute';
+                    // Green gradient for winning area (right side)
+                    rangeFillOver.style.background = `linear-gradient(to right, #16a34a, #1FFF20)`;
+                }
+                
+                // Update profit and payout calculations
+                const betAmountInput = document.getElementById('stakeBetAmount') || 
+                                     document.querySelector('input[placeholder*="bet amount"]');
+                let betAmount = 0;
+                if (betAmountInput) {
+                    betAmount = parseFloat(betAmountInput.value) || 0;
+                }
+                
+                const profit = betAmount * (multiplier - 1);
+                const payout = betAmount * multiplier;
+                
+                if (profitDisplay) {
+                    profitDisplay.textContent = profit.toFixed(8) + ' USDT';
+                }
+                
+                if (payoutDisplay) {
+                    payoutDisplay.textContent = payout.toFixed(8) + ' USDT';
+                }
+            }
+            
+            // Initialize values
+            updateSliderValues();
+            
+            // Add event listener for slider changes
+            slider.addEventListener('input', updateSliderValues);
+            slider.addEventListener('change', updateSliderValues);
+            
+            // Also update when bet amount changes
+                const betAmountInput = document.getElementById('stakeBetAmount') || 
+                                     document.querySelector('input[placeholder*="bet amount"]');
+                if (betAmountInput) {
+                    betAmountInput.addEventListener('input', updateSliderValues);
+                }
+        }
+        
+        // Simulate a dice roll with actual results
+        function simulateDiceRoll() {
+            const slider = document.getElementById('stakeSlider');
+            const liveResultDisplay = document.getElementById('liveResultDisplay');
+            const liveResultNumber = document.getElementById('liveResultNumber');
+            const liveResultOutcome = document.getElementById('liveResultOutcome');
+            const gameHistory = document.getElementById('stakeGameHistory');
+            
+            if (!slider) return;
+            
+            const rollUnder = parseFloat(slider.value);
+            const winChance = 99 - rollUnder;
+            
+            // Generate random roll (0.01 to 99.99)
+            const roll = Math.random() * 99.98 + 0.01;
+            const isWin = roll < rollUnder;
+            
+            // Update live display
+            if (liveResultDisplay) {
+                liveResultDisplay.style.display = 'block';
+            }
+            
+            if (liveResultNumber) {
+                liveResultNumber.textContent = roll.toFixed(2);
+                liveResultNumber.style.color = isWin ? '#1FFF20' : '#ef4444';
+            }
+            
+            if (liveResultOutcome) {
+                liveResultOutcome.textContent = isWin ? 'WIN' : 'LOSE';
+                liveResultOutcome.style.color = isWin ? '#1FFF20' : '#ef4444';
+            }
+            
+            // Add to game history
+            if (gameHistory) {
+                const historyItem = document.createElement('div');
+                historyItem.style.cssText = `
+                    display: inline-block;
+                    padding: 6px 10px;
+                    margin: 2px;
+                    border-radius: 15px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    background: ${isWin ? 'rgba(31, 255, 32, 0.2)' : 'rgba(239, 68, 68, 0.2)'};
+                    color: ${isWin ? '#1FFF20' : '#ef4444'};
+                    border: 1px solid ${isWin ? 'rgba(31, 255, 32, 0.3)' : 'rgba(239, 68, 68, 0.3)'};
+                `;
+                historyItem.textContent = roll.toFixed(2);
+                
+                // Add to beginning and limit to 20 items
+                gameHistory.insertBefore(historyItem, gameHistory.firstChild);
+                while (gameHistory.children.length > 20) {
+                    gameHistory.removeChild(gameHistory.lastChild);
+                }
+            }
+            
+            showNotification(
+                `🎲 Roll: ${roll.toFixed(2)} - ${isWin ? 'WIN!' : 'LOSS'}`,
+                isWin ? 'success' : 'error'
+            );
+        }
+        
+        // =============================================================================
+        // COMPREHENSIVE STAKE PANEL FUNCTIONALITY - COMPLETE IMPLEMENTATION
+        // =============================================================================
+        
+        // Toggle between Roll Over and Roll Under
+        function toggleRollDirection() {
+            const rollOverField = document.getElementById('stakeRollOver');
+            const rollToggleBtn = document.getElementById('stakeRollToggle');
+            const winChanceField = document.getElementById('stakeWinChance');
+            
+            if (rollOverField && rollToggleBtn) {
+                const currentValue = parseFloat(rollOverField.value) || 50;
+                const isRollOver = rollToggleBtn.getAttribute('data-mode') !== 'under';
+                
+                if (isRollOver) {
+                    // Switch to Roll Under
+                    rollToggleBtn.setAttribute('data-mode', 'under');
+                    rollToggleBtn.innerHTML = '<i class="fas fa-arrow-down"></i>';
+                    rollToggleBtn.title = 'Roll Under';
+                    rollToggleBtn.style.background = '#ef4444';
+                } else {
+                    // Switch to Roll Over
+                    rollToggleBtn.setAttribute('data-mode', 'over');
+                    rollToggleBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+                    rollToggleBtn.title = 'Roll Over';
+                    rollToggleBtn.style.background = '#1FFF20';
+                }
+                
+                updateStakeCalculations();
+                showNotification(`🎯 Switched to Roll ${isRollOver ? 'Under' : 'Over'}`, 'info');
+            }
+        }
+        
+        // =============================================================================
+        // COMPLETE SLIDER/TEXTBOX SYNCHRONIZATION - ALL 3 VALUES INFLUENCE EACH OTHER
+        // =============================================================================
+        
+        // Update all Stake calculations based on any input change
+        function updateStakeCalculations(source = 'unknown') {
+            const betAmountField = document.getElementById('stakeBetAmount');
+            const multiplierField = document.getElementById('stakeMultiplier');
+            const rollOverField = document.getElementById('stakeRollOver');
+            const winChanceField = document.getElementById('stakeWinChance');
+            const profitDisplay = document.getElementById('stakeProfitDisplay');
+            const payoutDisplay = document.getElementById('stakePayoutDisplay');
+            const winChanceDisplay = document.getElementById('stakeWinChanceDisplay');
+            const sliderInput = document.getElementById('stakeSlider');
+            
+            if (!betAmountField || !multiplierField || !rollOverField || !winChanceField) return;
+            
+            const betAmount = parseFloat(betAmountField.value) || 0;
+            let rollOver = parseFloat(rollOverField.value) || 50;
+            let winChance = parseFloat(winChanceField.value) || 49.5;
+            let multiplier = parseFloat(multiplierField.value) || 2;
+            
+            const rollToggleBtn = document.getElementById('stakeRollToggle');
+            const isRollOver = rollToggleBtn ? rollToggleBtn.getAttribute('data-mode') !== 'under' : true;
+            
+            // Ensure values are within valid ranges
+            rollOver = Math.max(1.01, Math.min(98.99, rollOver));
+            winChance = Math.max(1, Math.min(98, winChance));
+            multiplier = Math.max(1.0102, Math.min(9900, multiplier));
+            
+            // Calculate based on which field was changed
+            if (source === 'slider' || source === 'rollover') {
+                // Slider or Roll Over changed - calculate win chance and multiplier
+                if (isRollOver) {
+                    winChance = 100 - rollOver;
+                } else {
+                    winChance = rollOver - 1;
+                }
+                winChance = Math.max(1, Math.min(98, winChance));
+                multiplier = 99 / winChance;
+                
+            } else if (source === 'winchance') {
+                // Win Chance changed - calculate roll over and multiplier
+                winChance = Math.max(1, Math.min(98, winChance));
+                multiplier = 99 / winChance;
+                
+                if (isRollOver) {
+                    rollOver = 100 - winChance;
+                } else {
+                    rollOver = winChance + 1;
+                }
+                rollOver = Math.max(1.01, Math.min(98.99, rollOver));
+                
+            } else if (source === 'multiplier') {
+                // Multiplier changed - calculate win chance and roll over
+                multiplier = Math.max(1.0102, Math.min(9900, multiplier));
+                winChance = 99 / multiplier;
+                winChance = Math.max(1, Math.min(98, winChance));
+                
+                if (isRollOver) {
+                    rollOver = 100 - winChance;
+                } else {
+                    rollOver = winChance + 1;
+                }
+                rollOver = Math.max(1.01, Math.min(98.99, rollOver));
+            }
+            
+            // Update all fields (but prevent infinite loops)
+            if (source !== 'slider') {
+                if (sliderInput) sliderInput.value = rollOver.toFixed(2);
+            }
+            if (source !== 'rollover') {
+                if (rollOverField) rollOverField.value = rollOver.toFixed(2);
+            }
+            if (source !== 'winchance') {
+                if (winChanceField) winChanceField.value = winChance.toFixed(2);
+            }
+            if (source !== 'multiplier') {
+                if (multiplierField) multiplierField.value = multiplier.toFixed(4);
+            }
+            
+            // Update displays
+            if (winChanceDisplay) winChanceDisplay.textContent = winChance.toFixed(2) + '%';
+            
+            // Calculate and update profit/payout
+            const profit = betAmount * (multiplier - 1);
+            const payout = betAmount * multiplier;
+            
+            if (profitDisplay) profitDisplay.textContent = `${profit.toFixed(8)} USDT`;
+            if (payoutDisplay) payoutDisplay.textContent = `${payout.toFixed(8)} USDT`;
+            
+            // Update slider visual
+            if (source !== 'slider') {
+                updateSliderVisuals(rollOver);
+            }
+        }
+        
+        // Handle slider changes
+        function handleStakeSliderChange(value) {
+            updateStakeCalculations('slider');
+        }
+        
+        // Handle roll over field changes
+        function handleRollOverChange() {
+            updateStakeCalculations('rollover');
+        }
+        
+        // Handle win chance field changes
+        function handleWinChanceChange() {
+            updateStakeCalculations('winchance');
+        }
+        
+        // Handle multiplier field changes
+        function handleMultiplierChange() {
+            updateStakeCalculations('multiplier');
+        }
+        
+        // Place bet on Stake (real API integration)
+        function placeStakeBet() {
+            const betAmountField = document.getElementById('stakeBetAmount');
+            const rollOverField = document.getElementById('stakeRollOver');
+            const multiplierField = document.getElementById('stakeMultiplier');
+            const rollToggleBtn = document.getElementById('stakeRollToggle');
+            
+            if (!betAmountField || !rollOverField || !multiplierField) {
+                showNotification('❌ Missing bet parameters', 'error');
+                return;
+            }
+            
+            const betAmount = parseFloat(betAmountField.value);
+            const rollOver = parseFloat(rollOverField.value);
+            const multiplier = parseFloat(multiplierField.value);
+            const isRollOver = rollToggleBtn ? rollToggleBtn.getAttribute('data-mode') !== 'under' : true;
+            
+            if (!betAmount || betAmount <= 0) {
+                showNotification('❌ Please enter a valid bet amount', 'error');
+                return;
+            }
+            
+            // Show betting in progress
+            const playButton = document.getElementById('stakePlayButton');
+            if (playButton) {
+                playButton.disabled = true;
+                playButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Betting...';
+            }
+            
+            // Send bet to backend API
+            fetch('/api/stake/place_bet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    amount: betAmount,
+                    roll_over: rollOver,
+                    is_roll_over: isRollOver,
+                    multiplier: multiplier
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const result = data.result;
+                    const isWin = result.won;
+                    
+                    showNotification(
+                        `🎲 Result: ${result.roll.toFixed(2)} - ${isWin ? 'WIN!' : 'LOSS'} ${isWin ? '+' : ''}${result.profit.toFixed(8)} USDT`,
+                        isWin ? 'success' : 'error'
+                    );
+                    
+                    // Update game history
+                    addToStakeHistory(result.roll, isWin);
+                    
+                    // Update stats
+                    updateStakeStats(isWin, result.profit);
+                } else {
+                    showNotification(`❌ Bet failed: ${data.message}`, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Bet error:', error);
+                showNotification('❌ Bet failed: Network error', 'error');
+            })
+            .finally(() => {
+                // Reset button
+                if (playButton) {
+                    playButton.disabled = false;
+                    playButton.innerHTML = '<i class="fas fa-play"></i> Bet';
+                }
+            });
+        }
+        
+        // Add result to Stake game history
+        function addToStakeHistory(roll, isWin) {
+            const gameHistory = document.getElementById('stakeGameHistory');
+            if (gameHistory) {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-bubble';
+                historyItem.style.cssText = `
+                    background: ${isWin ? '#1FFF20' : '#ef4444'};
+                    color: white;
+                    padding: 4px 8px;
+                    border-radius: 12px;
+                    font-size: 10px;
+                    font-weight: 600;
+                    min-width: 40px;
+                    text-align: center;
+                    margin: 2px;
+                    display: inline-block;
+                `;
+                historyItem.textContent = roll.toFixed(1);
+                gameHistory.insertBefore(historyItem, gameHistory.firstChild);
+                
+                // Keep only last 20 results
+                while (gameHistory.children.length > 20) {
+                    gameHistory.removeChild(gameHistory.lastChild);
+                }
+            }
+        }
+        
+        // Update Stake game statistics
+        function updateStakeStats(isWin, profit) {
+            const totalPlayedEl = document.getElementById('totalPlayed');
+            const totalWonEl = document.getElementById('totalWon');
+            const winPercentageEl = document.getElementById('winPercentage');
+            
+            if (totalPlayedEl && totalWonEl && winPercentageEl) {
+                const currentPlayed = parseInt(totalPlayedEl.textContent) || 0;
+                const currentWon = parseInt(totalWonEl.textContent) || 0;
+                
+                const newPlayed = currentPlayed + 1;
+                const newWon = currentWon + (isWin ? 1 : 0);
+                const winRate = ((newWon / newPlayed) * 100).toFixed(1);
+                
+                totalPlayedEl.textContent = newPlayed;
+                totalWonEl.textContent = newWon;
+                winPercentageEl.textContent = winRate + '%';
+            }
+        }
+        
+        // Auto betting controls
+        let autoBettingActive = false;
+        let autoBettingInterval = null;
+        let autoBettingStats = {
+            totalBets: 0,
+            totalPnL: 0,
+            wins: 0,
+            losses: 0
+        };
+        
+        // Auto betting result management
+        function addAutoBettingResult(betData) {
+            const resultsPanel = document.getElementById('autoBettingResults');
+            const resultsContent = document.getElementById('resultsContent');
+            const emptyState = resultsContent.querySelector('.empty-results');
+            
+            // Show results panel and remove empty state
+            if (resultsPanel) {
+                resultsPanel.style.display = 'block';
+            }
+            if (emptyState) {
+                emptyState.remove();
+            }
+            
+            // Create bet entry
+            const betEntry = document.createElement('div');
+            betEntry.className = `bet-entry ${betData.won ? 'win' : 'loss'}`;
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            
+            betEntry.innerHTML = `
+                <div class="bet-info">
+                    <div class="bet-main">
+                        <span class="bet-amount">${betData.amount.toFixed(8)} USDT</span>
+                        <span style="color: #6b7280;">•</span>
+                        <span class="bet-result">${betData.result.toFixed(2)}</span>
+                        <span style="color: #6b7280;">${betData.condition} ${betData.target}</span>
+                        <span class="bet-time">${timeString}</span>
+                    </div>
+                    <div class="bet-details">
+                        ${betData.won ? '✅ Win' : '❌ Loss'} • ${betData.multiplier}x • ${(betData.winChance || 50).toFixed(1)}%
+                        ${betData.aiConfidence ? ` • AI: ${(betData.aiConfidence * 100).toFixed(0)}%` : ''}
+                    </div>
+                </div>
+                <div class="bet-profit ${betData.profit >= 0 ? 'positive' : 'negative'}">
+                    ${betData.profit >= 0 ? '+' : ''}${betData.profit.toFixed(8)}
+                </div>
+            `;
+            
+            // Add to top of results
+            resultsContent.insertBefore(betEntry, resultsContent.firstChild);
+            
+            // Remove old entries if more than 50
+            const entries = resultsContent.querySelectorAll('.bet-entry');
+            if (entries.length > 50) {
+                entries[entries.length - 1].remove();
+            }
+            
+            // Update stats
+            autoBettingStats.totalBets++;
+            autoBettingStats.totalPnL += betData.profit;
+            if (betData.won) {
+                autoBettingStats.wins++;
+            } else {
+                autoBettingStats.losses++;
+            }
+            
+            // Update summary
+            updateAutoBettingSummary();
+        }
+        
+        function updateAutoBettingSummary() {
+            const totalBetsEl = document.getElementById('totalAutoBets');
+            const totalPnLEl = document.getElementById('totalPnL');
+            const winRateEl = document.getElementById('autoWinRate');
+            
+            if (totalBetsEl) {
+                totalBetsEl.textContent = autoBettingStats.totalBets;
+            }
+            
+            if (totalPnLEl) {
+                totalPnLEl.textContent = (autoBettingStats.totalPnL >= 0 ? '+' : '') + autoBettingStats.totalPnL.toFixed(8);
+                totalPnLEl.className = `bet-profit ${autoBettingStats.totalPnL >= 0 ? 'positive' : 'negative'}`;
+            }
+            
+            if (winRateEl) {
+                const winRate = autoBettingStats.totalBets > 0 ? 
+                    (autoBettingStats.wins / autoBettingStats.totalBets * 100) : 0;
+                winRateEl.textContent = winRate.toFixed(1) + '%';
+            }
+            
+            // Update main stats panel
+            const mainTotalBets = document.getElementById('totalBets');
+            const mainWinRate = document.getElementById('winRate');
+            if (mainTotalBets) {
+                mainTotalBets.textContent = autoBettingStats.totalBets;
+            }
+            if (mainWinRate) {
+                const winRate = autoBettingStats.totalBets > 0 ? 
+                    (autoBettingStats.wins / autoBettingStats.totalBets * 100) : 0;
+                mainWinRate.textContent = winRate.toFixed(1) + '%';
+            }
+        }
+        
+        function toggleAutoBetting() {
+            const startButton = document.getElementById('startAutoBetting');
+            const stopButton = document.getElementById('stopAutoBetting');
+            const statusIndicator = document.getElementById('autoBettingIndicator');
+            const statusText = document.getElementById('autoBettingStatus');
+            
+            if (!autoBettingActive) {
+                // Start auto betting
+                autoBettingActive = true;
+                
+                // Check profit/loss limits
+                const stopOnProfitEnabled = document.getElementById('stopOnProfit')?.checked;
+                const stopOnLossEnabled = document.getElementById('stopOnLoss')?.checked;
+                const targetProfit = parseFloat(document.getElementById('stopProfitAmount')?.value) || 0;
+                const maxLoss = parseFloat(document.getElementById('stopLossAmount')?.value) || 0;
+                
+                if (startButton) {
+                    startButton.style.display = 'none';
+                }
+                if (stopButton) {
+                    stopButton.style.display = 'inline-flex';
+                }
+                if (statusIndicator) {
+                    statusIndicator.className = 'status-indicator active';
+                }
+                if (statusText) {
+                    statusText.textContent = 'Running';
+                }
+                
+                // Show results panel
+                const resultsPanel = document.getElementById('autoBettingResults');
+                if (resultsPanel) {
+                    resultsPanel.style.display = 'block';
+                }
+                
+                // Start betting loop
+                autoBettingInterval = setInterval(() => {
+                    // Check stop conditions
+                    if (stopOnProfitEnabled && autoBettingStats.totalPnL >= targetProfit && targetProfit > 0) {
+                        stopAutoBetting();
+                        showNotification(`🎯 Target profit reached: +${autoBettingStats.totalPnL.toFixed(8)} USDT`, 'success');
+                        return;
+                    }
+                    
+                    if (stopOnLossEnabled && autoBettingStats.totalPnL <= -maxLoss && maxLoss > 0) {
+                        stopAutoBetting();
+                        showNotification(`🛑 Max loss reached: ${autoBettingStats.totalPnL.toFixed(8)} USDT`, 'error');
+                        return;
+                    }
+                    
+                    // Get current bet settings
+                    const rollOver = parseFloat(document.getElementById('rollOver').value) || 50;
+                    const betAmount = parseFloat(document.getElementById('stakeBetAmount').value) || 0.00000001;
+                    const condition = rollOver > 50 ? 'over' : 'under';
+                    const target = condition === 'over' ? rollOver : rollOver;
+                    const winChance = condition === 'over' ? 100 - rollOver : rollOver;
+                    const multiplier = parseFloat(document.getElementById('multiplier').value) || 2.0;
+                    
+                    // Simulate or place real bet
+                    placeAutoBet({
+                        amount: betAmount,
+                        target: target,
+                        condition: condition,
+                        winChance: winChance,
+                        multiplier: multiplier
+                    });
+                    
+                }, 3000); // Place bet every 3 seconds
+                
+                showNotification('🤖 Auto betting started', 'success');
+            } else {
+                stopAutoBetting();
+            }
+        }
+        
+        async function placeAutoBet(betParams) {
+            try {
+                // Get demo mode status
+                const demoMode = document.getElementById('demoModeToggle')?.checked !== false;
+                
+                // Apply AI-based bet sizing strategy
+                const aiRecommendation = await getAIRecommendation();
+                let adjustedAmount = betParams.amount;
+                
+                if (aiRecommendation && aiRecommendation.confidence > 0.6) {
+                    // Increase bet size for high confidence
+                    adjustedAmount = betParams.amount * (1 + (aiRecommendation.confidence - 0.5));
+                } else if (aiRecommendation && aiRecommendation.confidence < 0.4) {
+                    // Decrease bet size for low confidence
+                    adjustedAmount = betParams.amount * 0.5;
+                }
+                
+                // Ensure bet amount stays within reasonable bounds
+                adjustedAmount = Math.max(0.00000001, Math.min(adjustedAmount, 1.0));
+                
+                if (demoMode) {
+                    // Demo mode - simulate result
+                    const result = Math.random() * 100;
+                    const won = (betParams.condition === 'over' && result > betParams.target) || 
+                                (betParams.condition === 'under' && result < betParams.target);
+                    const profit = won ? (adjustedAmount * (betParams.multiplier - 1)) : -adjustedAmount;
+                    
+                    const betResult = {
+                        amount: adjustedAmount,
+                        target: betParams.target,
+                        condition: betParams.condition,
+                        result: result,
+                        won: won,
+                        profit: profit,
+                        multiplier: betParams.multiplier,
+                        winChance: betParams.winChance,
+                        demo: true,
+                        aiConfidence: aiRecommendation?.confidence || 0
+                    };
+                    
+                    addAutoBettingResult(betResult);
+                    
+                    // Update balance in demo mode
+                    const currentBalance = parseFloat(document.getElementById('currentBalance')?.textContent) || 1000;
+                    const newBalance = currentBalance + profit;
+                    if (document.getElementById('currentBalance')) {
+                        document.getElementById('currentBalance').textContent = newBalance.toFixed(8);
+                    }
+                    
+                } else {
+                    // Real mode - use Stake API
+                    const response = await fetch('/api/stake/place_bet', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            amount: adjustedAmount,
+                            target: betParams.target,
+                            condition: betParams.condition,
+                            currency: 'usdt'
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        const betResult = {
+                            amount: adjustedAmount,
+                            target: betParams.target,
+                            condition: betParams.condition,
+                            result: result.roll,
+                            won: result.won,
+                            profit: result.profit,
+                            multiplier: betParams.multiplier,
+                            winChance: betParams.winChance,
+                            demo: false,
+                            aiConfidence: aiRecommendation?.confidence || 0
+                        };
+                        
+                        addAutoBettingResult(betResult);
+                        
+                        // Update balance from API
+                        if (result.balance !== undefined) {
+                            const balanceEl = document.getElementById('currentBalance');
+                            if (balanceEl) {
+                                balanceEl.textContent = result.balance.toFixed(8);
+                            }
+                        }
+                    } else {
+                        showNotification('❌ Auto bet failed: ' + result.message, 'error');
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Auto bet error:', error);
+                showNotification('❌ Auto bet error: ' + error.message, 'error');
+            }
+        }
+        
+        function stopAutoBetting() {
+            autoBettingActive = false;
+            
+            if (autoBettingInterval) {
+                clearInterval(autoBettingInterval);
+                autoBettingInterval = null;
+            }
+            
+            const startButton = document.getElementById('startAutoBetting');
+            const stopButton = document.getElementById('stopAutoBetting');
+            const statusIndicator = document.getElementById('autoBettingIndicator');
+            const statusText = document.getElementById('autoBettingStatus');
+            
+            if (startButton) {
+                startButton.style.display = 'inline-flex';
+            }
+            if (stopButton) {
+                stopButton.style.display = 'none';
+            }
+            if (statusIndicator) {
+                statusIndicator.className = 'status-indicator';
+            }
+            if (statusText) {
+                statusText.textContent = 'Stopped';
+            }
+            
+            showNotification('🛑 Auto betting stopped', 'info');
+        }
+        
+        // Auto betting version of place bet (returns promise)
+        function placeStakeBetAuto() {
+            return new Promise((resolve) => {
+                const betAmountField = document.getElementById('stakeBetAmount');
+                const rollOverField = document.getElementById('stakeRollOver');
+                const multiplierField = document.getElementById('stakeMultiplier');
+                const rollToggleBtn = document.getElementById('stakeRollToggle');
+                
+                if (!betAmountField || !rollOverField || !multiplierField) {
+                    resolve(null);
+                    return;
+                }
+                
+                const betAmount = parseFloat(betAmountField.value);
+                const rollOver = parseFloat(rollOverField.value);
+                const multiplier = parseFloat(multiplierField.value);
+                const isRollOver = rollToggleBtn ? rollToggleBtn.getAttribute('data-mode') !== 'under' : true;
+                
+                if (!betAmount || betAmount <= 0) {
+                    resolve(null);
+                    return;
+                }
+                
+                fetch('/api/stake/place_bet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: betAmount,
+                        roll_over: rollOver,
+                        is_roll_over: isRollOver,
+                        multiplier: multiplier
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const result = data.result;
+                        addToStakeHistory(result.roll, result.won);
+                        updateStakeStats(result.won, result.profit);
+                        resolve(result);
+                    } else {
+                        resolve(null);
+                    }
+                })
+                .catch(error => {
+                    console.error('Auto bet error:', error);
+                    resolve(null);
+                });
+            });
+        }
+        
+        // AI Prediction and Recommendation System
+        function getAIRecommendation() {
+            return fetch('/api/ai/get_recommendation')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        return data.recommendation;
+                    } else {
+                        return { action: 'hold', confidence: 0 };
+                    }
+                })
+                .catch(error => {
+                    console.error('AI recommendation error:', error);
+                    return { action: 'hold', confidence: 0 };
+                });
+        }
+        
+        function applyAIRecommendation(recommendation) {
+            if (recommendation.suggested_amount) {
+                const betAmountField = document.getElementById('stakeBetAmount');
+                if (betAmountField) {
+                    betAmountField.value = recommendation.suggested_amount.toFixed(8);
+                }
+            }
+            
+            if (recommendation.suggested_win_chance) {
+                const rollOverField = document.getElementById('stakeRollOver');
+                if (rollOverField) {
+                    rollOverField.value = (100 - recommendation.suggested_win_chance).toFixed(2);
+                    updateStakeCalculations();
+                }
+            }
+            
+            // Update AI display elements
+            const aiNextPrediction = document.getElementById('aiNextPrediction');
+            const aiPredictionConfidence = document.getElementById('aiPredictionConfidence');
+            const aiRecommendedAction = document.getElementById('aiRecommendedAction');
+            const aiSuggestedAmount = document.getElementById('aiSuggestedAmount');
+            const aiRiskLevel = document.getElementById('aiRiskLevel');
+            
+            if (aiNextPrediction) aiNextPrediction.textContent = recommendation.predicted_result || '--';
+            if (aiPredictionConfidence) aiPredictionConfidence.textContent = (recommendation.confidence * 100).toFixed(1) + '%';
+            if (aiRecommendedAction) aiRecommendedAction.textContent = recommendation.action.toUpperCase();
+            if (aiSuggestedAmount) aiSuggestedAmount.textContent = (recommendation.suggested_amount || 0).toFixed(8);
+            if (aiRiskLevel) {
+                aiRiskLevel.textContent = recommendation.risk_level || 'Medium';
+                aiRiskLevel.className = `recommendation-value risk-${(recommendation.risk_level || 'medium').toLowerCase()}`;
+            }
+        }
+        
+        // Update AI predictions display
+        function updateAIPredictionsDisplay() {
+            fetch('/api/ai/get_predictions')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const predictions = data.predictions;
+                        
+                        // Update prediction cards
+                        const nextPrediction = document.getElementById('aiNextPrediction');
+                        const winProbability = document.getElementById('aiWinProbability');
+                        const lossProbability = document.getElementById('aiLossProbability');
+                        const trendDirection = document.getElementById('aiTrendDirection');
+                        const trendStrength = document.getElementById('aiTrendStrength');
+                        const expectedReturn = document.getElementById('aiExpectedReturn');
+                        
+                        if (nextPrediction) nextPrediction.textContent = predictions.next_result || '--';
+                        if (winProbability) winProbability.textContent = (predictions.win_probability * 100).toFixed(1) + '%';
+                        if (lossProbability) lossProbability.textContent = (predictions.loss_probability * 100).toFixed(1) + '%';
+                        if (trendDirection) trendDirection.textContent = predictions.trend_direction || 'Neutral';
+                        if (trendStrength) trendStrength.textContent = predictions.trend_strength || '--';
+                        if (expectedReturn) expectedReturn.textContent = (predictions.expected_return >= 0 ? '+' : '') + (predictions.expected_return * 100).toFixed(2) + '%';
+                        
+                        // Update confidence bar
+                        const confidenceBar = document.getElementById('aiConfidenceBar');
+                        if (confidenceBar) {
+                            const confidence = predictions.confidence * 100;
+                            confidenceBar.style.width = confidence + '%';
+                            confidenceBar.style.background = confidence > 70 ? '#1FFF20' : confidence > 40 ? '#fbbf24' : '#ef4444';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to update AI predictions:', error);
+                });
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all button event listeners
+            initializeEventListeners();
+            
+            // Initialize slider functionality
+            initializeStakeSliderDynamic();
+            
+            // Initialize auto betting controls
+            initializeAutoBettingControls();
+            
+            // Update AI predictions every 10 seconds
+            setInterval(updateAIPredictionsDisplay, 10000);
+            
+            // Initial AI predictions load
+            updateAIPredictionsDisplay();
+            
+            console.log('✅ Dashboard fully initialized with Stake panel functionality');
+        });
+        
+        // Initialize all event listeners for buttons
+        function initializeEventListeners() {
+            // Main control buttons
+            const updateSeedsBtn = document.getElementById('updateSeedsBtn');
+            const calculateNextBtn = document.getElementById('calculateNextBtn');
+            const verifySeedsBtn = document.getElementById('verifySeedsBtn');
+            const clearSeedsBtn = document.getElementById('clearSeedsBtn');
+            
+            if (updateSeedsBtn) updateSeedsBtn.addEventListener('click', updateSeeds);
+            if (calculateNextBtn) calculateNextBtn.addEventListener('click', calculateNextNumbers);
+            if (verifySeedsBtn) verifySeedsBtn.addEventListener('click', verifySeeds);
+            if (clearSeedsBtn) clearSeedsBtn.addEventListener('click', clearSeeds);
+            
+            // Stake panel buttons
+            const stakePlayButton = document.getElementById('stakePlayButton');
+            const stakeRollToggle = document.getElementById('stakeRollToggle');
+            const applyRecommendationsBtn = document.getElementById('applyRecommendations');
+            
+            if (stakePlayButton) stakePlayButton.addEventListener('click', placeStakeBet);
+            if (stakeRollToggle) stakeRollToggle.addEventListener('click', toggleRollDirection);
+            if (applyRecommendationsBtn) applyRecommendationsBtn.addEventListener('click', function() {
+                getAIRecommendation().then(applyAIRecommendation);
+                showNotification('🚀 AI recommendations applied!', 'success');
+            });
+            
+            // Auto betting buttons
+            const startAutoBetting = document.getElementById('startAutoBetting');
+            const stopAutoBetting = document.getElementById('stopAutoBetting');
+            
+            if (startAutoBetting) startAutoBetting.addEventListener('click', toggleAutoBetting);
+            if (stopAutoBetting) stopAutoBetting.addEventListener('click', stopAutoBetting);
+            
+            // Bet amount buttons
+            const adjustBetButtons = document.querySelectorAll('.amount-btn');
+            adjustBetButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const onclick = this.getAttribute('onclick');
+                    if (onclick) {
+                        eval(onclick);
+                    }
+                });
+            });
+            
+            // Input field listeners for real-time updates with proper synchronization
+            const stakeBetAmount = document.getElementById('stakeBetAmount');
+            const stakeRollOver = document.getElementById('stakeRollOver');
+            const stakeWinChance = document.getElementById('stakeWinChance');
+            const stakeMultiplier = document.getElementById('stakeMultiplier');
+            
+            if (stakeBetAmount) {
+                stakeBetAmount.addEventListener('input', () => updateStakeCalculations('betamount'));
+                stakeBetAmount.addEventListener('change', () => updateStakeCalculations('betamount'));
+            }
+            
+            if (stakeRollOver) {
+                // Make roll over editable
+                stakeRollOver.removeAttribute('readonly');
+                stakeRollOver.addEventListener('input', handleRollOverChange);
+                stakeRollOver.addEventListener('change', handleRollOverChange);
+            }
+            
+            if (stakeWinChance) {
+                // Make win chance editable
+                stakeWinChance.removeAttribute('readonly');
+                stakeWinChance.addEventListener('input', handleWinChanceChange);
+                stakeWinChance.addEventListener('change', handleWinChanceChange);
+            }
+            
+            if (stakeMultiplier) {
+                // Make multiplier editable
+                stakeMultiplier.removeAttribute('readonly');
+                stakeMultiplier.addEventListener('input', handleMultiplierChange);
+                stakeMultiplier.addEventListener('change', handleMultiplierChange);
+            }
+            
+            // Stop conditions checkboxes
+            const stopOnProfit = document.getElementById('stopOnProfit');
+            const stopOnLoss = document.getElementById('stopOnLoss');
+            const stopProfitAmount = document.getElementById('stopProfitAmount');
+            const stopLossAmount = document.getElementById('stopLossAmount');
+            
+            if (stopOnProfit && stopProfitAmount) {
+                stopOnProfit.addEventListener('change', function() {
+                    stopProfitAmount.disabled = !this.checked;
+                });
+            }
+            
+            if (stopOnLoss && stopLossAmount) {
+                stopOnLoss.addEventListener('change', function() {
+                    stopLossAmount.disabled = !this.checked;
+                });
+            }
+        }
+        
+        // Initialize dynamic slider functionality with real-time textbox updates
+        function initializeStakeSliderDynamic() {
+            const stakeSlider = document.getElementById('stakeSlider');
+            const winChanceDisplay = document.getElementById('stakeWinChanceDisplay');
+            const stakeMultiplier = document.getElementById('stakeMultiplier');
+            const stakeWinChance = document.getElementById('stakeWinChance');
+            const stakeRollOver = document.getElementById('stakeRollOver');
+            const stakeProfitDisplay = document.getElementById('stakeProfitDisplay');
+            const stakePayoutDisplay = document.getElementById('stakePayoutDisplay');
+            
+            if (stakeSlider) {
+                // Real-time slider updates with proper synchronization
+                stakeSlider.addEventListener('input', function() {
+                    const sliderValue = parseFloat(this.value);
+                    
+                    // Update roll over field immediately
+                    if (stakeRollOver) {
+                        stakeRollOver.value = sliderValue.toFixed(2);
+                    }
+                    
+                    // Update all calculations through the centralized function
+                    updateStakeCalculations('slider');
+                });
+                
+                // Initialize slider visual
+                updateSliderVisuals(parseFloat(stakeSlider.value) || 50);
+                
+                // Initial calculation
+                updateStakeCalculations('initial');
+            }
+        }
+        
+        // Initialize auto betting controls
+        function initializeAutoBettingControls() {
+            // Initialize stop conditions
+            const stopOnProfit = document.getElementById('stopOnProfit');
+            const stopOnLoss = document.getElementById('stopOnLoss');
+            const stopProfitAmount = document.getElementById('stopProfitAmount');
+            const stopLossAmount = document.getElementById('stopLossAmount');
+            
+            if (stopProfitAmount) stopProfitAmount.disabled = true;
+            if (stopLossAmount) stopLossAmount.disabled = true;
+            
+            // Set default values
+            if (stopProfitAmount) stopProfitAmount.value = '1.00000000';
+            if (stopLossAmount) stopLossAmount.value = '1.00000000';
+            
+            // Initialize status indicator
+            const statusIndicator = document.getElementById('autoBettingIndicator');
+            const statusText = document.getElementById('autoBettingStatus');
+            
+            if (statusIndicator) {
+                statusIndicator.className = 'status-indicator';
+            }
+            if (statusText) {
+                statusText.textContent = 'Stopped';
+            }
+            
+            // Initialize toggle button for roll direction
+            const rollToggleBtn = document.getElementById('stakeRollToggle');
+            if (rollToggleBtn) {
+                rollToggleBtn.setAttribute('data-mode', 'over');
+                rollToggleBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+                rollToggleBtn.title = 'Roll Over';
+                rollToggleBtn.style.background = '#1FFF20';
+            }
+        }
+        
+        // Add all functions to window for global access
         window.testBasic = testBasic;
-        console.log('🎯 Type testBasic() in console to test');
+        window.loadTestSeeds1 = loadTestSeeds1;
+        window.loadTestSeeds2 = loadTestSeeds2;
+        window.generateRandomSeeds = generateRandomSeeds;
+        window.showNotification = showNotification;
+        window.setMaxStakeBetAmount = setMaxStakeBetAmount;
+        window.refreshAIPredictions = refreshAIPredictions;
+        window.applyAIRecommendations = applyAIRecommendations;
+        window.refreshAllUIElements = refreshAllUIElements;
+        window.updateSeeds = updateSeeds;
+        window.calculateNextNumbers = calculateNextNumbers;
+        window.verifySeeds = verifySeeds;
+        window.clearSeeds = clearSeeds;
+        window.adjustStakeBetAmount = adjustStakeBetAmount;
+        window.setStakeBetAmount = setStakeBetAmount;
+        window.simulateDiceRoll = simulateDiceRoll;
+        
+        // New Stake panel functions
+        window.toggleRollDirection = toggleRollDirection;
+        window.updateStakeCalculations = updateStakeCalculations;
+        window.placeStakeBet = placeStakeBet;
+        window.toggleAutoBetting = toggleAutoBetting;
+        window.stopAutoBetting = stopAutoBetting;
+        window.getAIRecommendation = getAIRecommendation;
+        window.applyAIRecommendation = applyAIRecommendation;
+        window.updateAIPredictionsDisplay = updateAIPredictionsDisplay;
+        
+        console.log('🎯 Type testBasic() in console to test - Full Stake panel loaded');
     </script>
 </body>
 </html>

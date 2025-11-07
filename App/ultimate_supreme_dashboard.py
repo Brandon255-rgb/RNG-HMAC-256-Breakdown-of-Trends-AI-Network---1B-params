@@ -11,6 +11,7 @@ import threading
 import time
 import json
 import logging
+import random
 from datetime import datetime, timedelta
 from typing import Dict, List, Any
 import os
@@ -671,6 +672,583 @@ def handle_disconnect_stake_api():
     dashboard_state['stake_api_connected'] = False
     emit('api_status', {'connected': False})
     logging.info("Disconnected from Stake API")
+
+@socketio.on('place_dice_bet')
+def handle_place_dice_bet(data):
+    """Handle dice bet placement via WebSocket"""
+    try:
+        bet_amount = float(data.get('amount', 0))
+        roll_under = float(data.get('rollUnder', 50))
+        
+        # Simulate dice roll
+        roll_result = random.uniform(0.01, 99.99)
+        won = roll_result < roll_under
+        
+        # Calculate multiplier and profit
+        win_chance = roll_under - 1
+        multiplier = 99 / win_chance if win_chance > 0 else 1.0
+        profit = bet_amount * (multiplier - 1) if won else -bet_amount
+        
+        # Update stats
+        dashboard_state['live_stats']['total_bets'] += 1
+        if won:
+            dashboard_state['live_stats']['successful_bets'] += 1
+        dashboard_state['live_stats']['total_profit'] += profit
+        dashboard_state['live_stats']['current_bankroll'] += profit
+        
+        emit('dice_bet_result', {
+            'roll': roll_result,
+            'won': won,
+            'profit': profit,
+            'multiplier': multiplier,
+            'stats': dashboard_state['live_stats']
+        })
+        
+    except Exception as e:
+        emit('dice_bet_error', {'message': str(e)})
+
+# =============================================================================
+# COMPREHENSIVE STAKE API ENDPOINTS - REAL INTEGRATION
+# =============================================================================
+
+@app.route('/api/stake/place_bet', methods=['POST'])
+def place_stake_bet():
+    """Place a bet on Stake dice game with real API integration"""
+    try:
+        data = request.get_json()
+        bet_amount = float(data.get('amount', 0))
+        roll_over = float(data.get('roll_over', 50))
+        is_roll_over = bool(data.get('is_roll_over', True))
+        multiplier = float(data.get('multiplier', 2.0))
+        
+        if bet_amount <= 0:
+            return jsonify({'success': False, 'message': 'Invalid bet amount'})
+        
+        # Initialize Stake API if available
+        stake_api = None
+        api_key = os.getenv('STAKE_API_KEY')
+        if api_key:
+            try:
+                from real_stake_api import RealStakeAPI
+                stake_api = RealStakeAPI(api_key)
+                if not stake_api.test_connection():
+                    stake_api = None
+            except Exception as e:
+                print(f"Stake API initialization failed: {e}")
+                stake_api = None
+        
+        if stake_api and not dashboard_state.get('demo_mode', True):
+            # Real API betting
+            try:
+                result = stake_api.place_dice_bet(
+                    amount=bet_amount,
+                    target=roll_over,
+                    condition='>' if is_roll_over else '<'
+                )
+                
+                if result.get('success'):
+                    bet_result = result['data']
+                    roll_value = bet_result.get('state', {}).get('result', 50)
+                    won = bet_result.get('payoutMultiplier', 0) > 0
+                    profit = bet_result.get('payout', 0) - bet_amount if won else -bet_amount
+                    
+                    # Update dashboard stats
+                    dashboard_state['live_stats']['total_bets'] += 1
+                    if won:
+                        dashboard_state['live_stats']['successful_bets'] += 1
+                    dashboard_state['live_stats']['total_profit'] += profit
+                    dashboard_state['live_stats']['current_bankroll'] += profit
+                    
+                    return jsonify({
+                        'success': True,
+                        'result': {
+                            'roll': roll_value,
+                            'won': won,
+                            'profit': profit,
+                            'multiplier': multiplier,
+                            'bet_id': bet_result.get('id'),
+                            'real_api': True
+                        }
+                    })
+                else:
+                    return jsonify({'success': False, 'message': result.get('message', 'API error')})
+                    
+            except Exception as e:
+                print(f"Real Stake API bet failed: {e}")
+                # Fall back to simulation
+                pass
+        
+        # Simulation mode (demo or fallback)
+        import random
+        roll_result = random.uniform(0.01, 99.99)
+        
+        if is_roll_over:
+            won = roll_result > roll_over
+        else:
+            won = roll_result < roll_over
+        
+        profit = bet_amount * (multiplier - 1) if won else -bet_amount
+        
+        # Update stats
+        dashboard_state['live_stats']['total_bets'] += 1
+        if won:
+            dashboard_state['live_stats']['successful_bets'] += 1
+        dashboard_state['live_stats']['total_profit'] += profit
+        dashboard_state['live_stats']['current_bankroll'] += profit
+        dashboard_state['live_stats']['win_rate'] = (dashboard_state['live_stats']['successful_bets'] / dashboard_state['live_stats']['total_bets']) * 100
+        
+        # Emit real-time update
+        socketio.emit('bet_update', {
+            'roll': roll_result,
+            'won': won,
+            'profit': profit,
+            'stats': dashboard_state['live_stats']
+        })
+        
+        return jsonify({
+            'success': True,
+            'result': {
+                'roll': roll_result,
+                'won': won,
+                'profit': profit,
+                'multiplier': multiplier,
+                'real_api': False
+            }
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Bet error: {str(e)}'})
+
+@app.route('/api/ai/get_recommendation', methods=['GET'])
+def get_ai_recommendation():
+    """Get AI betting recommendation based on current patterns"""
+    try:
+        # Initialize AI engine if available
+        ai_engine = get_supreme_engine()
+        if not ai_engine:
+            ai_engine = initialize_supreme_engine()
+        
+        if ai_engine:
+            # Get AI decision
+            current_context = {
+                'recent_outcomes': dashboard_state.get('recent_outcomes', [])[-10:],
+                'current_bankroll': dashboard_state['live_stats']['current_bankroll'],
+                'win_rate': dashboard_state['live_stats']['win_rate'],
+                'total_bets': dashboard_state['live_stats']['total_bets']
+            }
+            
+            decision = ai_engine.make_supreme_decision(current_context)
+            
+            if decision.should_bet:
+                confidence = min(decision.confidence_score, 0.95)
+                suggested_amount = min(decision.recommended_bet_amount, dashboard_state['live_stats']['current_bankroll'] * 0.1)
+                
+                # Calculate optimal win chance based on AI analysis
+                if decision.predicted_outcome > 50:
+                    suggested_win_chance = min(60 + (confidence * 20), 85)
+                else:
+                    suggested_win_chance = max(40 - (confidence * 20), 15)
+                
+                risk_level = 'Low' if confidence > 0.8 else 'Medium' if confidence > 0.5 else 'High'
+                
+                return jsonify({
+                    'success': True,
+                    'recommendation': {
+                        'action': 'bet',
+                        'confidence': confidence,
+                        'suggested_amount': suggested_amount,
+                        'suggested_win_chance': suggested_win_chance,
+                        'predicted_result': decision.predicted_outcome,
+                        'risk_level': risk_level,
+                        'reasoning': decision.reasoning or 'AI analysis suggests favorable conditions'
+                    }
+                })
+            else:
+                return jsonify({
+                    'success': True,
+                    'recommendation': {
+                        'action': 'hold',
+                        'confidence': decision.confidence_score,
+                        'suggested_amount': 0,
+                        'suggested_win_chance': 50,
+                        'predicted_result': decision.predicted_outcome,
+                        'risk_level': 'High',
+                        'reasoning': 'AI suggests waiting for better conditions'
+                    }
+                })
+        else:
+            # Fallback recommendation system
+            recent_outcomes = dashboard_state.get('recent_outcomes', [])
+            if len(recent_outcomes) >= 5:
+                win_rate = sum(1 for outcome in recent_outcomes[-5:] if outcome.get('won', False)) / 5
+                if win_rate < 0.3:
+                    # Increase win chance after losses
+                    return jsonify({
+                        'success': True,
+                        'recommendation': {
+                            'action': 'bet',
+                            'confidence': 0.7,
+                            'suggested_amount': 0.00001000,
+                            'suggested_win_chance': 65,
+                            'predicted_result': 35,
+                            'risk_level': 'Medium',
+                            'reasoning': 'Pattern suggests higher win chance recommended'
+                        }
+                    })
+                elif win_rate > 0.7:
+                    # Lower win chance after wins
+                    return jsonify({
+                        'success': True,
+                        'recommendation': {
+                            'action': 'bet',
+                            'confidence': 0.6,
+                            'suggested_amount': 0.00005000,
+                            'suggested_win_chance': 45,
+                            'predicted_result': 55,
+                            'risk_level': 'Low',
+                            'reasoning': 'Capitalize on winning streak with calculated risk'
+                        }
+                    })
+            
+            return jsonify({
+                'success': True,
+                'recommendation': {
+                    'action': 'bet',
+                    'confidence': 0.5,
+                    'suggested_amount': 0.00001000,
+                    'suggested_win_chance': 50,
+                    'predicted_result': 50,
+                    'risk_level': 'Medium',
+                    'reasoning': 'Neutral market conditions'
+                }
+            })
+            
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'AI recommendation error: {str(e)}'})
+
+@app.route('/api/ai/get_predictions', methods=['GET'])
+def get_ai_predictions():
+    """Get comprehensive AI predictions for the dashboard"""
+    try:
+        ai_engine = get_supreme_engine()
+        recent_outcomes = dashboard_state.get('recent_outcomes', [])
+        
+        if ai_engine and len(recent_outcomes) >= 3:
+            # Advanced AI predictions
+            context = {
+                'recent_outcomes': recent_outcomes[-10:],
+                'current_stats': dashboard_state['live_stats']
+            }
+            
+            prediction = ai_engine.analyze_patterns(context)
+            
+            return jsonify({
+                'success': True,
+                'predictions': {
+                    'next_result': prediction.get('next_result', 50),
+                    'win_probability': prediction.get('win_probability', 0.5),
+                    'loss_probability': 1 - prediction.get('win_probability', 0.5),
+                    'trend_direction': prediction.get('trend', 'Neutral'),
+                    'trend_strength': prediction.get('trend_strength', 'Medium'),
+                    'confidence': prediction.get('confidence', 0.5),
+                    'expected_return': prediction.get('expected_return', 0.0)
+                }
+            })
+        else:
+            # Simplified pattern analysis
+            if len(recent_outcomes) >= 3:
+                last_3_wins = sum(1 for outcome in recent_outcomes[-3:] if outcome.get('won', False))
+                win_prob = 0.6 if last_3_wins == 0 else 0.4 if last_3_wins == 3 else 0.5
+                
+                trend = 'Bullish' if last_3_wins >= 2 else 'Bearish' if last_3_wins <= 1 else 'Neutral'
+                
+                return jsonify({
+                    'success': True,
+                    'predictions': {
+                        'next_result': 45 if win_prob > 0.5 else 55,
+                        'win_probability': win_prob,
+                        'loss_probability': 1 - win_prob,
+                        'trend_direction': trend,
+                        'trend_strength': 'Medium',
+                        'confidence': 0.6,
+                        'expected_return': (win_prob - 0.5) * 0.1
+                    }
+                })
+            else:
+                return jsonify({
+                    'success': True,
+                    'predictions': {
+                        'next_result': 50,
+                        'win_probability': 0.5,
+                        'loss_probability': 0.5,
+                        'trend_direction': 'Neutral',
+                        'trend_strength': 'Low',
+                        'confidence': 0.5,
+                        'expected_return': 0.0
+                    }
+                })
+                
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Prediction error: {str(e)}'})
+
+@app.route('/api/stake/toggle_demo_mode', methods=['POST'])
+def toggle_demo_mode():
+    """Toggle between demo and real trading mode"""
+    try:
+        data = request.get_json()
+        demo_mode = data.get('demo_mode', True)
+        dashboard_state['demo_mode'] = demo_mode
+        
+        # Test real API connection if switching to real mode
+        if not demo_mode:
+            api_key = os.getenv('STAKE_API_KEY')
+            if api_key:
+                try:
+                    from real_stake_api import RealStakeAPI
+                    stake_api = RealStakeAPI(api_key)
+                    connected = stake_api.test_connection()
+                    dashboard_state['stake_api_connected'] = connected
+                    
+                    if not connected:
+                        return jsonify({
+                            'success': False,
+                            'message': 'Cannot connect to Stake API. Check your API key and connection.'
+                        })
+                except Exception as e:
+                    return jsonify({
+                        'success': False,
+                        'message': f'Stake API error: {str(e)}'
+                    })
+            else:
+                return jsonify({
+                    'success': False,
+                    'message': 'No Stake API key configured. Please set STAKE_API_KEY environment variable.'
+                })
+        
+        return jsonify({
+            'success': True,
+            'demo_mode': dashboard_state['demo_mode'],
+            'api_connected': dashboard_state.get('stake_api_connected', False),
+            'message': f"Switched to {'Demo' if demo_mode else 'Live'} mode"
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Mode switch error: {str(e)}'})
+
+@app.route('/api/stake/get_balance', methods=['GET'])
+def get_stake_balance():
+    """Get current Stake account balance"""
+    try:
+        if dashboard_state.get('demo_mode', True):
+            return jsonify({
+                'success': True,
+                'balance': dashboard_state['live_stats']['current_bankroll'],
+                'currency': 'USDT',
+                'demo_mode': True
+            })
+        
+        api_key = os.getenv('STAKE_API_KEY')
+        if api_key:
+            from real_stake_api import RealStakeAPI
+            stake_api = RealStakeAPI(api_key)
+            
+            if stake_api.test_connection():
+                balance_info = stake_api.get_balance()
+                return jsonify({
+                    'success': True,
+                    'balance': balance_info.get('amount', 0),
+                    'currency': balance_info.get('currency', 'USDT'),
+                    'demo_mode': False
+                })
+            else:
+                return jsonify({'success': False, 'message': 'API connection failed'})
+        else:
+            return jsonify({'success': False, 'message': 'No API key configured'})
+            
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Balance error: {str(e)}'})
+
+# Seed Management API Endpoints
+@app.route('/api/seeds/update', methods=['POST'])
+def update_seeds():
+    """Update client and server seed information"""
+    try:
+        data = request.json
+        client_seed = data.get('client_seed', '')
+        server_seed_hash = data.get('server_seed_hash', '')
+        nonce = int(data.get('nonce', 0))
+        
+        if not client_seed or not server_seed_hash:
+            return jsonify({'error': 'Client seed and server seed hash are required'}), 400
+        
+        # Store in global state for session
+        dashboard_state['seeds'] = {
+            'client_seed': client_seed,
+            'server_seed_hash': server_seed_hash,
+            'nonce': nonce,
+            'updated_at': datetime.now().isoformat()
+        }
+        
+        if not dashboard_state['demo_mode']:
+            # Update real Stake API seeds
+            api_key = os.getenv('STAKE_API_KEY')
+            if api_key:
+                try:
+                    from real_stake_api import RealStakeAPI
+                    stake_api = RealStakeAPI(api_key)
+                    if stake_api.test_connection():
+                        stake_api.update_client_seed(client_seed)
+                except Exception as e:
+                    logging.warning(f"Failed to update Stake API seeds: {e}")
+        
+        return jsonify({
+            'success': True,
+            'message': 'Seeds updated successfully',
+            'seeds': dashboard_state['seeds']
+        })
+    
+    except Exception as e:
+        logging.error(f"Seed update error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/seeds/calculate', methods=['POST'])
+def calculate_next_numbers():
+    """Calculate next dice results using HMAC-SHA256"""
+    try:
+        data = request.json
+        count = int(data.get('count', 5))  # Default to 5 predictions
+        
+        if 'seeds' not in dashboard_state:
+            return jsonify({'error': 'Please update seeds first'}), 400
+        
+        seeds = dashboard_state['seeds']
+        client_seed = seeds['client_seed']
+        server_seed_hash = seeds['server_seed_hash']
+        current_nonce = seeds['nonce']
+        
+        # Import HMAC calculation function
+        try:
+            sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+            from oracle_support_utils import hmac_to_dice_result
+        except ImportError:
+            # Fallback implementation
+            import hmac
+            import hashlib
+            
+            def hmac_to_dice_result(server_seed: str, client_seed: str, nonce: int) -> float:
+                message = f"{client_seed}:{nonce}"
+                hash_result = hmac.new(
+                    server_seed.encode('utf-8'),
+                    message.encode('utf-8'),
+                    hashlib.sha256
+                ).hexdigest()
+                
+                # Convert to dice result (0-100)
+                hex_int = int(hash_result[:8], 16)
+                return (hex_int % 10000) / 100.0
+        
+        # Calculate next numbers
+        results = []
+        for i in range(count):
+            nonce = current_nonce + i + 1
+            # For demonstration, use server hash as seed (in real implementation, server seed would be revealed)
+            result = hmac_to_dice_result(server_seed_hash, client_seed, nonce)
+            results.append({
+                'nonce': nonce,
+                'result': round(result, 2)
+            })
+        
+        # Update nonce in state
+        dashboard_state['seeds']['nonce'] = current_nonce + count
+        
+        return jsonify({
+            'success': True,
+            'results': results,
+            'next_nonce': current_nonce + count + 1
+        })
+    
+    except Exception as e:
+        logging.error(f"Number calculation error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/seeds/verify', methods=['POST'])
+def verify_seeds():
+    """Verify seed integrity using revealed server seed"""
+    try:
+        data = request.json
+        revealed_server_seed = data.get('revealed_server_seed', '')
+        
+        if 'seeds' not in dashboard_state:
+            return jsonify({'error': 'No seeds to verify'}), 400
+        
+        seeds = dashboard_state['seeds']
+        client_seed = seeds['client_seed']
+        server_seed_hash = seeds['server_seed_hash']
+        
+        if not revealed_server_seed:
+            return jsonify({
+                'success': False,
+                'message': 'Revealed server seed required for verification'
+            })
+        
+        # Verify hash
+        import hashlib
+        calculated_hash = hashlib.sha256(revealed_server_seed.encode('utf-8')).hexdigest()
+        is_valid = calculated_hash == server_seed_hash
+        
+        verification_result = {
+            'success': True,
+            'valid': is_valid,
+            'calculated_hash': calculated_hash,
+            'expected_hash': server_seed_hash,
+            'revealed_seed': revealed_server_seed[:20] + '...' if len(revealed_server_seed) > 20 else revealed_server_seed
+        }
+        
+        if is_valid:
+            verification_result['message'] = 'Seeds verified successfully! Game was provably fair.'
+        else:
+            verification_result['message'] = 'Seed verification failed! Hash mismatch detected.'
+        
+        return jsonify(verification_result)
+    
+    except Exception as e:
+        logging.error(f"Seed verification error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/seeds/clear', methods=['POST'])
+def clear_seeds():
+    """Clear all seed data"""
+    try:
+        if 'seeds' in dashboard_state:
+            del dashboard_state['seeds']
+        
+        return jsonify({
+            'success': True,
+            'message': 'All seeds cleared successfully'
+        })
+    
+    except Exception as e:
+        logging.error(f"Seed clear error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/seeds/current', methods=['GET'])
+def get_current_seeds():
+    """Get current seed information"""
+    try:
+        if 'seeds' in dashboard_state:
+            return jsonify({
+                'success': True,
+                'seeds': dashboard_state['seeds']
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'No seeds configured'
+            })
+    
+    except Exception as e:
+        logging.error(f"Get seeds error: {e}")
+        return jsonify({'error': str(e)}), 500
 
 @socketio.on('place_dice_bet')
 def handle_place_dice_bet(data):

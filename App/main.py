@@ -236,7 +236,7 @@ except ImportError as e:
     sys.exit(1)
 
 # Configure Flask application
-app = Flask(__name__, template_folder='.', static_folder='static')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SECRET_KEY'] = 'supreme_oracle_main_2025'
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
@@ -813,4 +813,4 @@ if __name__ == '__main__':
     print("🔥" * 60)
     
     # Run the application
-    socketio.run(app, host='0.0.0.0', port=5000, debug=False)
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True)

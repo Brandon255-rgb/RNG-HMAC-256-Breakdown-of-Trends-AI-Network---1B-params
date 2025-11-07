@@ -226,14 +226,13 @@ import hmac
 import hashlib
 from typing import Dict, List, Any, Optional
 
-# Import our consolidated components
-try:
-    from supreme_bedrock_bot import SupremeBedrockBot, BettingDecision, MarketConditions
-    from massive_pretrain_oracle import OracleCore
-    import torch
-except ImportError as e:
-    logging.error(f"❌ Failed to import components: {e}")
-    sys.exit(1)
+# Import our AI systems
+from bedrock_ai_brain import BedrockAIBrain, BettingContext, AIDecision
+from supreme_bedrock_bot import SupremeBedrockBot, BettingDecision, MarketConditions
+from massive_pretrain_oracle import OracleCore, train_oracle_model
+from live_demo_oracle import LiveOracle
+from oracle_support_utils import detect_streaks, shannon_entropy, analyze_tda_holes
+from demo_analysis_system import DemoAnalysisSystem, DemoRoll, SeedAnalysis
 
 # Configure Flask application
 app = Flask(__name__, template_folder='.', static_folder='static')
@@ -267,6 +266,7 @@ class SupremeSystemOrchestrator:
         self.bedrock_bot = None
         self.pattern_oracle = None
         self.stake_api = StakeAPIConnector()
+        self.demo_analyzer = None
         
         # System state
         self.system_state = {
@@ -275,7 +275,8 @@ class SupremeSystemOrchestrator:
             'oracle_ready': False,
             'stake_connected': False,
             'auto_trading': False,
-            'session_active': False
+            'session_active': False,
+            'demo_analysis_ready': False
         }
         
         # Initialize Stake API connector
@@ -658,6 +659,68 @@ def dashboard():
 def api_status():
     """Get system status"""
     return jsonify(orchestrator.get_system_status())
+
+# Demo Analysis Routes
+@app.route('/api/demo/start', methods=['POST'])
+def start_demo_analysis():
+    """Start demo analysis system"""
+    try:
+        if not orchestrator.demo_analyzer:
+            # Initialize demo analyzer
+            stake_api_key = os.getenv('STAKE_API_KEY', '')
+            orchestrator.demo_analyzer = DemoAnalysisSystem(stake_api_key)
+        
+        # Start analysis in background
+        def run_analysis():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            result = loop.run_until_complete(orchestrator.demo_analyzer.start_demo_analysis())
+            
+            # Emit results via WebSocket
+            socketio.emit('demo_analysis_complete', result)
+        
+        import threading
+        analysis_thread = threading.Thread(target=run_analysis, daemon=True)
+        analysis_thread.start()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Demo analysis started',
+            'status': 'analyzing'
+        })
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to start demo analysis: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/demo/status')
+def demo_status():
+    """Get demo analysis status"""
+    if orchestrator.demo_analyzer:
+        status = orchestrator.demo_analyzer.get_analysis_status()
+        return jsonify(status)
+    
+    return jsonify({
+        'is_analyzing': False,
+        'progress': 0,
+        'demo_complete': False,
+        'error': 'Demo analyzer not initialized'
+    })
+
+@app.route('/api/demo/toggle-mode', methods=['POST'])
+def toggle_demo_mode():
+    """Toggle between demo and real mode"""
+    data = request.json
+    demo_mode = data.get('demo_mode', True)
+    
+    # Update system state
+    orchestrator.system_state['demo_mode'] = demo_mode
+    
+    return jsonify({
+        'success': True,
+        'demo_mode': demo_mode,
+        'message': f'Switched to {"Demo" if demo_mode else "Real"} mode'
+    })
 
 # SocketIO Event Handlers
 @socketio.on('connect')

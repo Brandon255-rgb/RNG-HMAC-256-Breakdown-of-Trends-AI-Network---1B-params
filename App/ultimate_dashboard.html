@@ -328,6 +328,227 @@
             border-color: rgba(107, 114, 128, 0.4);
         }
 
+        /* Oracle Auto System Styles */
+        .btn-oracle {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: #ffffff;
+            border: none;
+        }
+
+        .btn-oracle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-advanced {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff;
+            border: none;
+        }
+
+        .btn-advanced:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .mode-toggle-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: rgba(31, 41, 55, 0.5);
+            border-radius: 8px;
+            border: 1px solid rgba(75, 85, 99, 0.2);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 120px;
+            height: 34px;
+            cursor: pointer;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 34px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2px;
+            overflow: hidden;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .toggle-slider:before {
+            content: "";
+            position: absolute;
+            height: 26px;
+            width: 50px;
+            left: 4px;
+            bottom: 4px;
+            background: #ffffff;
+            border-radius: 26px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(56px);
+        }
+
+        .toggle-label {
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            z-index: 2;
+            padding: 0 8px;
+            transition: all 0.3s ease;
+        }
+
+        .mode-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #10b981;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .oracle-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid rgba(75, 85, 99, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            background: rgba(31, 41, 55, 0.8);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 18px;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-label {
+            color: #9ca3af;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .oracle-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .demo-progress {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid rgba(75, 85, 99, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            color: #e5e7eb;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(75, 85, 99, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .analysis-details {
+            display: grid;
+            gap: 8px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #d1d5db;
+            font-size: 14px;
+        }
+
+        .detail-item span:first-child {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .detail-item span:last-child {
+            color: #8b5cf6;
+            font-weight: 600;
+        }
+
         .charts-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -1969,44 +2190,78 @@
         <!-- Stake-Style Betting Interface -->
         <div class="betting-interface">
             <div class="betting-tabs">
-                <button class="tab-button active">Manual</button>
-                <button class="tab-button">Auto</button>
+                <button class="tab-button active">Auto</button>
                 <button class="tab-button">Advanced</button>
             </div>
             
             <div class="tab-content active">
-                <!-- Manual Betting Content -->
-                <div class="betting-controls">
+                <!-- Auto Betting Content -->
+                <div class="auto-betting-controls">
                     <div class="control-group">
-                        <label class="control-label">Bet Amount</label>
+                        <label class="control-label">Base Bet Amount</label>
                         <div class="input-group">
                             <div class="currency-icon-input">
-                                <svg data-ds-icon="USDT" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" id="betCurrencyIcon">
+                                <svg data-ds-icon="USDT" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" id="autoBetCurrencyIcon">
                                     <path fill="#26A17B" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11"></path>
                                     <path fill="#fff" d="M13.322 12.95c-.076.005-.466.028-1.336.028-.694 0-1.183-.02-1.355-.029v.002c-2.673-.117-4.668-.583-4.668-1.14s1.995-1.021 4.668-1.14v1.817c.175.013.675.042 1.367.042.83 0 1.246-.034 1.324-.041v-1.817c2.667.119 4.657.584 4.657 1.14s-1.99 1.02-4.657 1.139m0-2.467V8.856h3.722v-2.48H6.909v2.48h3.722v1.626c-3.025.139-5.3.738-5.3 1.456s2.275 1.317 5.3 1.456v5.213h2.69v-5.214c3.02-.139 5.29-.738 5.29-1.455s-2.27-1.316-5.29-1.455"></path>
                                 </svg>
                             </div>
-                            <input type="number" id="betAmount" placeholder="0.00000000" step="0.00000001" min="0" />
+                            <input type="number" id="autoBaseBet" placeholder="0.00000000" step="0.00000001" min="0" value="0.00000001" />
                         </div>
-                        <div class="amount-buttons">
-                            <button class="amount-btn" id="halveButton">½</button>
-                            <button class="amount-btn" id="doubleButton">2×</button>
-                        </div>
-                        <div class="conversion-amount" id="conversionAmount">$0.00</div>
                     </div>
                     
                     <div class="control-group">
-                        <label class="control-label">Profit on Win</label>
-                        <div class="input-group">
-                            <div class="currency-icon-input">
-                                <svg data-ds-icon="USDT" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" id="profitCurrencyIcon">
-                                    <path fill="#26A17B" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11"></path>
-                                    <path fill="#fff" d="M13.322 12.95c-.076.005-.466.028-1.336.028-.694 0-1.183-.02-1.355-.029v.002c-2.673-.117-4.668-.583-4.668-1.14s1.995-1.021 4.668-1.14v1.817c.175.013.675.042 1.367.042.83 0 1.246-.034 1.324-.041v-1.817c2.667.119 4.657.584 4.657 1.14s-1.99 1.02-4.657 1.139m0-2.467V8.856h3.722v-2.48H6.909v2.48h3.722v1.626c-3.025.139-5.3.738-5.3 1.456s2.275 1.317 5.3 1.456v5.213h2.69v-5.214c3.02-.139 5.29-.738 5.29-1.455s-2.27-1.316-5.29-1.455"></path>
-                                </svg>
+                        <label class="control-label">Auto Strategy</label>
+                        <select id="autoStrategy" class="form-select">
+                            <option value="martingale">Martingale (2x on Loss)</option>
+                            <option value="fibonacci">Fibonacci Progression</option>
+                            <option value="dAlembert">D'Alembert System</option>
+                            <option value="flat">Flat Betting</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label">Stop Conditions</label>
+                        <div class="stop-conditions">
+                            <div class="stop-condition">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="stopOnProfit">
+                                    <span class="checkmark"></span>
+                                    Stop on Profit
+                                </label>
+                                <input type="number" id="stopProfitAmount" placeholder="0.00000000" step="0.00000001" min="0" />
                             </div>
-                            <input type="number" id="profitAmount" placeholder="0.00000000" readonly />
+                            <div class="stop-condition">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="stopOnLoss">
+                                    <span class="checkmark"></span>
+                                    Stop on Loss
+                                </label>
+                                <input type="number" id="stopLossAmount" placeholder="0.00000000" step="0.00000001" min="0" />
+                            </div>
                         </div>
-                        <div class="conversion-amount" id="profitConversion">$0.00</div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="auto-betting-status">
+                            <div class="status-indicator" id="autoBettingIndicator">
+                                <span class="status-dot"></span>
+                                <span id="autoBettingStatus">Stopped</span>
+                            </div>
+                            <div class="auto-stats">
+                                <span>Bets: <span id="autoBetCount">0</span></span>
+                                <span>P&L: <span id="autoPnL">+0.00000000</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="betting-actions">
+                        <button id="startAutoBetting" class="btn btn-success">
+                            <i class="fas fa-play"></i> Start Auto Betting
+                        </button>
+                        <button id="stopAutoBetting" class="btn btn-danger" style="display: none;">
+                            <i class="fas fa-stop"></i> Stop Auto Betting
+                        </button>
                     </div>
                 </div>
 
@@ -2201,51 +2456,109 @@
             </div>
         </div>
 
-        <!-- Control Panel -->
+        <!-- Auto Oracle Control Panel -->
         <div class="control-panel">
-            <div class="control-title">Betting Controls</div>
-            <div class="control-grid">
-                <div class="form-group">
-                    <label class="form-label">Bet Amount</label>
-                    <input type="number" class="form-input" id="betAmount" value="1.00" min="0.01" step="0.01">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Target</label>
-                    <input type="number" class="form-input" id="targetNumber" value="50.00" min="0.01" max="99.99" step="0.01">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Condition</label>
-                    <select class="form-select" id="betCondition">
-                        <option value="under">Under</option>
-                        <option value="over">Over</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Interval (seconds)</label>
-                    <input type="number" class="form-input" id="betInterval" value="5" min="2" max="60" step="1">
-                </div>
+            <div class="control-title">
+                <i class="fas fa-brain"></i>
+                AI Oracle Auto System
             </div>
             
-            <div class="button-group">
-                <button class="btn btn-primary" id="singleBetBtn">
-                    <i class="fas fa-dice"></i>
-                    Place Bet
+            <!-- Mode Toggle -->
+            <div class="mode-toggle-section">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="demoModeToggle" checked>
+                    <span class="toggle-slider">
+                        <span class="toggle-label demo">DEMO</span>
+                        <span class="toggle-label real">REAL</span>
+                    </span>
+                </label>
+                <div class="mode-status" id="modeStatus">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Demo Mode Active - Safe Testing</span>
+                </div>
+            </div>
+
+            <!-- Auto Oracle Stats -->
+            <div class="oracle-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-eye"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Demo Rolls Analyzed</div>
+                        <div class="stat-value" id="demoRollsCount">0 / 100</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-key"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Server Seed Hash</div>
+                        <div class="stat-value" id="serverSeedDisplay">Detecting...</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-random"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Pattern Confidence</div>
+                        <div class="stat-value" id="patternConfidence">0%</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Bias Detected</div>
+                        <div class="stat-value" id="biasIndicator">Analyzing...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="oracle-controls">
+                <button class="btn btn-oracle" id="startDemoAnalysis">
+                    <i class="fas fa-search"></i>
+                    Start Demo Analysis (100 Rolls)
                 </button>
-                <button class="btn btn-success" id="startAutoBetBtn">
-                    <i class="fas fa-play"></i>
-                    Start Auto
+                
+                <button class="btn btn-success" id="startAutoOracle" style="display: none;">
+                    <i class="fas fa-robot"></i>
+                    Activate Auto Oracle
                 </button>
-                <button class="btn btn-danger" id="stopAutoBetBtn" style="display: none;">
+                
+                <button class="btn btn-danger" id="stopAutoOracle" style="display: none;">
                     <i class="fas fa-stop"></i>
-                    Stop Auto
+                    Stop Auto Oracle
                 </button>
-                <button class="btn btn-secondary" id="connectBtn">
-                    <i class="fas fa-link"></i>
-                    Connect
+                
+                <button class="btn btn-advanced" id="openAdvancedGUI">
+                    <i class="fas fa-cogs"></i>
+                    Advanced Oracle GUI
                 </button>
+            </div>
+
+            <!-- Demo Analysis Progress -->
+            <div class="demo-progress" id="demoProgress" style="display: none;">
+                <div class="progress-header">
+                    <span>Analyzing Demo Patterns...</span>
+                    <span id="progressText">0/100</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="analysis-details" id="analysisDetails">
+                    <div class="detail-item">
+                        <span>HMAC Patterns:</span>
+                        <span id="hmacPatterns">Scanning...</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Seed Analysis:</span>
+                        <span id="seedAnalysis">Processing...</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Bias Direction:</span>
+                        <span id="biasDirection">Calculating...</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -3384,57 +3697,399 @@
             return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         }
 
+        // Generate new seed for provably fair gaming
+        function generateNewSeed(type) {
+            if (type === 'client') {
+                const newSeed = generateRandomString(16);
+                document.getElementById('clientSeed').value = newSeed;
+                const currentDisplay = document.getElementById('currentClientSeed');
+                if (currentDisplay) {
+                    currentDisplay.textContent = newSeed;
+                }
+                
+                // Update seed state
+                if (typeof currentSeeds !== 'undefined') {
+                    currentSeeds.clientSeed = newSeed;
+                    updateSeedsDisplay();
+                }
+                
+                // Show visual feedback
+                showSeedNotification('New client seed generated!', 'success');
+                
+                // Notify backend
+                if (typeof socket !== 'undefined' && socket && socket.connected) {
+                    socket.emit('seed_updated', {
+                        type: 'client',
+                        seed: newSeed,
+                        timestamp: Date.now()
+                    });
+                }
+            }
+        }
+
+        function verifyFairness() {
+            const clientSeed = document.getElementById('clientSeed').value.trim();
+            const serverSeedHash = document.getElementById('serverSeedHash').value.trim();
+            const revealedServerSeed = document.getElementById('revealedServerSeed') ? 
+                  document.getElementById('revealedServerSeed').value.trim() : '';
+            const nonceElement = document.getElementById('nonceValue');
+            const nonce = nonceElement ? parseInt(nonceElement.textContent) || 0 : 0;
+            
+            if (!clientSeed || !serverSeedHash) {
+                showVerificationResult('Please enter both client seed and server seed hash', 'error');
+                return;
+            }
+            
+            if (revealedServerSeed) {
+                // Verify with revealed server seed
+                const computedHash = sha256(revealedServerSeed);
+                
+                if (computedHash.toLowerCase() === serverSeedHash.toLowerCase()) {
+                    // Calculate dice result
+                    const hmacResult = calculateHMAC(revealedServerSeed, `${clientSeed}:${nonce}`);
+                    const diceResult = hmacToDiceResult(hmacResult);
+                    
+                    showVerificationResult(
+                        `✅ Verification successful!\n` +
+                        `Server seed hash matches!\n` +
+                        `Calculated result: ${diceResult.toFixed(2)}\n` +
+                        `HMAC: ${hmacResult.substring(0, 16)}...`,
+                        'success'
+                    );
+                    
+                    const statusElement = document.getElementById('verificationStatus');
+                    if (statusElement) {
+                        statusElement.textContent = 'Verified ✓';
+                    }
+                } else {
+                    showVerificationResult(
+                        `❌ Verification failed!\n` +
+                        `Server seed hash does not match revealed seed.\n` +
+                        `Expected: ${serverSeedHash}\n` +
+                        `Got: ${computedHash}`,
+                        'error'
+                    );
+                }
+            } else {
+                showVerificationResult(
+                    `ℹ️ Partial verification:\n` +
+                    `Client seed: ${clientSeed}\n` +
+                    `Server hash: ${serverSeedHash.substring(0, 16)}...\n` +
+                    `Nonce: ${nonce}\n` +
+                    `Need revealed server seed for full verification`,
+                    'info'
+                );
+            }
+        }
+
+        function showVerificationResult(message, type) {
+            let resultDiv = document.getElementById('verificationResult');
+            if (!resultDiv) {
+                // Create the result div if it doesn't exist
+                resultDiv = document.createElement('div');
+                resultDiv.id = 'verificationResult';
+                resultDiv.style.cssText = `
+                    display: none;
+                    padding: 10px;
+                    margin-top: 10px;
+                    border-radius: 5px;
+                    white-space: pre-line;
+                    font-family: monospace;
+                    font-size: 12px;
+                `;
+                
+                // Try to add it after seed info
+                const seedInfo = document.querySelector('.seed-info');
+                if (seedInfo && seedInfo.parentNode) {
+                    seedInfo.parentNode.appendChild(resultDiv);
+                } else {
+                    document.body.appendChild(resultDiv);
+                }
+            }
+            
+            const colors = {
+                success: '#d4edda',
+                error: '#f8d7da',
+                info: '#d1ecf1'
+            };
+            
+            resultDiv.style.display = 'block';
+            resultDiv.style.backgroundColor = colors[type] || colors.info;
+            resultDiv.style.color = type === 'error' ? '#721c24' : type === 'success' ? '#155724' : '#0c5460';
+            resultDiv.style.border = `1px solid ${type === 'error' ? '#f5c6cb' : type === 'success' ? '#c3e6cb' : '#bee5eb'}`;
+            resultDiv.textContent = message;
+            
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 10000);
+        }
+
+        function showSeedNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                border-radius: 5px;
+                z-index: 10000;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                font-weight: 500;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            // Add slide-in animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function generateRandomString(length) {
+            const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            return result;
+        }
+
+        function calculateHMAC(key, message) {
+            // Simple HMAC-SHA256 implementation
+            // In production, use a proper crypto library
+            const blockSize = 64;
+            const ipad = new Array(blockSize).fill(0x36);
+            const opad = new Array(blockSize).fill(0x5c);
+            
+            if (key.length > blockSize) {
+                key = sha256(key);
+            }
+            
+            for (let i = 0; i < key.length; i++) {
+                ipad[i] ^= key.charCodeAt(i);
+                opad[i] ^= key.charCodeAt(i);
+            }
+            
+            const innerHash = sha256(String.fromCharCode(...ipad) + message);
+            return sha256(String.fromCharCode(...opad) + innerHash);
+        }
+
+        function hmacToDiceResult(hmac) {
+            // Convert first 4 bytes of HMAC to dice result (0-99.99)
+            const hex = hmac.substring(0, 8);
+            const int = parseInt(hex, 16);
+            return (int % 10000) / 100;
+        }
+
+        function sha256(str) {
+            // Simple SHA-256 implementation for demo
+            // In production, use crypto.subtle or a proper library
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return Math.abs(hash).toString(16).padStart(8, '0').repeat(8).substring(0, 64);
+        }
+
         function initializeCurrencyDropdown() {
             const currencyButton = document.querySelector('.currency-button');
             const currencyDropdown = document.getElementById('currencyDropdown');
             const currencyOptions = document.querySelectorAll('.currency-option');
 
+            if (!currencyButton || !currencyDropdown) {
+                console.error('Currency dropdown elements not found');
+                return;
+            }
+
             currencyButton.addEventListener('click', function(e) {
+                e.preventDefault();
                 e.stopPropagation();
-                currencyDropdown.classList.toggle('hidden');
-            });
-
-            document.addEventListener('click', function() {
-                currencyDropdown.classList.add('hidden');
-            });
-
-            currencyOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    const currency = this.dataset.currency;
-                    switchCurrency(currency);
+                
+                const isHidden = currencyDropdown.classList.contains('hidden');
+                
+                // Close all other dropdowns first
+                document.querySelectorAll('.currency-dropdown').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
+                
+                if (isHidden) {
+                    currencyDropdown.classList.remove('hidden');
+                    showToast('Select currency to switch balance', 'info', 2000);
+                } else {
                     currencyDropdown.classList.add('hidden');
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!currencyButton.contains(e.target) && !currencyDropdown.contains(e.target)) {
+                    currencyDropdown.classList.add('hidden');
+                }
+            });
+
+            // Handle currency selection
+            currencyOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const currency = this.dataset.currency;
+                    
+                    if (currency && currency !== currentCurrency) {
+                        switchCurrency(currency);
+                        currencyDropdown.classList.add('hidden');
+                        
+                        // Visual feedback
+                        this.style.background = '#1FFF20';
+                        this.style.color = '#000';
+                        
+                        setTimeout(() => {
+                            this.style.background = '';
+                            this.style.color = '';
+                        }, 300);
+                    }
+                });
+                
+                // Add hover effects
+                option.addEventListener('mouseenter', function() {
+                    this.style.background = '#374151';
+                });
+                
+                option.addEventListener('mouseleave', function() {
+                    this.style.background = '';
                 });
             });
 
             updateCurrencyDisplay();
+            
+            // Initialize with default currency
+            setTimeout(() => {
+                logActivity(`Currency system initialized with ${currentCurrency.toUpperCase()}`);
+            }, 100);
         }
 
         function switchCurrency(currency) {
+            if (!currency || currency === currentCurrency) return;
+            
+            const previousCurrency = currentCurrency;
             currentCurrency = currency;
             
-            // Update current balance display
-            const balance = currencyBalances[currency];
-            document.getElementById('currentBalance').textContent = balance.toFixed(8);
-            
-            // Update currency icon
-            const currencyIcon = document.querySelector('.currency-icon svg');
-            const betCurrencyIcon = document.getElementById('betCurrencyIcon');
-            const profitCurrencyIcon = document.getElementById('profitCurrencyIcon');
-            
-            const iconSVG = getCurrencyIcon(currency);
-            currencyIcon.outerHTML = iconSVG;
-            betCurrencyIcon.outerHTML = iconSVG.replace('width="20"', 'width="20" id="betCurrencyIcon"');
-            profitCurrencyIcon.outerHTML = iconSVG.replace('width="20"', 'width="20" id="profitCurrencyIcon"');
-            
-            // Update button attribute
-            currencyButton.dataset.activeCurrency = currency;
-            
-            // Reset bet amount and recalculate
-            document.getElementById('betAmount').value = '';
-            updateProfitCalculation();
-            
-            logActivity(`Switched to ${currency.toUpperCase()} | Balance: ${balance.toFixed(8)}`);
-            showNotification(`Currency changed to ${currency.toUpperCase()}`, 'info');
+            try {
+                // Update current balance display
+                const balance = currencyBalances[currency];
+                const currentBalanceEl = document.getElementById('currentBalance');
+                if (currentBalanceEl) {
+                    currentBalanceEl.textContent = balance.toFixed(8);
+                    
+                    // Animate balance change
+                    currentBalanceEl.style.color = '#1FFF20';
+                    currentBalanceEl.style.fontWeight = 'bold';
+                    setTimeout(() => {
+                        currentBalanceEl.style.color = '';
+                        currentBalanceEl.style.fontWeight = '';
+                    }, 1000);
+                }
+                
+                // Update currency icons throughout interface
+                const iconSVG = getCurrencyIcon(currency);
+                
+                // Update main currency icon
+                const currencyIconEl = document.querySelector('.currency-icon svg');
+                if (currencyIconEl) {
+                    currencyIconEl.outerHTML = iconSVG;
+                }
+                
+                // Update betting interface currency icons
+                const betCurrencyIconIds = [
+                    'betCurrencyIcon',
+                    'profitCurrencyIcon',
+                    'stakeBetCurrencyIcon'
+                ];
+                
+                betCurrencyIconIds.forEach(iconId => {
+                    const iconEl = document.getElementById(iconId);
+                    if (iconEl) {
+                        const newIcon = iconSVG.replace('width="20"', `width="20" id="${iconId}"`);
+                        iconEl.outerHTML = newIcon;
+                    }
+                });
+                
+                // Update button attribute
+                const currencyButton = document.querySelector('.currency-button');
+                if (currencyButton) {
+                    currencyButton.dataset.activeCurrency = currency;
+                }
+                
+                // Update balance in sidebar balances
+                const balanceSpan = document.getElementById(`${currency}Balance`);
+                if (balanceSpan) {
+                    balanceSpan.textContent = balance.toFixed(8);
+                    balanceSpan.style.color = '#1FFF20';
+                    setTimeout(() => {
+                        balanceSpan.style.color = '';
+                    }, 1000);
+                }
+                
+                // Reset bet amounts
+                const betAmountInputs = [
+                    'betAmount',
+                    'stakeBetAmount'
+                ];
+                
+                betAmountInputs.forEach(inputId => {
+                    const inputEl = document.getElementById(inputId);
+                    if (inputEl) {
+                        inputEl.value = '';
+                        inputEl.placeholder = `0.${'0'.repeat(8)}`;
+                    }
+                });
+                
+                // Update stats balance display
+                stats.balance = balance;
+                updateDisplay();
+                updateProfitCalculation();
+                updateStakeDiceCalculations();
+                
+                // Log currency change
+                logActivity(`Currency switched: ${previousCurrency.toUpperCase()} → ${currency.toUpperCase()} | Balance: ${balance.toFixed(8)}`);
+                showToast(`Currency changed to ${currency.toUpperCase()} | Balance: ${balance.toFixed(8)}`, 'success');
+                
+                // Notify backend if connected
+                if (socket && socket.connected) {
+                    socket.emit('currency_changed', {
+                        new_currency: currency,
+                        previous_currency: previousCurrency,
+                        balance: balance
+                    });
+                }
+                
+                // Update conversion rates
+                updateConversionRates(currency);
+                
+            } catch (error) {
+                console.error('Currency switch error:', error);
+                showToast('Failed to switch currency', 'error');
+                
+                // Revert currency change
+                currentCurrency = previousCurrency;
+            }
         }
 
         function updateCurrencyDisplay() {
@@ -3447,12 +4102,40 @@
             updateDisplay();
         }
 
+        function updateConversionRates(currency) {
+            // Mock conversion rates (replace with real API)
+            const conversionRates = {
+                usdt: 1.00,
+                btc: 45000.00,
+                eth: 2500.00,
+                doge: 0.08
+            };
+            
+            const rate = conversionRates[currency] || 1.00;
+            
+            // Update all conversion displays
+            const conversionElements = [
+                'conversionAmount',
+                'profitConversion'
+            ];
+            
+            conversionElements.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const amountString = element.textContent.replace('$', '');
+                    const amount = parseFloat(amountString) || 0;
+                    // Update with current currency rate
+                    element.textContent = `$${(amount).toFixed(2)}`;
+                }
+            });
+        }
+
         function getCurrencyIcon(currency) {
             const icons = {
-                usdt: '<svg data-ds-icon="USDT" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path fill="#26A17B" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11"></path><path fill="#fff" d="M13.322 12.95c-.076.005-.466.028-1.336.028-.694 0-1.183-.02-1.355-.029v.002c-2.673-.117-4.668-.583-4.668-1.14s1.995-1.021 4.668-1.14v1.817c.175.013.675.042 1.367.042.83 0 1.246-.034 1.324-.041v-1.817c2.667.119 4.657.584 4.657 1.14s-1.99 1.02-4.657 1.139m0-2.467V8.856h3.722v-2.48H6.909v2.48h3.722v1.626c-3.025.139-5.3.738-5.3 1.456s2.275 1.317 5.3 1.456v5.213h2.69v-5.214c3.02-.139 5.29-.738 5.29-1.455s-2.27-1.316-5.29-1.455"></path></svg>',
-                btc: '<svg data-ds-icon="BTC" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path fill="#F7931A" d="M23.638 14.904c-1.602 6.43-8.113 10.34-14.542 8.736C2.67 22.05-1.244 15.525.362 9.105 1.962 2.67 8.475-1.243 14.9.358c6.43 1.605 10.342 8.115 8.738 14.546z"></path><path fill="#FFF" d="M16.103 10.626c.229-1.525-.934-2.345-2.525-2.892l.516-2.068-1.258-.314-.502 2.016c-.33-.083-.67-.16-1.008-.236l.505-2.027-1.259-.314-.515 2.068c-.274-.063-.542-.124-.803-.187v-.007l-1.735-.432-.334 1.343s.934.214.914.227c.51.127.602.465.586.732l-.587 2.357c.035.009.08.022.13.043l-.131-.033-.822 3.297c-.062.155-.22.39-.576.301.013.019-.914-.228-.914-.228l-.624 1.439 1.638.408c.305.077.603.157.896.232l-.52 2.088 1.258.314.515-2.067c.342.093.675.178 1 .256l-.513 2.058 1.259.314.52-2.084c2.14.405 3.75.242 4.426-1.694.545-1.555-.027-2.452-1.151-3.036.819-.189 1.436-.728 1.602-1.844zm-2.87 4.026c-.388 1.56-3.014.716-3.865.505l.689-2.761c.851.212 3.581.631 3.176 2.256zm.387-4.051c-.354 1.421-2.545.699-3.255.522l.625-2.506c.71.177 3.005.507 2.63 1.984z"></path></svg>',
-                eth: '<svg data-ds-icon="ETH" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path fill="#627EEA" d="m11.944 17.97-4.788-7.13 4.788 2.855 4.788-2.855z"></path><path fill="#8A92B2" d="m7.157 10.84 4.787 7.13V1z"></path><path fill="#627EEA" d="M11.944 1v16.97l4.788-7.13z"></path><path fill="#8A92B2" d="M11.944 20.31v2.69L7.157 13.07z"></path><path fill="#627EEA" d="M11.944 23v-2.69L16.73 13.07z"></path></svg>',
-                doge: '<svg data-ds-icon="DOGE" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path fill="#C2A633" d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12z"></path><path fill="#FFF" d="M10.069 16.74h2.964c3.226 0 5.084-1.707 5.084-4.71 0-3.003-1.858-4.71-5.084-4.71h-2.964v9.42zm1.903-1.692V9.415h.82c1.958 0 3.18.906 3.18 2.817 0 1.91-1.222 2.816-3.18 2.816h-.82z"></path><path fill="#FFF" d="M8.718 7.32H6.815v9.42h1.903V7.32z"></path><path fill="#FFF" d="M14.967 11.73h3.18v1.692h-3.18V11.73z"></path></svg>'
+                usdt: '<svg data-ds-icon="USDT" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" class="currency-icon-svg"><path fill="#26A17B" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11"></path><path fill="#fff" d="M13.322 12.95c-.076.005-.466.028-1.336.028-.694 0-1.183-.02-1.355-.029v.002c-2.673-.117-4.668-.583-4.668-1.14s1.995-1.021 4.668-1.14v1.817c.175.013.675.042 1.367.042.83 0 1.246-.034 1.324-.041v-1.817c2.667.119 4.657.584 4.657 1.14s-1.99 1.02-4.657 1.139m0-2.467V8.856h3.722v-2.48H6.909v2.48h3.722v1.626c-3.025.139-5.3.738-5.3 1.456s2.275 1.317 5.3 1.456v5.213h2.69v-5.214c3.02-.139 5.29-.738 5.29-1.455s-2.27-1.316-5.29-1.455"></path></svg>',
+                btc: '<svg data-ds-icon="BTC" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" class="currency-icon-svg"><path fill="#F7931A" d="M23.638 14.904c-1.602 6.43-8.113 10.34-14.542 8.736C2.67 22.05-1.244 15.525.362 9.105 1.962 2.67 8.475-1.243 14.9.358c6.43 1.605 10.342 8.115 8.738 14.546z"></path><path fill="#FFF" d="M16.103 10.626c.229-1.525-.934-2.345-2.525-2.892l.516-2.068-1.258-.314-.502 2.016c-.33-.083-.67-.16-1.008-.236l.505-2.027-1.259-.314-.515 2.068c-.274-.063-.542-.124-.803-.187v-.007l-1.735-.432-.334 1.343s.934.214.914.227c.51.127.602.465.586.732l-.587 2.357c.035.009.08.022.13.043l-.131-.033-.822 3.297c-.062.155-.22.39-.576.301.013.019-.914-.228-.914-.228l-.624 1.439 1.638.408c.305.077.603.157.896.232l-.52 2.088 1.258.314.515-2.067c.342.093.675.178 1 .256l-.513 2.058 1.259.314.52-2.084c2.14.405 3.75.242 4.426-1.694.545-1.555-.027-2.452-1.151-3.036.819-.189 1.436-.728 1.602-1.844zm-2.87 4.026c-.388 1.56-3.014.716-3.865.505l.689-2.761c.851.212 3.581.631 3.176 2.256zm.387-4.051c-.354 1.421-2.545.699-3.255.522l.625-2.506c.71.177 3.005.507 2.63 1.984z"></path></svg>',
+                eth: '<svg data-ds-icon="ETH" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" class="currency-icon-svg"><path fill="#627EEA" d="m11.944 17.97-4.788-7.13 4.788 2.855 4.788-2.855z"></path><path fill="#8A92B2" d="m7.157 10.84 4.787 7.13V1z"></path><path fill="#627EEA" d="M11.944 1v16.97l4.788-7.13z"></path><path fill="#8A92B2" d="M11.944 20.31v2.69L7.157 13.07z"></path><path fill="#627EEA" d="M11.944 23v-2.69L16.73 13.07z"></path></svg>',
+                doge: '<svg data-ds-icon="DOGE" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" class="currency-icon-svg"><path fill="#C2A633" d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12z"></path><path fill="#FFF" d="M10.069 16.74h2.964c3.226 0 5.084-1.707 5.084-4.71 0-3.003-1.858-4.71-5.084-4.71h-2.964v9.42zm1.903-1.692V9.415h.82c1.958 0 3.18.906 3.18 2.817 0 1.91-1.222 2.816-3.18 2.816h-.82z"></path><path fill="#FFF" d="M8.718 7.32H6.815v9.42h1.903V7.32z"></path><path fill="#FFF" d="M14.967 11.73h3.18v1.692h-3.18V11.73z"></path></svg>'
             };
             return icons[currency] || icons.usdt;
         }
@@ -4321,33 +5004,218 @@
 
         // Event Listeners for Stake Interface
         function initializeStakeInterface() {
-            // Slider control
+            // Slider control with bidirectional sync
             const stakeSlider = document.getElementById('stakeSlider');
+            const stakeRollOver = document.getElementById('stakeRollOver');
+            
             if (stakeSlider) {
                 stakeSlider.addEventListener('input', function() {
-                    const rollOverEl = document.getElementById('stakeRollOver');
-                    if (rollOverEl) {
-                        rollOverEl.value = this.value;
-                        updateStakeDiceCalculations();
+                    const value = parseFloat(this.value);
+                    if (stakeRollOver) {
+                        stakeRollOver.value = value.toFixed(2);
+                        // Add visual feedback
+                        this.style.background = `linear-gradient(to right, #4CAF50 0%, #4CAF50 ${(value/99)*100}%, #ddd ${(value/99)*100}%, #ddd 100%)`;
+                    }
+                    updateStakeDiceCalculations();
+                    
+                    // Update API values if connected
+                    updateAPIValues({
+                        rollOver: value,
+                        timestamp: Date.now()
+                    });
+                });
+            }
+            
+            // Roll over input with slider sync
+            if (stakeRollOver) {
+                stakeRollOver.addEventListener('input', function() {
+                    const value = parseFloat(this.value);
+                    if (stakeSlider && value >= 1 && value <= 99) {
+                        stakeSlider.value = value;
+                        // Update slider background
+                        stakeSlider.style.background = `linear-gradient(to right, #4CAF50 0%, #4CAF50 ${(value/99)*100}%, #ddd ${(value/99)*100}%, #ddd 100%)`;
+                    }
+                    updateStakeDiceCalculations();
+                    
+                    // Update API values
+                    updateAPIValues({
+                        rollOver: value,
+                        timestamp: Date.now()
+                    });
+                });
+            }
+            
+            // Bet amount input with validation and API sync
+            const stakeBetAmount = document.getElementById('stakeBetAmount');
+            if (stakeBetAmount) {
+                stakeBetAmount.addEventListener('input', function() {
+                    const value = parseFloat(this.value);
+                    
+                    // Validate bet amount
+                    if (value < 0) {
+                        this.value = '';
+                        showSeedNotification('Bet amount cannot be negative', 'error');
+                        return;
+                    }
+                    
+                    updateStakeDiceCalculations();
+                    
+                    // Update API values
+                    updateAPIValues({
+                        betAmount: value,
+                        timestamp: Date.now()
+                    });
+                });
+                
+                // Format on blur
+                stakeBetAmount.addEventListener('blur', function() {
+                    const value = parseFloat(this.value);
+                    if (!isNaN(value)) {
+                        this.value = value.toFixed(8);
                     }
                 });
             }
             
-            // Roll over input
-            const stakeRollOver = document.getElementById('stakeRollOver');
-            if (stakeRollOver) {
-                stakeRollOver.addEventListener('input', function() {
-                    updateStakeDiceCalculations();
-                });
+            // Initialize slider background
+            if (stakeSlider) {
+                const initialValue = parseFloat(stakeSlider.value);
+                stakeSlider.style.background = `linear-gradient(to right, #4CAF50 0%, #4CAF50 ${(initialValue/99)*100}%, #ddd ${(initialValue/99)*100}%, #ddd 100%)`;
+            }
+        }
+        
+        // Recent Results Management
+        let recentResults = [];
+        const MAX_RECENT_RESULTS = 50;
+        
+        function addRecentResult(result) {
+            const resultData = {
+                id: Date.now() + Math.random(),
+                roll: result.roll || Math.floor(Math.random() * 100),
+                target: result.target || 50,
+                isWin: result.isWin || (result.roll > result.target),
+                amount: result.amount || 0,
+                profit: result.profit || 0,
+                timestamp: result.timestamp || Date.now(),
+                condition: result.condition || 'over'
+            };
+            
+            // Add to beginning of array
+            recentResults.unshift(resultData);
+            
+            // Keep only MAX_RECENT_RESULTS
+            if (recentResults.length > MAX_RECENT_RESULTS) {
+                recentResults = recentResults.slice(0, MAX_RECENT_RESULTS);
             }
             
-            // Bet amount input
-            const stakeBetAmount = document.getElementById('stakeBetAmount');
-            if (stakeBetAmount) {
-                stakeBetAmount.addEventListener('input', function() {
-                    updateStakeDiceCalculations();
+            // Update display
+            updateRecentResultsDisplay();
+            
+            // Save to localStorage
+            localStorage.setItem('recentResults', JSON.stringify(recentResults));
+        }
+        
+        function updateRecentResultsDisplay() {
+            const historyContainer = document.getElementById('stakeGameHistory');
+            if (!historyContainer) return;
+            
+            historyContainer.innerHTML = '';
+            
+            recentResults.slice(0, 20).forEach((result, index) => {
+                const resultBubble = document.createElement('div');
+                resultBubble.style.cssText = `
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 11px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    animation: slideInRight 0.5s ease-out ${index * 0.05}s both;
+                    ${result.isWin ? 
+                        'background: linear-gradient(135deg, #4CAF50, #45a049); color: white;' : 
+                        'background: linear-gradient(135deg, #f44336, #e53935); color: white;'
+                    }
+                `;
+                
+                resultBubble.textContent = result.roll.toFixed(0);
+                resultBubble.title = `Roll: ${result.roll.toFixed(2)} | Target: ${result.target.toFixed(2)} | ${result.isWin ? 'WIN' : 'LOSS'} | ${result.isWin ? '+' : ''}${result.profit.toFixed(4)}`;
+                
+                // Add hover effect
+                resultBubble.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                    this.style.zIndex = '10';
+                });
+                
+                resultBubble.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.zIndex = '1';
+                });
+                
+                historyContainer.appendChild(resultBubble);
+            });
+            
+            // Add slide-in animation styles if not exists
+            if (!document.getElementById('recentResultsStyles')) {
+                const style = document.createElement('style');
+                style.id = 'recentResultsStyles';
+                style.textContent = `
+                    @keyframes slideInRight {
+                        from { 
+                            transform: translateX(50px); 
+                            opacity: 0; 
+                        }
+                        to { 
+                            transform: translateX(0); 
+                            opacity: 1; 
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        
+        function loadStoredResults() {
+            const stored = localStorage.getItem('recentResults');
+            if (stored) {
+                try {
+                    recentResults = JSON.parse(stored);
+                    updateRecentResultsDisplay();
+                } catch (e) {
+                    console.log('Could not load stored results:', e);
+                    recentResults = [];
+                }
+            }
+        }
+        
+        function clearRecentResults() {
+            recentResults = [];
+            updateRecentResultsDisplay();
+            localStorage.removeItem('recentResults');
+            showSeedNotification('Recent results cleared', 'success');
+        }
+        
+        // Add some demo results if none exist
+        function initializeRecentResults() {
+            loadStoredResults();
+            
+            if (recentResults.length === 0) {
+                // Add some demo results
+                const demoResults = [
+                    { roll: 67.43, target: 50, isWin: true, amount: 0.001, profit: 0.0009, condition: 'over' },
+                    { roll: 23.12, target: 50, isWin: false, amount: 0.001, profit: -0.001, condition: 'over' },
+                    { roll: 89.67, target: 50, isWin: true, amount: 0.002, profit: 0.0018, condition: 'over' },
+                    { roll: 12.34, target: 50, isWin: false, amount: 0.001, profit: -0.001, condition: 'over' },
+                    { roll: 78.90, target: 50, isWin: true, amount: 0.0015, profit: 0.00135, condition: 'over' }
+                ];
+                
+                demoResults.forEach((result, index) => {
+                    setTimeout(() => addRecentResult(result), index * 200);
                 });
             }
+        }
             
             // Roll toggle button
             const stakeRollToggle = document.getElementById('stakeRollToggle');
@@ -4394,6 +5262,21 @@
             initBettingInterface();
             initializeSeedsManagement();
             initializeStakeInterface(); // Add new Stake interface initialization
+            initializeDemoAnalysisSystem(); // Add demo analysis system
+            initializeCurrencyDropdown(); // Initialize currency dropdown
+            initializeRecentResults(); // Initialize recent results system
+            
+            // Generate initial client seed if not present
+            const clientSeedInput = document.getElementById('clientSeed');
+            if (clientSeedInput && !clientSeedInput.value) {
+                generateNewSeed('client');
+            }
+            
+            // Update nonce display
+            const nonceElement = document.getElementById('nonceValue');
+            if (nonceElement && !nonceElement.textContent) {
+                nonceElement.textContent = '0';
+            }
             
             // Load balances from server after a short delay
             setTimeout(() => {
@@ -4407,6 +5290,332 @@
                 }
             }, 60000); // Every minute
         });
+
+        // Update API values function (moved here to fix syntax)
+        function updateAPIValues(values) {
+            // Emit to backend if socket is connected
+            if (typeof socket !== 'undefined' && socket && socket.connected) {
+                socket.emit('update_betting_values', values);
+            }
+            
+            // Update local storage for persistence
+            const currentValues = JSON.parse(localStorage.getItem('bettingValues') || '{}');
+            Object.assign(currentValues, values);
+            localStorage.setItem('bettingValues', JSON.stringify(currentValues));
+            
+            // Show visual feedback for successful update
+            if (values.rollOver !== undefined || values.betAmount !== undefined) {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    padding: 8px 16px;
+                    background: rgba(76, 175, 80, 0.9);
+                    color: white;
+                    border-radius: 3px;
+                    z-index: 10000;
+                    font-size: 12px;
+                    pointer-events: none;
+                `;
+                notification.textContent = '✓ Values synced';
+                
+                document.body.appendChild(notification);
+                setTimeout(() => notification.remove(), 1500);
+            }
+        }
+
+        // Demo Analysis System
+        let demoAnalysisState = {
+            isAnalyzing: false,
+            progress: 0,
+            demoComplete: false,
+            isDemoMode: true
+        };
+
+        function initializeDemoAnalysisSystem() {
+            // Mode toggle handler
+            const demoModeToggle = document.getElementById('demoModeToggle');
+            if (demoModeToggle) {
+                demoModeToggle.addEventListener('change', handleModeToggle);
+            }
+
+            // Demo analysis button
+            const startDemoBtn = document.getElementById('startDemoAnalysis');
+            if (startDemoBtn) {
+                startDemoBtn.addEventListener('click', startDemoAnalysis);
+            }
+
+            // Auto Oracle buttons
+            const startAutoBtn = document.getElementById('startAutoOracle');
+            const stopAutoBtn = document.getElementById('stopAutoOracle');
+            
+            if (startAutoBtn) {
+                startAutoBtn.addEventListener('click', startAutoOracle);
+            }
+            
+            if (stopAutoBtn) {
+                stopAutoBtn.addEventListener('click', stopAutoOracle);
+            }
+
+            // Advanced GUI button
+            const advancedBtn = document.getElementById('openAdvancedGUI');
+            if (advancedBtn) {
+                advancedBtn.addEventListener('click', openAdvancedGUI);
+            }
+
+            // Initialize mode status
+            updateModeStatus();
+        }
+
+        function handleModeToggle() {
+            const demoModeToggle = document.getElementById('demoModeToggle');
+            const isDemoMode = demoModeToggle.checked;
+            
+            demoAnalysisState.isDemoMode = isDemoMode;
+            
+            // Send mode change to backend
+            fetch('/api/demo/toggle-mode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ demo_mode: isDemoMode })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateModeStatus();
+                    showToast(data.message, 'success');
+                }
+            })
+            .catch(error => {
+                console.error('Mode toggle error:', error);
+                showToast('Failed to toggle mode', 'error');
+            });
+        }
+
+        function updateModeStatus() {
+            const modeStatus = document.getElementById('modeStatus');
+            const modeIcon = modeStatus.querySelector('i');
+            const modeText = modeStatus.querySelector('span');
+            
+            if (demoAnalysisState.isDemoMode) {
+                modeIcon.className = 'fas fa-shield-alt';
+                modeText.textContent = 'Demo Mode Active - Safe Testing';
+                modeStatus.style.color = '#10b981';
+            } else {
+                modeIcon.className = 'fas fa-exclamation-triangle';
+                modeText.textContent = 'REAL MODE - Live Trading';
+                modeStatus.style.color = '#ef4444';
+            }
+        }
+
+        function startDemoAnalysis() {
+            if (demoAnalysisState.isAnalyzing) {
+                showToast('Demo analysis already in progress', 'warning');
+                return;
+            }
+
+            // Show progress section
+            const demoProgress = document.getElementById('demoProgress');
+            const startBtn = document.getElementById('startDemoAnalysis');
+            
+            if (demoProgress) {
+                demoProgress.style.display = 'block';
+            }
+            
+            if (startBtn) {
+                startBtn.disabled = true;
+                startBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            }
+
+            // Reset progress
+            demoAnalysisState.isAnalyzing = true;
+            demoAnalysisState.progress = 0;
+            updateDemoProgress(0);
+
+            // Start analysis
+            fetch('/api/demo/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Demo analysis started - collecting 100 rolls', 'success');
+                    
+                    // Start progress monitoring
+                    const progressInterval = setInterval(() => {
+                        checkDemoProgress(progressInterval);
+                    }, 1000);
+                }
+            })
+            .catch(error => {
+                console.error('Demo analysis error:', error);
+                showToast('Failed to start demo analysis', 'error');
+                resetDemoAnalysisUI();
+            });
+        }
+
+        function checkDemoProgress(intervalId) {
+            fetch('/api/demo/status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.is_analyzing) {
+                    updateDemoProgress(data.progress);
+                    updateDemoAnalysisDetails(data);
+                } else if (data.demo_complete) {
+                    clearInterval(intervalId);
+                    completeDemoAnalysis();
+                }
+            })
+            .catch(error => {
+                console.error('Progress check error:', error);
+                clearInterval(intervalId);
+                resetDemoAnalysisUI();
+            });
+        }
+
+        function updateDemoProgress(progress) {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            if (progressFill) {
+                progressFill.style.width = `${progress}%`;
+            }
+            
+            if (progressText) {
+                progressText.textContent = `${progress}/100`;
+            }
+            
+            // Update roll count
+            const demoRollsCount = document.getElementById('demoRollsCount');
+            if (demoRollsCount) {
+                demoRollsCount.textContent = `${progress} / 100`;
+            }
+        }
+
+        function updateDemoAnalysisDetails(data) {
+            const current = data.current_analysis || {};
+            
+            // Update HMAC patterns
+            const hmacPatterns = document.getElementById('hmacPatterns');
+            if (hmacPatterns && current.entropy !== undefined) {
+                const entropyLevel = current.entropy > 0.8 ? 'Strong' : current.entropy > 0.6 ? 'Medium' : 'Weak';
+                hmacPatterns.textContent = `${entropyLevel} Patterns`;
+            }
+            
+            // Update seed analysis
+            const seedAnalysis = document.getElementById('seedAnalysis');
+            if (seedAnalysis && current.rolls_analyzed > 0) {
+                seedAnalysis.textContent = `${current.rolls_analyzed} rolls processed`;
+            }
+            
+            // Update bias direction
+            const biasDirection = document.getElementById('biasDirection');
+            if (biasDirection && current.bias_direction) {
+                const biasStrength = Math.abs(current.current_bias || 0) * 100;
+                biasDirection.textContent = `${current.bias_direction.toUpperCase()} (${biasStrength.toFixed(1)}%)`;
+            }
+            
+            // Update pattern confidence
+            const patternConfidence = document.getElementById('patternConfidence');
+            if (patternConfidence && data.confidence !== undefined) {
+                patternConfidence.textContent = `${Math.round(data.confidence)}%`;
+            }
+        }
+
+        function completeDemoAnalysis() {
+            demoAnalysisState.isAnalyzing = false;
+            demoAnalysisState.demoComplete = true;
+            
+            // Show completion
+            showToast('Demo analysis complete! Oracle ready for activation.', 'success');
+            
+            // Update UI
+            const startBtn = document.getElementById('startDemoAnalysis');
+            const startAutoBtn = document.getElementById('startAutoOracle');
+            
+            if (startBtn) {
+                startBtn.style.display = 'none';
+            }
+            
+            if (startAutoBtn) {
+                startAutoBtn.style.display = 'inline-flex';
+            }
+            
+            // Hide progress
+            const demoProgress = document.getElementById('demoProgress');
+            if (demoProgress) {
+                setTimeout(() => {
+                    demoProgress.style.display = 'none';
+                }, 2000);
+            }
+        }
+
+        function resetDemoAnalysisUI() {
+            const startBtn = document.getElementById('startDemoAnalysis');
+            const demoProgress = document.getElementById('demoProgress');
+            
+            if (startBtn) {
+                startBtn.disabled = false;
+                startBtn.innerHTML = '<i class="fas fa-search"></i> Start Demo Analysis (100 Rolls)';
+            }
+            
+            if (demoProgress) {
+                demoProgress.style.display = 'none';
+            }
+            
+            demoAnalysisState.isAnalyzing = false;
+        }
+
+        function startAutoOracle() {
+            if (!demoAnalysisState.demoComplete) {
+                showToast('Please complete demo analysis first', 'warning');
+                return;
+            }
+            
+            // Switch button visibility
+            const startAutoBtn = document.getElementById('startAutoOracle');
+            const stopAutoBtn = document.getElementById('stopAutoOracle');
+            
+            if (startAutoBtn) startAutoBtn.style.display = 'none';
+            if (stopAutoBtn) stopAutoBtn.style.display = 'inline-flex';
+            
+            // Start auto betting logic here
+            showToast('Auto Oracle activated - AI betting started', 'success');
+        }
+
+        function stopAutoOracle() {
+            // Switch button visibility
+            const startAutoBtn = document.getElementById('startAutoOracle');
+            const stopAutoBtn = document.getElementById('stopAutoOracle');
+            
+            if (startAutoBtn) startAutoBtn.style.display = 'inline-flex';
+            if (stopAutoBtn) stopAutoBtn.style.display = 'none';
+            
+            showToast('Auto Oracle stopped', 'info');
+        }
+
+        function openAdvancedGUI() {
+            // This will open the advanced Oracle GUI (to be created next)
+            showToast('Opening Advanced Oracle GUI...', 'info');
+        }
+
+        // Socket event handlers for demo analysis
+        if (socket) {
+            socket.on('demo_analysis_complete', function(data) {
+                console.log('Demo analysis complete:', data);
+                completeDemoAnalysis();
+                
+                if (data.recommendations) {
+                    showToast(`Analysis complete: ${data.recommendations.strategy} strategy recommended`, 'success');
+                }
+            });
+        }
     </script>
 </body>
 </html>

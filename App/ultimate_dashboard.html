@@ -1574,6 +1574,156 @@
             font-style: italic;
         }
 
+        /* Advanced AI System Styles */
+        .advanced-ai-system {
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        .ai-predictions-section {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        .predictions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .prediction-card {
+            background: linear-gradient(135deg, #2d2d44, #1f1f3a);
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #404040;
+            text-align: center;
+        }
+
+        .prediction-header {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .prediction-main-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1FFF20;
+            margin-bottom: 8px;
+        }
+
+        .prediction-confidence {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .confidence-percent {
+            font-weight: bold;
+            color: #00ffff;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcf7f);
+            transition: width 0.5s ease;
+        }
+
+        .prediction-sub-text {
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        .betting-recommendations,
+        .pattern-analysis {
+            background: linear-gradient(135deg, #2a2a3e, #1e1e32);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #404040;
+        }
+
+        .recommendation-grid,
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .recommendation-item,
+        .analysis-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .recommendation-value,
+        .analysis-value {
+            font-weight: bold;
+            color: #1FFF20;
+        }
+
+        .risk-low { color: #4CAF50 !important; }
+        .risk-medium { color: #FF9800 !important; }
+        .risk-high { color: #f44336 !important; }
+
+        .recommendation-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .analysis-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            margin-top: 16px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .last-update {
+            font-size: 11px;
+            color: #888;
+        }
+
         /* Stake-style Rolling Results Banner */
         .results-banner {
             position: fixed;
@@ -2399,9 +2549,126 @@
             </div>
             
             <div class="tab-content">
-                <!-- Advanced Content (placeholder) -->
-                <div class="advanced-placeholder">
-                    <p>Advanced features coming soon...</p>
+                <!-- Advanced AI Predictions & Oracle System -->
+                <div class="advanced-ai-system">
+                    
+                    <!-- AI Predictions Panel -->
+                    <div class="ai-predictions-section">
+                        <h4 style="color: #1FFF20; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-brain"></i>
+                            AI Oracle Predictions
+                        </h4>
+                        
+                        <div class="predictions-grid">
+                            <div class="prediction-card">
+                                <div class="prediction-header">Next Result Prediction</div>
+                                <div class="prediction-main-value" id="aiNextPrediction">--</div>
+                                <div class="prediction-confidence">
+                                    <span>Confidence: </span>
+                                    <span id="aiPredictionConfidence" class="confidence-percent">--</span>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill" id="aiConfidenceBar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="prediction-card">
+                                <div class="prediction-header">Win Probability</div>
+                                <div class="prediction-main-value" id="aiWinProbability">--</div>
+                                <div class="prediction-sub-text">
+                                    Loss Probability: <span id="aiLossProbability">--</span>
+                                </div>
+                            </div>
+                            
+                            <div class="prediction-card">
+                                <div class="prediction-header">Trend Analysis</div>
+                                <div class="prediction-main-value" id="aiTrendDirection">Neutral</div>
+                                <div class="prediction-sub-text">
+                                    Strength: <span id="aiTrendStrength">--</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Betting Recommendations -->
+                        <div class="betting-recommendations">
+                            <h5 style="color: #00ffff; margin-bottom: 12px;">
+                                <i class="fas fa-chart-line"></i>
+                                Betting Recommendations
+                            </h5>
+                            
+                            <div class="recommendation-grid">
+                                <div class="recommendation-item">
+                                    <label>Recommended Action:</label>
+                                    <span id="aiRecommendedAction" class="recommendation-value">Hold</span>
+                                </div>
+                                
+                                <div class="recommendation-item">
+                                    <label>Suggested Bet Amount:</label>
+                                    <span id="aiSuggestedAmount" class="recommendation-value">0.00000000</span>
+                                </div>
+                                
+                                <div class="recommendation-item">
+                                    <label>Risk Level:</label>
+                                    <span id="aiRiskLevel" class="recommendation-value risk-medium">Medium</span>
+                                </div>
+                                
+                                <div class="recommendation-item">
+                                    <label>Expected Return:</label>
+                                    <span id="aiExpectedReturn" class="recommendation-value">+0.00%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="recommendation-actions">
+                                <button id="applyRecommendations" class="btn btn-primary">
+                                    <i class="fas fa-magic"></i> Apply AI Recommendations
+                                </button>
+                                <button id="refreshPredictions" class="btn btn-secondary">
+                                    <i class="fas fa-sync"></i> Refresh Predictions
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Pattern Analysis -->
+                        <div class="pattern-analysis">
+                            <h5 style="color: #ff9500; margin-bottom: 12px;">
+                                <i class="fas fa-search"></i>
+                                Pattern Analysis
+                            </h5>
+                            
+                            <div class="analysis-grid">
+                                <div class="analysis-item">
+                                    <label>Detected Patterns:</label>
+                                    <span id="detectedPatterns" class="analysis-value">None</span>
+                                </div>
+                                
+                                <div class="analysis-item">
+                                    <label>Sequence Strength:</label>
+                                    <span id="sequenceStrength" class="analysis-value">--</span>
+                                </div>
+                                
+                                <div class="analysis-item">
+                                    <label>Bias Detection:</label>
+                                    <span id="biasDetection" class="analysis-value">Neutral</span>
+                                </div>
+                                
+                                <div class="analysis-item">
+                                    <label>Entropy Score:</label>
+                                    <span id="entropyScore" class="analysis-value">--</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Live Analysis Status -->
+                        <div class="analysis-status">
+                            <div class="status-indicator">
+                                <span class="status-dot" id="analysisStatusDot"></span>
+                                <span id="analysisStatusText">Analyzing...</span>
+                            </div>
+                            <div class="last-update">
+                                Last Update: <span id="lastAnalysisUpdate">--</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2572,32 +2839,6 @@
             <div class="chart-container">
                 <div class="chart-title">Result Distribution</div>
                 <canvas id="resultsChart" style="height: 280px;"></canvas>
-            </div>
-        </div>
-
-        <!-- Predictions Panel -->
-        <div class="predictions-panel">
-            <div class="control-title">AI Predictions</div>
-            <div class="prediction-item">
-                <span class="prediction-label">Next Result</span>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span class="prediction-value" id="nextPrediction">--</span>
-                    <div class="confidence-bar">
-                        <div class="confidence-fill" id="predictionConfidence" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="prediction-item">
-                <span class="prediction-label">Trend</span>
-                <span class="prediction-value" id="trendDirection">Neutral</span>
-            </div>
-            <div class="prediction-item">
-                <span class="prediction-label">Recommendation</span>
-                <span class="prediction-value" id="recommendedBet">Hold</span>
-            </div>
-            <div class="prediction-item">
-                <span class="prediction-label">Risk Level</span>
-                <span class="prediction-value" id="riskLevel">Medium</span>
             </div>
         </div>
 
